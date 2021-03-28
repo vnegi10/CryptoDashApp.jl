@@ -18,7 +18,8 @@ Once the environment is activated, you can make use of the **CryptoDashApp** mod
     using CryptoDashApp
     run_app(8056, "your key") # where 8056 is the port 
     
-Now, open a new tab and check if you can access http://0.0.0.0:8056/
+Now, open a new tab in your browser and check if you can access http://0.0.0.0:8056/
+First plot will take a few seconds to appear, wait patiently!
     
 
 
