@@ -1,5 +1,5 @@
 function raw_to_df(raw_data)
-    df = DataFrames.DataFrame(raw_data[1])
+    df = DataFrame(raw_data[1])
     df_names = Symbol.(vcat(raw_data[2]...))
     df = DataFrames.rename(df, df_names)
 
@@ -15,7 +15,7 @@ function raw_to_df(raw_data)
     return df
 end
 
-function average_price_df(currency::String, df_in::DataFrames.DataFrame, df_out_price::DataFrames.DataFrame, df_out_candle::DataFrames.DataFrame)
+function average_price_df(currency::String, df_in::DataFrame, df_out_price::DataFrame, df_out_candle::DataFrame)
     
     if isempty(names(df_out_price))
         df_out_price[!,:Date] = df_in[!,:Date]
@@ -34,7 +34,7 @@ function average_price_df(currency::String, df_in::DataFrames.DataFrame, df_out_
     df_out_candle[!,Symbol("$currency")] = candle_col    
 end
 
-function vol_df(currency::String, df_in::DataFrames.DataFrame, df_out_vol::DataFrames.DataFrame)
+function vol_df(currency::String, df_in::DataFrame, df_out_vol::DataFrame)
     if isempty(names(df_out_vol))
         df_out_vol[!,:Date] = df_in[!,:Date]
     end 
@@ -42,10 +42,10 @@ function vol_df(currency::String, df_in::DataFrames.DataFrame, df_out_vol::DataF
     df_out_vol[!,Symbol("$currency")] = df_in[!,:volume]
 end
 
-function moving_averages(Price_df::DataFrames.DataFrame, duration::Int64, window::Int64, currency::String)
+function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64, currency::String)
         
     # Reverse the order of the DataFrame, oldest date first, newest at the bottom
-    Price_df_rev = DataFrames.DataFrame()
+    Price_df_rev = DataFrame()
     Price_df_rev[!,:Date] = Price_df[!,:Date][end:-1:1]
     Price_df_rev[!,Symbol("$(currency)")] = Price_df[!,2][end:-1:1]
 

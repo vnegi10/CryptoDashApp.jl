@@ -1,8 +1,8 @@
 function get_price_data_single(currency::String)
     
-    df_out_price  = DataFrames.DataFrame()
-    df_out_vol    = DataFrames.DataFrame()
-    df_out_candle = DataFrames.DataFrame()
+    df_out_price  = DataFrame()
+    df_out_vol    = DataFrame()
+    df_out_candle = DataFrame()
     date = Dates.today()
 
     main_dir = pwd()   
@@ -11,7 +11,7 @@ function get_price_data_single(currency::String)
     # Look for present day's CSV file, if not found, download and save data to a new file
     if isfile("$(currency)_EUR_data_$(date).csv")
         @info "Reading $(currency) data from CSV file on disk"
-        global raw_df = CSV.File("$(currency)_EUR_data_$(date).csv") |> DataFrames.DataFrame        
+        global raw_df = CSV.File("$(currency)_EUR_data_$(date).csv") |> DataFrame        
     else
         try 
             @info "Fetching $(currency) data from Alpha Vantage"  
@@ -41,7 +41,7 @@ function get_ratings_data(currency::String)
     # Look for present day's CSV file, if not found, download and save data to a new file
     if isfile("$(currency)_metrics_data_$(date).csv")
         @info "Reading $(currency) data from CSV file on disk"
-        global metrics_df = CSV.File("$(currency)_metrics_data_$(date).csv") |> DataFrames.DataFrame
+        global metrics_df = CSV.File("$(currency)_metrics_data_$(date).csv") |> DataFrame
     else
         try
             @info "Fetching $(currency) data from Alpha Vantage"  
@@ -49,7 +49,7 @@ function get_ratings_data(currency::String)
             scores = rating["Crypto Rating (FCAS)"]
             s2 = "$(currency)_metrics_data_$(date).csv"
             CSV.write(s2, scores)
-            global metrics_df = CSV.File("$(currency)_metrics_data_$(date).csv") |> DataFrames.DataFrame
+            global metrics_df = CSV.File("$(currency)_metrics_data_$(date).csv") |> DataFrame
         catch err
             if isa(err, KeyError)
                 println("Could not retrieve data. Something wrong with API, try again later!")
