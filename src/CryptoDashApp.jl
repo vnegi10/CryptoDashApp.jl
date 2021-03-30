@@ -9,7 +9,7 @@ include("GetDataFunctions.jl")
 include("PlotFunctions.jl")
 
 # Parameters to interact with the web app
-currencies = ["BTC", "ETH", "LTC", "BCH", "ETC", "ADA", "XTZ", "KNC", "LINK", "XRP", "ZEC", "DASH", "XLM"]
+currencies = ["BTC", "ETH", "LTC", "BCH", "ETC", "ADA", "XTZ", "KNC", "LINK", "XRP", "ZEC", "DASH", "XLM", "XMR", "EOS"]
 currencies_index = 1:length(currencies)
 modes = ["Average price", "Candlestick + Volume", "FCAS data"]
 modes_index = 1:length(modes)
