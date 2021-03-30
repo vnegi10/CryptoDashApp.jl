@@ -14,6 +14,7 @@ Clone this repo to your local system. Open Julia REPL and cd to the repo directo
 * Type **instantiate**
 
 Alternatively, with VS Code, simply selecting the repo folder should activate the correct environment. You can also instantiate from a script (see example.jl) by executing:
+
     using Pkg; Pkg.instantiate()
 
 Once all the packages are downloaded, you can make use of the **CryptoDashApp** module from the REPL itself or within a script by executing:
