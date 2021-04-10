@@ -10,11 +10,11 @@ function get_price_data_single(currency::String)
 
     # Look for present day's CSV file, if not found, download and save data to a new file
     if isfile("$(currency)_EUR_data_$(date).csv")
-        @info "Reading $(currency) data from CSV file on disk"
+        @info "Reading $(currency) price/vol data from CSV file on disk"
         global raw_df = CSV.File("$(currency)_EUR_data_$(date).csv") |> DataFrame        
     else
         try 
-            @info "Fetching $(currency) data from Alpha Vantage"  
+            @info "Fetching $(currency) price/vol data from Alpha Vantage"  
             raw = AlphaVantage.digital_currency_daily(currency, "EUR", datatype="csv") 
             global raw_df = raw_to_df(raw) 
             s2 = "$(currency)_EUR_data_$(date).csv"                   
@@ -40,11 +40,11 @@ function get_ratings_data(currency::String)
 
     # Look for present day's CSV file, if not found, download and save data to a new file
     if isfile("$(currency)_metrics_data_$(date).csv")
-        @info "Reading $(currency) data from CSV file on disk"
+        @info "Reading $(currency) FCAS data from CSV file on disk"
         global metrics_df = CSV.File("$(currency)_metrics_data_$(date).csv") |> DataFrame
     else
         try
-            @info "Fetching $(currency) data from Alpha Vantage"  
+            @info "Fetching $(currency) FCAS data from Alpha Vantage"  
             rating = AlphaVantage.crypto_rating(currency)
             scores = rating["Crypto Rating (FCAS)"]
             s2 = "$(currency)_metrics_data_$(date).csv"

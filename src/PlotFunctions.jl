@@ -46,7 +46,7 @@ function plot_fcas_data(index::Int64)
     us, fs, ds, ms, fr = get_ratings_data(currencies[index])
 
     ################# FCAS metrics data #################
-    trace7 = PlotlyJS.bar(;x = ["Utility", "FCAS", "Developer", "Market maturity"], y = [us, fs, ds, ms], name = "Overall rating is $(fr)", width = 0.25)
-    return trace7
+    trace7 = PlotlyJS.bar(;x = ["Utility", "FCAS", "Developer", "Market maturity"], y = [us, fs, ds, ms], width = 0.25)
+    return trace7, fr
 end
 

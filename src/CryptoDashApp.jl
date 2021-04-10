@@ -121,8 +121,8 @@ function run_app(port::Int64, key::String)
             P2 = Plot(t2, layout2) # plots daily volume
             return [P1 P2]
         elseif mode_ID == 3
-            t7 = plot_fcas_data(pair_ID)
-            layout1 = Layout(;title="FCAS metrics data for $(currencies[pair_ID])",
+            t7, fr = plot_fcas_data(pair_ID)
+            layout1 = Layout(;title="FCAS metrics data for $(currencies[pair_ID]), overall rating = $(fr)",
                 xaxis = attr(title="Type of metric", showgrid=true, zeroline=true),
                 yaxis = attr(title="Score", showgrid=true, zeroline=true),
                 height = 500,
