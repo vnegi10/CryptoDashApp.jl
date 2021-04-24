@@ -11,7 +11,7 @@ include("PlotFunctions.jl")
 # Parameters to interact with the web app
 currencies = ["BTC", "ETH", "LTC", "BCH", "ETC", "ADA", "XTZ", "KNC", "LINK", "XRP", "ZEC", "DASH", "XLM", "XMR", "EOS"]
 currencies_index = 1:length(currencies)
-modes = ["Average price", "Candlestick + Volume", "FCAS data"]
+modes = ["Average price + Daily trade", "Candlestick + Volume", "FCAS data"]
 modes_index = 1:length(modes)
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
 windows = [1, 5, 10, 30, 50, 75]
@@ -92,36 +92,44 @@ function run_app(port::Int64, key::String)
         Input("window_ID", "value"),
         Input("duration_ID", "value"),
     ) do mode_ID, pair_ID, window_ID, duration_ID
-        t1, t2, t3, t4, t5, t6 = plot_price_vol_data(pair_ID, duration_ID, window_ID)
+        t1, t2, t3, t4, t5, t6, t7 = plot_price_vol_data(pair_ID, duration_ID, window_ID)
         
         if mode_ID == 1
-            layout1 = Layout(;title="Alpha Vantage daily average price data for $(currencies[pair_ID])",
+            layout1 = Layout(;title="Daily average price data for $(currencies[pair_ID])",
                 xaxis = attr(title="Time", showgrid=true, zeroline=true, linewidth=1.0),
                 yaxis = attr(title="Price [euros]", showgrid=true, zeroline=true, linewidth=1.0),
                 height = 500,
                 width = 1000,
                 paper_bgcolor="white"            
-            )             
-            P1 = Plot([t1, t4, t5, t6], layout1) # plots daily average price and three diferent moving averages               
-            return P1
+            )  
+            layout2 = Layout(;title="Daily trade data (volume x price) for $(currencies[pair_ID])",
+                xaxis = attr(title="Time", showgrid=true, zeroline=true, linewidth=1.0),
+                yaxis = attr(title="Daily trade [euros]", showgrid=true, zeroline=true, linewidth=1.0),
+                height = 500,
+                width = 1000,
+                paper_bgcolor="white"            
+            ) 
+            P1 = Plot([t1, t5, t6, t7], layout1) # plots daily average price and three diferent moving averages               
+            P2 = Plot(t3, layout2)               # plots daily market cap
+            return [P1 P2]
         elseif mode_ID == 2
             layout1 = Layout(;title="Candlestick data for $(currencies[pair_ID])",
                 xaxis=attr(title="Time", showgrid=true, zeroline=true),
-                yaxis=attr(title="Price from Alpha Vantage [euros]", zeroline=true),
+                yaxis=attr(title="Price [euros]", zeroline=true),
                 height = 500,
                 width = 1000,
             )
             layout2 = Layout(;title="Daily volume data for $(currencies[pair_ID])",
                 xaxis=attr(title="Time", showgrid=true, zeroline=true),
-                yaxis=attr(title="Volume from Alpha Vantage", zeroline=true),
+                yaxis=attr(title="Volume [Number of coins]", zeroline=true),
                 height = 100,
                 width = 200
             )
-            P1 = Plot(t3, layout1) # plots candlestick data
+            P1 = Plot(t4, layout1) # plots candlestick data
             P2 = Plot(t2, layout2) # plots daily volume
             return [P1 P2]
         elseif mode_ID == 3
-            t7, fr = plot_fcas_data(pair_ID)
+            t8, fr = plot_fcas_data(pair_ID)
             layout1 = Layout(;title="FCAS metrics data for $(currencies[pair_ID]), overall rating = $(fr)",
                 xaxis = attr(title="Type of metric", showgrid=true, zeroline=true),
                 yaxis = attr(title="Score", showgrid=true, zeroline=true),
@@ -129,7 +137,7 @@ function run_app(port::Int64, key::String)
                 width = 1000,
                 paper_bgcolor="white"            
             ) 
-            P1 = Plot(t7, layout1)  # plots FCAS metrics
+            P1 = Plot(t8, layout1)  # plots FCAS metrics
         end
     end
 

@@ -51,9 +51,7 @@ function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64, cu
 
     Price_col = Price_df_rev[end-duration+1-window+1:end,2]
     rows1 = length(Price_col)
-    Price_SMA = Array{Float64}(undef,0)    
-    Price_WMA = Array{Float64}(undef,0)
-    Price_EMA = Array{Float64}(undef,0)
+    Price_SMA, Price_WMA, Price_EMA = [Float64[] for i = 1:3]
 
     weights = collect(1:window)/(window*(window+1)/2) 
     k = 2/(window+1)

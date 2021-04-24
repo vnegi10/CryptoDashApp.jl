@@ -1,8 +1,6 @@
 function get_price_data_single(currency::String)
     
-    df_out_price  = DataFrame()
-    df_out_vol    = DataFrame()
-    df_out_candle = DataFrame()
+    df_out_price, df_out_vol, df_out_candle  = [DataFrame() for i = 1:3]    
     date = Dates.today()
 
     main_dir = pwd()   
