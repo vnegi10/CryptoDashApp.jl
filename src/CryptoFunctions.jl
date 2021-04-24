@@ -44,10 +44,9 @@ end
 
 function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64, currency::String)
         
-    # Reverse the order of the DataFrame, oldest date first, newest at the bottom
-    Price_df_rev = DataFrame()
-    Price_df_rev[!,:Date] = Price_df[!,:Date][end:-1:1]
-    Price_df_rev[!,Symbol("$(currency)")] = Price_df[!,2][end:-1:1]
+    # Copy to a new DataFrame, and reverse the order (oldest date first, newest at the bottom)
+    Price_df_rev = deepcopy(Price_df)
+    sort!(Price_df_rev, :Date)
 
     Price_col = Price_df_rev[end-duration+1-window+1:end,2]
     rows1 = length(Price_col)
