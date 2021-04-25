@@ -63,8 +63,11 @@ function plot_price_vol_data(index::Int64, duration::Int64, window::Int64)
         end
     end
 
-    trace9_green = PlotlyJS.bar(; x = green_X, y = green_Y, marker_color = "green", name = "$(currencies[index]) daily change")
-    trace9_red   = PlotlyJS.bar(; x = red_X, y = red_Y, marker_color = "red", name = "$(currencies[index]) daily change")
+    green_share = round((length(green_Y)/length(Y))*100, digits = 2)
+    red_share = 100.0 - green_share
+
+    trace9_green = PlotlyJS.bar(; x = green_X, y = green_Y, marker_color = "green", name = "$(currencies[index]) increase, share = $(green_share) %")
+    trace9_red   = PlotlyJS.bar(; x = red_X, y = red_Y, marker_color = "red", name = "$(currencies[index]) decrease, share = $(red_share) %")
 
     return trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8, trace9_green, trace9_red
 end

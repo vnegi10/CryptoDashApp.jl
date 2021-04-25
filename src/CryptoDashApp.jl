@@ -132,13 +132,13 @@ function run_app(port::Int64, key::String)
         elseif mode_ID == 3
             layout1 = Layout(;title="Cumulative return for $(currencies[pair_ID])",
                 xaxis=attr(title="Time", showgrid=true, zeroline=true),
-                yaxis=attr(title="Return in % from starting date", zeroline=true),
+                yaxis=attr(title="Return [in %]", zeroline=true),
                 height = 500,
                 width = 1000,
             )
-            layout2 = Layout(;title="Daily % change for $(currencies[pair_ID])",
+            layout2 = Layout(;title="Daily change for $(currencies[pair_ID])",
                 xaxis=attr(title="Time", showgrid=true, zeroline=true),
-                yaxis=attr(title="Change % w.r.t. previous day", zeroline=true),
+                yaxis=attr(title="Change [in %]", zeroline=true),
                 height = 500,
                 width = 1000,
                 barmode = "group",
