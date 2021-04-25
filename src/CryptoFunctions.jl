@@ -42,7 +42,7 @@ function vol_df(currency::String, df_in::DataFrame, df_out_vol::DataFrame)
     df_out_vol[!,Symbol("$currency")] = df_in[!,:volume]
 end
 
-function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64, currency::String)
+function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64)
         
     # Copy to a new DataFrame, and reverse the order (oldest date first, newest at the bottom)
     Price_df_rev = deepcopy(Price_df)

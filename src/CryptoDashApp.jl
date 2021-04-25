@@ -11,10 +11,10 @@ include("PlotFunctions.jl")
 # Parameters to interact with the web app
 currencies = ["BTC", "ETH", "LTC", "BCH", "ETC", "ADA", "XTZ", "KNC", "LINK", "XRP", "ZEC", "DASH", "XLM", "XMR", "EOS"]
 currencies_index = 1:length(currencies)
-modes = ["Average price + Daily trade", "Candlestick + Volume", "FCAS data"]
+modes = ["Average price + Daily trade", "Candlestick + Volume", "Cumulative return + Daily return", "FCAS data"]
 modes_index = 1:length(modes)
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
-windows = [1, 5, 10, 30, 50, 75]
+windows = [1, 5, 10, 30, 50, 75, 100]
 
 function run_app(port::Int64, key::String)
 
@@ -76,7 +76,7 @@ function run_app(port::Int64, key::String)
                     value = 7,
                 ),
             ],
-            style = (width = "50%", display = "inline-block", padding="2% 25%"),
+            style = (width = "50%", display = "inline-block", padding="5% 25%"),
         ),
         
         html_div(style = (width="100%", display="inline-block", padding="2% 25%")) do
@@ -92,7 +92,7 @@ function run_app(port::Int64, key::String)
         Input("window_ID", "value"),
         Input("duration_ID", "value"),
     ) do mode_ID, pair_ID, window_ID, duration_ID
-        t1, t2, t3, t4, t5, t6, t7 = plot_price_vol_data(pair_ID, duration_ID, window_ID)
+        t1, t2, t3, t4, t5, t6, t7, t8, t9_green, t9_red = plot_price_vol_data(pair_ID, duration_ID, window_ID)
         
         if mode_ID == 1
             layout1 = Layout(;title="Daily average price data for $(currencies[pair_ID])",
@@ -128,8 +128,28 @@ function run_app(port::Int64, key::String)
             P1 = Plot(t4, layout1) # plots candlestick data
             P2 = Plot(t2, layout2) # plots daily volume
             return [P1 P2]
+        
         elseif mode_ID == 3
-            t8, fr = plot_fcas_data(pair_ID)
+            layout1 = Layout(;title="Cumulative return for $(currencies[pair_ID])",
+                xaxis=attr(title="Time", showgrid=true, zeroline=true),
+                yaxis=attr(title="Return in % from starting date", zeroline=true),
+                height = 500,
+                width = 1000,
+            )
+            layout2 = Layout(;title="Daily % change for $(currencies[pair_ID])",
+                xaxis=attr(title="Time", showgrid=true, zeroline=true),
+                yaxis=attr(title="Change % w.r.t. previous day", zeroline=true),
+                height = 500,
+                width = 1000,
+                barmode = "group",
+            )
+
+            P1 = Plot(t8, layout1) # plots cumulative return %
+            P2 = Plot([t9_green, t9_red], layout2) # plots daily change %
+            return [P1 P2]
+
+        elseif mode_ID == 4
+            t10, fr = plot_fcas_data(pair_ID)
             layout1 = Layout(;title="FCAS metrics data for $(currencies[pair_ID]), overall rating = $(fr)",
                 xaxis = attr(title="Type of metric", showgrid=true, zeroline=true),
                 yaxis = attr(title="Score", showgrid=true, zeroline=true),
@@ -137,7 +157,7 @@ function run_app(port::Int64, key::String)
                 width = 1000,
                 paper_bgcolor="white"            
             ) 
-            P1 = Plot(t8, layout1)  # plots FCAS metrics
+            P1 = Plot(t10, layout1)  # plots FCAS metrics
         end
     end
 
