@@ -43,12 +43,9 @@ function vol_df(currency::String, df_in::DataFrame, df_out_vol::DataFrame)
 end
 
 function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64)
-        
-    # Copy to a new DataFrame, and reverse the order (oldest date first, newest at the bottom)
-    Price_df_rev = deepcopy(Price_df)
-    sort!(Price_df_rev, :Date)
-
-    Price_col = Price_df_rev[end-duration+1-window+1:end,2]
+    
+    # Price_df should have date order - oldest to latest
+    Price_col = Price_df[end-duration+1-window+1:end,2]
     rows1 = length(Price_col)
     Price_SMA, Price_WMA, Price_EMA = [Float64[] for i = 1:3]
 
@@ -69,5 +66,5 @@ function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64)
         push!(Price_EMA, EMA) 
     end 
     
-    return Price_df_rev, Price_SMA, Price_WMA, Price_EMA
+    return Price_SMA, Price_WMA, Price_EMA
 end
