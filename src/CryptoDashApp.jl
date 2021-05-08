@@ -18,6 +18,14 @@ windows = [1, 5, 10, 30, 50, 75, 100]
 
 function run_app(port::Int64, key::String)
 
+    # Check if "data" folder exists, if not, create a new one
+    if isdir("data")
+        @info "data folder exists, cleanup action will be performed!"
+    else
+        mkdir("data")
+        @info "New data folder has been created"
+    end
+
     # Cleanup csv files from previous days
     try
         main_dir = pwd()
