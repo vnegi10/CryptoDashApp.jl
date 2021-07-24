@@ -1,5 +1,7 @@
 function raw_to_df(raw_data)
-    df = DataFrame(raw_data[1])
+
+    # Argument ":auto" is required to generate column names in latest version of DataFrames.jl (v1.2.1)    
+    df = DataFrame(raw_data[1], :auto) 
     df_names = Symbol.(vcat(raw_data[2]...))
     df = DataFrames.rename(df, df_names)
 

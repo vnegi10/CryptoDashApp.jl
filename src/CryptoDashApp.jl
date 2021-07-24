@@ -40,7 +40,7 @@ function run_app(port::Int64, key::String)
                 rm(file)
             end
         end
-    cd(main_dir)    
+        cd(main_dir)    
     catch
         println("Unable to perform cleanup action")
     end
