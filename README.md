@@ -12,14 +12,14 @@ Add this package to your working Julia environment by doing the following in the
 * Press ']' to enter Pkg prompt
 
 ```julia
-pkg>  add https://github.com/vnegi10/CryptoDashApp.git
+pkg> add https://github.com/vnegi10/CryptoDashApp.git
 ```   
 
 Once all the packages are downloaded, you can make use of the **CryptoDashApp** module from the REPL itself or within a script by executing:
 
 ```julia
-julia>  using CryptoDashApp
-julia>  run_app(8056, "your key") # where 8056 is the port
+julia> using CryptoDashApp
+julia> run_app(8056, "your key") # where 8056 is the port
 ```    
     
 Now, open a new tab in your browser and check if you can access http://0.0.0.0:8056/ or http://127.0.0.1:8056/
