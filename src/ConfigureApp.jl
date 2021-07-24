@@ -36,7 +36,7 @@ function run_app(port::Int64, key::String)
         end
         cd(main_dir)    
     catch
-        println("Unable to perform cleanup action")
+        @info "Unable to perform cleanup action"
     end
 
     # Set API key
@@ -182,6 +182,6 @@ function run_app(port::Int64, key::String)
         end
     end
 
-    # Allows access from a web browser, port can be changed, currently set to 8056
+    # Allows access from a web browser, port can be changed to any valid entry
     run_server(app, "0.0.0.0", port)
 end

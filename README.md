@@ -8,14 +8,9 @@ Functionality of the app will be extended in the future by adding more technical
 
 ## How to use?
 
-Clone this repo to your local system. Open Julia REPL and cd to the repo directory. Now activate + instantiate the project environment by doing the following:
+Add this package to your working Julia environment by doing the following in the REPL:
 * Press ']' to enter Pkg prompt
-* Type **activate .**
-* Type **instantiate**
-
-Alternatively, with VS Code, simply selecting the repo folder should activate the correct environment. You can also instantiate from a script (see example.jl) by executing:
-
-    using Pkg; Pkg.instantiate()
+*    add https://github.com/vnegi10/CryptoDashApp.git
 
 Once all the packages are downloaded, you can make use of the **CryptoDashApp** module from the REPL itself or within a script by executing:
 
