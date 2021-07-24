@@ -1,4 +1,4 @@
-# CryptoDashApp
+# CryptoDashApp.jl
 
 Interactive visualization of historical price, health metrics, candlestick and volume data for various cryptocurrencies. Data are obtained via API queries to Alpha Vantage. 
 The app is written in Julia and makes use of Dash.jl along with its react framework to generate a dashboard style view accessible via a browser. 
@@ -12,7 +12,7 @@ Add this package to your working Julia environment by doing the following in the
 * Press ']' to enter Pkg prompt
 
 ```julia
-pkg> add https://github.com/vnegi10/CryptoDashApp.git
+pkg> add https://github.com/vnegi10/CryptoDashApp.jl.git
 ```   
 
 Once all the packages are downloaded, you can make use of the **CryptoDashApp** module from the REPL itself or within a script by executing:
