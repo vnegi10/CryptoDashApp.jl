@@ -10,7 +10,7 @@ Functionality of the app will be extended in the future by adding more technical
 
 Add this package to your working Julia environment by doing the following in the REPL:
 * Press ']' to enter Pkg prompt
-*    add https://github.com/vnegi10/CryptoDashApp.git
+    add https://github.com/vnegi10/CryptoDashApp.git
 
 Once all the packages are downloaded, you can make use of the **CryptoDashApp** module from the REPL itself or within a script by executing:
 
