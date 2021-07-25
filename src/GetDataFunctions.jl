@@ -1,6 +1,5 @@
 function get_price_data_single(currency::String)
     
-    df_out_price, df_out_vol, df_out_candle  = [DataFrame() for i = 1:3]    
     date = Dates.today()
 
     filename = "$(currency)_EUR_data_$(date).csv"
@@ -23,10 +22,10 @@ function get_price_data_single(currency::String)
         end         
     end 
     
-    # Return processed DataFrame only when data has been fetched successfully
+    # Return processed DataFrame only when raw data has been fetched successfully
     if ~isempty(raw_df)    
-        average_price_df(currency, raw_df, df_out_price, df_out_candle)
-        vol_df(currency, raw_df, df_out_vol)    
+        df_out_price, df_out_candle = average_price_df(currency, raw_df)
+        df_out_vol = vol_df(currency, raw_df)    
 
         return df_out_price, df_out_candle, df_out_vol
     else
@@ -56,7 +55,7 @@ function get_ratings_data(currency::String)
             metrics_df = CSV.File(filepath) |> DataFrame
         catch err
             if isa(err, KeyError)
-                @info "Could not retrieve data. Something wrong with API, try again later!"
+                @info "Could not retrieve data. Something wrong with the API, try again later!"
             else
                 @info "This is a new error: $(err)"
             end            
@@ -66,7 +65,7 @@ function get_ratings_data(currency::String)
     ratings = ["utility", "fcas score", "developer", "market", "fcas rating"]
     index = Array{Int64}(undef,0)
 
-    # Return scores only when data has been fetched successfully
+    # Return scores only when metrics data has been fetched successfully
     if ~isempty(metrics_df)
         
         # Find the row(index) of a string match

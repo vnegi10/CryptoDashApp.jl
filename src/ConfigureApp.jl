@@ -10,6 +10,23 @@ windows = [1, 5, 10, 30, 50, 75, 100]
 
 ################# Run the app #################
 
+"""
+    run_app(port::Int64, key::String)
+
+Start the app on the given port using the provided API key.
+
+# Arguments
+- `port::Int64` : Port number, for example 8056
+- `key::String` : API key from Alpha Vantage
+
+# Example
+```julia-repl
+julia> run_app(8056, "Your API key")
+[ Info: data folder exists, cleanup action will be performed!
+[ Info: Listening on: 0.0.0.0:8056
+[ Info: Fetching BTC price/vol data from Alpha Vantage
+```
+"""
 function run_app(port::Int64, key::String)
 
     # Check if "data" folder exists, if not, create a new one
@@ -46,42 +63,75 @@ function run_app(port::Int64, key::String)
     app = dash()
 
     app.layout = html_div() do
+
+        # Title
         html_h1("Crypto Dashboard",
                 style= (
                 textAlign = "center",
                 )
         ),
-        html_div(
-            children = [
-                dcc_dropdown(
-                    id = "mode_ID",
-                    options = [
-                        (label = "$(modes[i])", value = i) for i in modes_index
-                    ],
-                    value = 1,
-                ),
-                dcc_dropdown(
-                    id = "pair_ID",
-                    options = [
-                        (label = "$(currencies[i])", value = i) for i in currencies_index
-                    ],
-                    value = 1,
-                ),
-                dcc_radioitems(
-                    id = "window_ID",
-                    options = [(label = "$(i)-day", value = i) for i in windows],
-                    value = 1,
-                ),
-                dcc_radioitems(
-                    id = "duration_ID",
-                    options = [(label = "$(i)d", value = i) for i in durations],
-                    value = 7,
-                ),
-            ],
-            style = (width = "50%", display = "inline-block", padding="5% 25%"),
-        ),
+
+        # Subtitle
+        html_div(style=(width="75%", margin="auto", textAlign="center"), 
+
+        ["Visualization of market data obtained from",
+                html_a(" Alpha Vantage", href="https://www.alphavantage.co/documentation/"), 
+
+                html_a(" until $(Dates.today())"),
+
+                html_p("                                                                 "),
+                ]),
+
+        # First row of drop down buttons
+        html_div(className="row", [
+                html_div(className="col-8",
+                    html_table(style=(width="100%", textAlign="center"),
+                        vcat(html_tr([html_th("Type of data", style=(width="50%", textAlign="center")),
+                                      html_th("Cryptocurrency", style=(width="75%", textAlign="center"))]),
+                             [html_tr([
+                                     html_td(dcc_dropdown(
+                                        id = "mode_ID",
+                                        options = [
+                                            (label = "$(modes[i])", value = i) for i in modes_index
+                                        ],
+                                        value = 1,
+                                    )),
+
+                                     html_td(dcc_dropdown(
+                                        id = "pair_ID",
+                                        options = [
+                                            (label = "$(currencies[i])", value = i) for i in currencies_index
+                                        ],
+                                        value = 1,
+                                    ))])]
+                        )))]),
         
-        html_div(style = (width="100%", display="inline-block", padding="2% 25%")) do
+        # Add space between the two rows
+        html_div(style=(width="75%", margin="auto", textAlign="center"), 
+        [html_p("                                                                 "), ]),
+        
+        # Second row of radio items
+        html_div(className="row", [
+            html_div(className="col-8",
+                html_table(style=(width="100%", textAlign="center"),
+                    vcat(html_tr([html_th("Moving average window", style=(width="50%", textAlign="center")),
+                                    html_th("Historical data [days]", style=(width="75%", textAlign="center"))]),
+                            [html_tr([
+                                    html_td(dcc_radioitems(
+                                        id = "window_ID",
+                                        options = [(label = "$(i)-day", value = i) for i in windows],
+                                        value = 1,
+                                    )),
+
+                                    html_td(dcc_radioitems(
+                                        id = "duration_ID",
+                                        options = [(label = "$(i)d", value = i) for i in durations],
+                                        value = 7,
+                                ))])]
+                    )))]),
+                    
+        # Plots           
+        html_div(style = (width="100%", display="inline-block", margin="0 5% 0 2%")) do
             dcc_graph(id = "graph")
         end
     end

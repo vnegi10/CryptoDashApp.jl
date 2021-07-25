@@ -17,31 +17,34 @@ function raw_to_df(raw_data)
     return df
 end
 
-function average_price_df(currency::String, df_in::DataFrame, df_out_price::DataFrame, df_out_candle::DataFrame)
+function average_price_df(currency::String, df_in::DataFrame)
     
-    if isempty(names(df_out_price))
-        df_out_price[!,:Date] = df_in[!,:Date]
-    end    
+    df_out_price, df_out_candle  = [DataFrame() for i = 1:2]
+
+    df_out_price[!,:Date] = df_in[!,:Date]        
     
     df_out_price[!,Symbol("$currency")] = (df_in[!,Symbol("open (EUR)")] + df_in[!,Symbol("high (EUR)")] + df_in[!,Symbol("low (EUR)")] + df_in[!,Symbol("close (EUR)")])/4
 
-    candle_col = []
+    candle_col = Any[]
     for i in 1:size(df_in)[1]
         push!(candle_col, (df_in[!,Symbol("open (EUR)")][i], df_in[!,Symbol("high (EUR)")][i], df_in[!,Symbol("low (EUR)")][i], df_in[!,Symbol("close (EUR)")][i]))
     end
 
-    if isempty(names(df_out_candle))
-        df_out_candle[!,:Date] = df_in[!,:Date]
-    end
-    df_out_candle[!,Symbol("$currency")] = candle_col    
+    df_out_candle[!,:Date] = df_in[!,:Date]
+    
+    df_out_candle[!,Symbol("$currency")] = candle_col 
+    
+    return df_out_price, df_out_candle
 end
 
-function vol_df(currency::String, df_in::DataFrame, df_out_vol::DataFrame)
-    if isempty(names(df_out_vol))
-        df_out_vol[!,:Date] = df_in[!,:Date]
-    end 
+function vol_df(currency::String, df_in::DataFrame)
 
+    df_out_vol = DataFrame()
+
+    df_out_vol[!,:Date] = df_in[!,:Date]    
     df_out_vol[!,Symbol("$currency")] = df_in[!,:volume]
+
+    return df_out_vol
 end
 
 function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64)
