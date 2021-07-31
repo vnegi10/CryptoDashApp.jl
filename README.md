@@ -4,7 +4,7 @@
 
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://vnegi10.github.io/CryptoDashApp.jl/stable)
 
-Interactive visualization of historical price, health metrics, candlestick and volume data for various cryptocurrencies. Data are obtained via API queries to Alpha Vantage. 
+Interactive visualization of historical price (currently only in EUR), health metrics, candlestick and volume data for various cryptocurrencies. Data are obtained via API queries to Alpha Vantage. 
 The app is written in Julia and makes use of Dash.jl along with its react framework to generate a dashboard style view accessible via a browser. 
 Different moving averages are also calculated and plotted along with the daily average price data. Averaging window can be selected by the user.
 
@@ -12,11 +12,11 @@ Functionality of the app will be extended in the future by adding more technical
 
 ## How to use?
 
-Add this package to your working Julia environment by doing the following in the REPL:
+This package is available via the General registry. Add it to your working Julia environment by doing the following in the REPL:
 * Press ']' to enter Pkg prompt
 
 ```julia
-pkg> add https://github.com/vnegi10/CryptoDashApp.jl.git
+pkg> add CryptoDashApp
 ```   
 
 Once all the packages are downloaded, you can make use of the **CryptoDashApp** module from the REPL itself or within a script by executing:

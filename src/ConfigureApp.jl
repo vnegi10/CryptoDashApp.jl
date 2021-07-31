@@ -1,9 +1,16 @@
 ################# Parameters to interact with the web app #################
 
-currencies = ["BTC", "LTC", "BCH", "ETH", "KNC", "LINK", "ETC", "BNB", "ADA", "XTZ", "EOS", "XRP", "XLM", "ZEC", "DASH", "XMR", "DOT", "UNI"]
+currencies_list = ["BTC", "LTC", "BCH", "ETH", "KNC", "LINK", "ETC", "BNB", "ADA", "XTZ", 
+              "EOS", "XRP", "XLM", "ZEC", "DASH", "XMR", "DOT", "UNI", "SOL", "MATIC", 
+              "THETA", "OMG", "ALGO", "GRT", "AAVE", "FIL", "BAT", "ZRX", "COMP"]
+
+currencies = sort(currencies_list)
 currencies_index = 1:length(currencies)
-modes = ["Average price + Daily trade", "Candlestick + Volume", "Cumulative + Daily return", "Daily volatility", "FCAS data"]
+
+modes = ["Average price + Daily trade", "Candlestick + Volume", 
+         "Cumulative + Daily return", "Daily volatility", "FCAS data"]
 modes_index = 1:length(modes)
+
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
 windows = [1, 5, 10, 30, 50, 75, 100]
 
