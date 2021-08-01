@@ -73,3 +73,49 @@ function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64)
     
     return Price_SMA, Price_WMA, Price_EMA
 end
+
+function calculate_ema(Price_col::Vector{Float64}, window::Int64)
+
+    k(window) = 2/(window+1)
+	Price_EMA = Float64[]
+	rows = length(Price_col)
+	
+	for i = 1:rows-(window-1)
+		
+		SMA = mean(Price_col[i:i+(window-1)])
+        EMA = (Price_col[i+(window-1)]*k(window)) + 
+		      (SMA*(1-k(window)))
+        push!(Price_EMA, EMA) 
+	end
+	
+	return Price_EMA
+end
+
+function calculate_macd(Price_df::DataFrame, window_long::Int64 = 26, 
+                        window_short::Int64 = 12, window_signal::Int64 = 9)
+	
+	# Price_df should have date order - oldest to latest    
+	Price_col = Price_df[!, 2]	
+	
+	# Calculate 26 (long) and 12 (short) period EMA
+	Price_EMA_short = calculate_ema(Price_col, window_short)	
+	Price_EMA_long = calculate_ema(Price_col, window_long)		
+	
+	# Make EMA_long and EMA_short equal	
+	EMA_short_col = Price_EMA_short[window_long - window_short + 1:end]
+	
+	# Calculate MACD = EMA_short - EMA_long
+	MACD_col = EMA_short_col - Price_EMA_long
+	
+	# Calculate signal line (9 period EMA of MACD)	
+	Signal_col = calculate_ema(MACD_col, window_signal)
+	
+	df_ema = DataFrame(date = Price_df[window_long+window_signal-1:end, :Date], 
+                      Raw = Price_df[window_long+window_signal-1:end, 2], 
+                      EMA_long = Price_EMA_long[window_signal:end], 
+                      EMA_short = EMA_short_col[window_signal:end], 
+                      MACD = MACD_col[window_signal:end], Signal = Signal_col)	
+	
+	return df_ema
+end	
+

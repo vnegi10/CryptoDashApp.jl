@@ -80,19 +80,11 @@ function plot_cumul_daily_return_hist(index::Int64, duration::Int64)
     Y = (diff(Price_df[end-duration+1:end,2]) ./ Price_df[end-duration+1:end-1,2]) .* 100
 
     # Split into two datasets (green: positive change, red: negative change)
+    green_Y = Y[Y .≥ 0.0]
+    green_X = X[Y .≥ 0.0]
 
-    green_X, red_X = [Date[] for i = 1:2]
-    green_Y, red_Y = [Float64[] for i = 1:2]
-    
-    for i = 1:length(Y)
-        if Y[i] ≥ 0.0
-            push!(green_Y, Y[i])
-            push!(green_X, X[i])
-        else
-            push!(red_Y, Y[i])
-            push!(red_X, X[i])
-        end
-    end
+    red_Y = Y[Y .< 0.0]
+    red_X = X[Y .< 0.0]
 
     green_share = round((length(green_Y)/length(Y))*100, digits = 2)
     red_share = 100.0 - green_share
@@ -140,4 +132,73 @@ function plot_fcas_data(index::Int64)
     trace1 = PlotlyJS.bar(;x = ["Utility", "FCAS", "Developer", "Market maturity"], y = [us, fs, ds, ms], width = 0.25)
     return trace1, fr
 end
+
+function plot_macd_signal(index::Int64, duration::Int64)
+
+    # Retrieve data from various helper functions    
+    Price_df, _ , _ = get_price_data_single(currencies[index])
+
+    # Make sure that duration does not exceed the number of rows in the DataFrame
+    if duration > size(Price_df)[1]
+        duration = size(Price_df)[1]
+    end
+
+    sort!(Price_df, :Date)                            # oldest date first, newest at the bottom
+
+    Price_df = Price_df[end-duration+1-26-9+1:end, :] # filter based on selected duration and effective 
+                                                      # window size of 26+9
+
+    df_ema_all = calculate_macd(Price_df)             # get EMA and MACD data into a DataFrame
+
+
+    ################# Daily average, EMA-12 and EMA-26 data #################
+    trace1 = PlotlyJS.scatter(;x = df_ema_all[!,:date], y = df_ema_all[!,:Raw], 
+                              mode="markers+lines", name = "Daily average")	
+
+	trace2 = PlotlyJS.scatter(;x = df_ema_all[!,:date], y = df_ema_all[!,:EMA_long], 
+                              mode="markers+lines", name = "EMA-26")	
+
+	trace3 = PlotlyJS.scatter(;x = df_ema_all[!,:date], y = df_ema_all[!,:EMA_short], 
+                              mode="markers+lines", name = "EMA-12")
+
+
+    ################# MACD and its signal data #################
+    trace4 = PlotlyJS.scatter(;x = df_ema_all[!,:date], y = df_ema_all[!,:MACD], 
+                              mode="markers+lines", name = "MACD")
+	
+	trace5 = PlotlyJS.scatter(;x = df_ema_all[!,:date], y = df_ema_all[!,:Signal], 
+                              mode="markers+lines", name = "Signal (EMA-9)")
+
+    
+    ################# Distance between MACD and its signal line #################
+
+    X = df_ema_all[!,:date]
+	Y = df_ema_all[!,:MACD] - df_ema_all[!,:Signal]
+	
+	# Split into two datasets (green: positive change, red: negative change)
+	green_Y = Y[Y .≥ 0.0]
+    green_X = X[Y .≥ 0.0]
+
+    red_Y = Y[Y .< 0.0]
+    red_X = X[Y .< 0.0]
+	
+	trace6_green = PlotlyJS.bar(; x = green_X, y = green_Y, marker_color = "green", 
+                                  name = "MACD above signal ")
+	
+    trace6_red   = PlotlyJS.bar(; x = red_X, y = red_Y, marker_color = "red", 
+                                  name = "MACD below signal")
+
+    return trace1, trace2, trace3, trace4, trace5, trace6_green, trace6_red
+
+end
+
+
+
+
+
+
+
+
+
+
 

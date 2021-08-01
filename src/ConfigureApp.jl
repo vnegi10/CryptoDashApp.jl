@@ -8,7 +8,7 @@ currencies = sort(currencies_list)
 currencies_index = 1:length(currencies)
 
 modes = ["Average price + Daily trade", "Candlestick + Volume", 
-         "Cumulative + Daily return", "Daily volatility", "FCAS data"]
+         "Cumulative + Daily return", "Daily volatility", "MACD + Signal", "FCAS data"]
 modes_index = 1:length(modes)
 
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
@@ -227,6 +227,27 @@ function run_app(port::Int64, key::String)
             return [P1]
 
         elseif mode_ID == 5
+            t1, t2, t3, t4, t5, t6_green, t6_red = plot_macd_signal(pair_ID, duration_ID)
+
+            layout1 = Layout(;title="EMA and average price data for $(currencies[pair_ID])",
+                xaxis = attr(title="Time", showgrid=true, zeroline=true, linewidth=1.0),
+                yaxis = attr(title="Price [euros]", showgrid=true, zeroline=true, linewidth=1.0),
+                height = 500,
+                width = 1000,
+            )
+            layout2 = Layout(;title="MACD and signal for $(currencies[pair_ID])",
+                xaxis = attr(title="Time", showgrid=true, zeroline=true, linewidth=1.0),
+                yaxis = attr(title="Indicator [euros]", showgrid=true, zeroline=true, linewidth=1.0),
+                height = 500,
+                width = 1000,
+            )  
+
+            P1 = Plot([t1, t2, t3], layout1)               # plots average price, EMA-12 and EMA-26
+            P2 = Plot([t4, t5, t6_green, t6_red], layout2) # plots MACD, signal and their distance
+            return [P1 P2]            
+
+        elseif mode_ID == 6
+
             t1, fr = plot_fcas_data(pair_ID)
             layout1 = Layout(;title="FCAS metrics data for $(currencies[pair_ID]), overall rating = $(fr)",
                 xaxis = attr(title="Type of metric", showgrid=true, zeroline=true),

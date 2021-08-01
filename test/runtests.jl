@@ -1,4 +1,4 @@
-using Test, AlphaVantage, Dates, CryptoDashApp
+using Test, AlphaVantage, Dates, DataFrames, CryptoDashApp
 
 AlphaVantage.global_key!("AKTJ25ALEBBLH1QJ")
 
@@ -31,7 +31,7 @@ end
 
 ################# Test cases for accessing market data #################
 
-@testset "Check if market data is accessible" begin
+@testset "Check if market data is accessible" begin    
 
     for currency in ["ETH", "LTC", "LINK"]
 
@@ -40,7 +40,35 @@ end
         @test ~isempty(df_out_price)
         @test ~isempty(df_out_candle)
         @test ~isempty(df_out_vol)
+
     end
+
+end
+
+################# Test cases for moving averages #################
+
+@testset "Check if MA, MACD and signal are calculated" begin
+
+    for currency in ["BTC", "DOT"]
+
+        df_out_price, _ , _ = CryptoDashApp.get_price_data_single(currency)
+
+        duration = 90
+        window = 30
+
+        Price_SMA, Price_WMA, Price_EMA = CryptoDashApp.moving_averages(df_out_price, duration, window)
+
+        @test ~isempty(Price_SMA)
+        @test ~isempty(Price_WMA)
+        @test ~isempty(Price_WMA)        
+
+        df_out_price = df_out_price[end-duration+1-26-9+1:end, :]
+        df_ema_all = CryptoDashApp.calculate_macd(df_out_price)
+
+        @test ~isempty(df_ema_all)
+        
+    end
+    
 end
 
 #=@testset "Check if ratings data is accessible" begin
