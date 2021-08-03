@@ -34,6 +34,11 @@ The plots are interactive, which means you can hover your cursor over the data p
 ### Fundamental Cryptocurrency Asset Score (FCAS) data
 - This metric tells us about the market health of an asset. In the case of cryptocurrencies, they are user activity, developer behavior, and market maturity, which are provided by [Flipside Crypto](https://app.flipsidecrypto.com/tracker/all-coins).
 
+### MACD + Signal
+- Left plot shows the daily average price data along with 12-day and 26-day EMAs. These are used to calculate the Moving Average Convergence Divergence (MACD) indicator, which is shown on the right.
+
+- Right plot shows the MACD (26-day EMA subtracted from 12-day EMA) along with its signal line (9-day EMA of the MACD). A buy signal occurs when MACD crosses the signal line from below, and a sell signal occurs when the crossing is from above. Distance between the MACD and the signal line is shown via bars in the same plot, with green bars (bullish momentum) indicating the region where MACD > signal, and red bars (bearish momentum) for the opposite. For more description, see [link.](https://www.investopedia.com/terms/m/macd.asp)
+
 ## Run app
 ```@docs
 run_app(port::Int64, key::String)
