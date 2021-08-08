@@ -192,6 +192,58 @@ function plot_macd_signal(index::Int64, duration::Int64)
 
 end
 
+function plot_linear_regression(index::Int64, duration::Int64)
+
+    # Retrieve data from various helper functions    
+    Price_df, _ , _ = get_price_data_single(currencies[index])
+
+    # Make sure that duration does not exceed the number of rows in the DataFrame
+    if duration > size(Price_df)[1]
+        duration = size(Price_df)[1]
+    end
+
+    # Filter on duration and create index column (model fit does not work with dates)	
+	df_fit = sort!(Price_df[1:duration, :])
+	df_fit.Index = 1:size(df_fit)[1]
+	
+	# Rename column to price to make df_fit generic
+	rename!(df_fit, Dict(Symbol(names(df_fit)[2]) => "Price"))
+	
+	# Get model parameters and R²
+	model_params = lm(@formula(Price ~ Index), df_fit)
+    R² = round(r2(model_params), digits = 2)
+	
+	# Predicted data
+	price_from_model = Float64.(predict(model_params, df_fit))	
+	
+	# Get standard deviation σ
+	σ = std(price_from_model)
+
+    ################# Raw price data #################
+    
+    trace1 = PlotlyJS.scatter(;x = df_fit[!,:Date], y = df_fit[!,:Price], 
+                              mode="markers+lines", name = "Actual price")
+
+    ################# Linear regression channel #################
+	
+	trace2 = PlotlyJS.scatter(;x = df_fit[!,:Date], y = price_from_model, 
+                              mode="lines", name = "Linear regression line")
+	
+	trace3 = PlotlyJS.scatter(;x = df_fit[!,:Date], y = price_from_model .+ 2*σ, 
+                              mode="markers", name = "Upper channel (+2σ)")
+	
+	trace4 = PlotlyJS.scatter(;x = df_fit[!,:Date], y = price_from_model .- 2*σ, 
+                              mode="markers", name = "Lower channel (-2σ)")
+
+    return trace1, trace2, trace3, trace4, R²
+end
+
+
+
+
+
+
+
 
 
 

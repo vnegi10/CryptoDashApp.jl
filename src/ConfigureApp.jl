@@ -8,7 +8,8 @@ currencies = sort(currencies_list)
 currencies_index = 1:length(currencies)
 
 modes = ["Average price + Daily trade", "Candlestick + Volume", 
-         "Cumulative + Daily return", "Daily volatility", "MACD + Signal", "FCAS data"]
+         "Cumulative + Daily return", "Daily volatility", "MACD + Signal", 
+         "Linear regression channel", "FCAS data"]
 modes_index = 1:length(modes)
 
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
@@ -223,7 +224,7 @@ function run_app(port::Int64, key::String)
                 width = 1000,
             )
 
-            P1 = Plot(t1, layout1)      # plots histogram of daily price change
+            P1 = Plot(t1, layout1) # plots histogram of daily price change
             return [P1]
 
         elseif mode_ID == 5
@@ -244,19 +245,34 @@ function run_app(port::Int64, key::String)
 
             P1 = Plot([t1, t2, t3], layout1)               # plots average price, EMA-12 and EMA-26
             P2 = Plot([t4, t5, t6_green, t6_red], layout2) # plots MACD, signal and their distance
-            return [P1 P2]            
-
+            return [P1 P2]   
+            
         elseif mode_ID == 6
+            t1, t2, t3, t4, R² = plot_linear_regression(pair_ID, duration_ID)
 
+            layout1 = Layout(;title="Linear regression channel for $(currencies[pair_ID]) price over last $(duration_ID) days, R² = $(R²)",
+                xaxis = attr(title="Time", showgrid=true, zeroline=true),
+                yaxis = attr(title="Price [euros]", showgrid=true, zeroline=true),
+                height = 500,
+                width = 1000,                           
+            ) 
+
+            P1 = Plot([t1, t2, t3, t4], layout1) # plots linear regression channel   
+            return [P1]
+
+        elseif mode_ID == 7
             t1, fr = plot_fcas_data(pair_ID)
+
             layout1 = Layout(;title="FCAS metrics data for $(currencies[pair_ID]), overall rating = $(fr)",
                 xaxis = attr(title="Type of metric", showgrid=true, zeroline=true),
                 yaxis = attr(title="Score", showgrid=true, zeroline=true),
                 height = 500,
-                width = 1000,
-                paper_bgcolor="white"            
+                width = 1000,                           
             ) 
-            P1 = Plot(t1, layout1)  # plots FCAS metrics
+
+            P1 = Plot(t1, layout1) # plots FCAS metrics
+            return [P1]
+
         end
     end
 
