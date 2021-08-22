@@ -84,3 +84,118 @@ function get_ratings_data(currency::String)
     end
 
 end
+
+
+################# Functions for CoinGecko API #################
+
+function get_API_response(params::String, url::String = URL)
+	
+	CG_request = HTTP.request("GET", url * params; verbose = 0, retries = 2)
+	response_text = String(CG_request.body)
+	response_dict = JSON.parse(response_text)
+	
+	return response_dict
+end
+
+function get_coin_id(currency::String)
+
+    date = Dates.today()
+
+    filename = "List_of_all_coins_$(date).csv"
+    filepath = joinpath("data", filename)
+
+    df_coins, df_filter, df_filter_1 = [DataFrame() for i = 1:3]
+
+    # Look for present day's CSV file, if not found, download and save data to a new file
+    if isfile(filepath)
+        @info "Reading list of coins from CSV file on disk"
+        df_coins = CSV.File(filepath) |> DataFrame        
+    else
+        try 
+            @info "Fetching list of coins from CoinGecko"  
+            coins_dict = get_API_response("/coins/list")
+            df_coins = vcat(DataFrame.(coins_dict)...) 
+            CSV.write(filepath, df_coins)           
+        catch
+            @info "Could not fetch data, try again later!"          
+        end         
+    end 
+
+    # Return valid coin id only when list of coins is available
+    if ~isempty(df_coins)
+
+        # Filter on matching currency 
+        df_filter = df_coins |> @filter(_.symbol == currency) |> DataFrame
+
+        # For multiple matches, first filter on coin ids and then on names,
+        # which do not have "-" in them
+        if size(df_filter)[1] > 1
+
+            df_filter_1 = df_filter |> 
+                        @filter(~occursin("-", _.id)) |> DataFrame
+
+            if isempty(df_filter_1)
+                df_filter_1 = df_filter |> 
+                        @filter(~occursin("-", _.name)) |> DataFrame
+            end
+
+            return df_filter_1[!, :id][1]
+        end
+        
+        return df_filter[!, :id][1]
+    else
+        return ""   
+    end
+end
+
+function get_dev_data(currency::String)
+
+    coin_id = get_coin_id(currency)
+
+    coin_dict, dev_dict = Dict(), Dict()
+
+    try
+        @info "Fetching coin data from CoinGecko" 
+        coin_dict = get_API_response("/coins/$(coin_id)")        
+    catch
+        @info "Could not fetch data, try again later!" 
+    end
+
+    try
+        dev_dict = coin_dict["developer_data"]
+    catch err     
+        if isa(err, KeyError)
+            @info "Could not find developer data!"
+        else
+            @info "This is a new error: $(err)"
+        end
+    end
+
+    df_dev = DataFrame(Metric = String[], Value = Int64[])
+
+    if ~isempty(coin_dict) && ~isempty(dev_dict)   
+        
+        # Collect only the key-value data which is suitable for plotting	
+        for key in collect(keys(dev_dict))            
+            if length(dev_dict[key]) == 1
+                push!(df_dev, [key Int(dev_dict[key])])
+            end		
+        end	
+    end
+
+    return df_dev
+end
+        
+        
+
+    
+
+
+
+
+
+    
+
+
+
+    

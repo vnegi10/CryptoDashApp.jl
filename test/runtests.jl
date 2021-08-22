@@ -1,4 +1,4 @@
-using Test, AlphaVantage, Dates, DataFrames, CryptoDashApp
+using Test, AlphaVantage, Dates, DataFrames, CryptoDashApp, HTTP, JSON, Query
 
 AlphaVantage.global_key!("AKTJ25ALEBBLH1QJ")
 
@@ -69,6 +69,18 @@ end
         
     end
     
+end
+
+################# Test cases for CoinGecko API  #################
+
+@testset "Check if CoinGecko API is working" begin    
+
+    for currency in ["btc", "eth", "ltc"]
+
+        df_dev = CryptoDashApp.get_dev_data(currency)
+        @test ~isempty(df_dev)
+    end
+
 end
 
 #=@testset "Check if ratings data is accessible" begin

@@ -3,7 +3,7 @@ module CryptoDashApp
 export run_app
 
 using AlphaVantage, DataFrames, Dates, PlotlyJS, Dash, DashHtmlComponents, 
-      DashCoreComponents, CSV, Statistics, StatsBase, GLM
+      DashCoreComponents, CSV, Statistics, StatsBase, GLM, HTTP, JSON, Query
 
 include("CryptoFunctions.jl")
 include("GetDataFunctions.jl")

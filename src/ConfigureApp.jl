@@ -9,11 +9,16 @@ currencies_index = 1:length(currencies)
 
 modes = ["Average price + Daily trade", "Candlestick + Volume", 
          "Cumulative + Daily return", "Daily volatility", "MACD + Signal", 
-         "Linear regression channel", "FCAS data"]
+         "Linear regression channel", "FCAS data", "Developer + Community data"]
 modes_index = 1:length(modes)
 
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
 windows = [1, 5, 10, 30, 50, 75, 100]
+
+
+################# CoinGecko URL #################
+
+const URL = "https://api.coingecko.com/api/v3/"
 
 
 ################# Run the app #################
@@ -272,7 +277,23 @@ function run_app(port::Int64, key::String)
 
             P1 = Plot(t1, layout1) # plots FCAS metrics
             return [P1]
+        
+        # From CoinGecko
+        elseif mode_ID == 8
+            t1 = plot_dev_data(pair_ID)
 
+            layout1 = Layout(;title="Developer metrics for $(currencies[pair_ID])",
+                xaxis = attr(title="", showgrid=true, zeroline=true),
+                xaxis_tickangle = -15,
+                margin_b = 75,
+                yaxis = attr(title="Value", showgrid=true, zeroline=true),
+                height = 500,
+                width = 1000,                           
+            ) 
+
+            P1 = Plot(t1, layout1) # plots developer data 
+            return [P1]
+        
         end
     end
 
