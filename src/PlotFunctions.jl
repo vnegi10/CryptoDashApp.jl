@@ -238,16 +238,20 @@ function plot_linear_regression(index::Int64, duration::Int64)
     return trace1, trace2, trace3, trace4, R²
 end
 
-function plot_dev_data(index::Int64)
+function plot_dev_comm_data(index::Int64)
 
     # Convert currency symbol to lowercase and fetch data from CoinGecko
-    df_dev = get_dev_data(lowercase(currencies[index]))
+    df_dev, df_comm = get_dev_comm_data(lowercase(currencies[index]))
 
-    # Plot developer data
+    ################# Developer data #################
     trace1 = PlotlyJS.bar(; x = df_dev[!, :Metric], y = df_dev[!, :Value], 
                             name = "Developer data")
 
-    return trace1
+    ################# Community data #################
+    trace2 = PlotlyJS.bar(; x = df_comm[!, :Metric], y = df_comm[!, :Value], 
+                            name = "Community data")                        
+
+    return trace1, trace2
 end                        
 	
 

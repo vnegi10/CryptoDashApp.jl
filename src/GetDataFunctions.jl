@@ -148,11 +148,23 @@ function get_coin_id(currency::String)
     end
 end
 
-function get_dev_data(currency::String)
+function dict_to_df(data_dict::Dict, df::DataFrame)
+
+    # Collect only the key-value data which is suitable for plotting
+    for key in collect(keys(data_dict))            
+        if ~isnothing(data_dict[key]) && length(data_dict[key]) == 1
+            push!(df, [key Float64(data_dict[key])])
+        end		
+    end
+
+    return df
+end
+
+function get_dev_comm_data(currency::String)
 
     coin_id = get_coin_id(currency)
 
-    coin_dict, dev_dict = Dict(), Dict()
+    coin_dict, dev_dict, comm_dict = [Dict() for i = 1:3]
 
     try
         @info "Fetching coin data from CoinGecko" 
@@ -161,6 +173,7 @@ function get_dev_data(currency::String)
         @info "Could not fetch data, try again later!" 
     end
 
+    # Get developer data
     try
         dev_dict = coin_dict["developer_data"]
     catch err     
@@ -171,19 +184,29 @@ function get_dev_data(currency::String)
         end
     end
 
-    df_dev = DataFrame(Metric = String[], Value = Int64[])
-
-    if ~isempty(coin_dict) && ~isempty(dev_dict)   
-        
-        # Collect only the key-value data which is suitable for plotting	
-        for key in collect(keys(dev_dict))            
-            if length(dev_dict[key]) == 1
-                push!(df_dev, [key Int(dev_dict[key])])
-            end		
-        end	
+    # Get community data
+    try
+        comm_dict = coin_dict["community_data"]
+    catch err     
+        if isa(err, KeyError)
+            @info "Could not find community data!"
+        else
+            @info "This is a new error: $(err)"
+        end
     end
 
-    return df_dev
+    # Convert dict to DataFrame
+    df_dev, df_comm = [DataFrame(Metric = String[], Value = Float64[]) for i = 1:2]
+
+    if ~isempty(dev_dict)
+        df_dev = dict_to_df(dev_dict, df_dev)         
+    end
+
+    if ~isempty(comm_dict) 
+        df_comm = dict_to_df(comm_dict, df_comm)        	
+    end
+
+    return df_dev, df_comm
 end
         
         

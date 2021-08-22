@@ -7,9 +7,9 @@ currencies_list = ["BTC", "LTC", "BCH", "ETH", "KNC", "LINK", "ETC", "BNB", "ADA
 currencies = sort(currencies_list)
 currencies_index = 1:length(currencies)
 
-modes = ["Average price + Daily trade", "Candlestick + Volume", 
-         "Cumulative + Daily return", "Daily volatility", "MACD + Signal", 
-         "Linear regression channel", "FCAS data", "Developer + Community data"]
+modes = ["Average price + Daily trade (AV)", "Candlestick + Volume (AV)", 
+         "Cumulative + Daily return (AV)", "Daily volatility (AV)", "MACD + Signal (AV)", 
+         "Linear regression channel (AV)", "FCAS data (AV)", "Developer + Community data (CG)"]
 modes_index = 1:length(modes)
 
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
@@ -88,7 +88,11 @@ function run_app(port::Int64, key::String)
         html_div(style=(width="75%", margin="auto", textAlign="center"), 
 
         ["Visualization of market data obtained from",
-                html_a(" Alpha Vantage", href="https://www.alphavantage.co/documentation/"), 
+                html_a(" Alpha Vantage", href="https://www.alphavantage.co/documentation/"),
+                
+                html_a(" and"),
+
+                html_a(" CoinGecko", href="https://www.coingecko.com/en/api/documentation"),
 
                 html_a(" until $(Dates.today())"),
 
@@ -280,19 +284,26 @@ function run_app(port::Int64, key::String)
         
         # From CoinGecko
         elseif mode_ID == 8
-            t1 = plot_dev_data(pair_ID)
+            t1, t2 = plot_dev_comm_data(pair_ID)
 
             layout1 = Layout(;title="Developer metrics for $(currencies[pair_ID])",
-                xaxis = attr(title="", showgrid=true, zeroline=true),
-                xaxis_tickangle = -15,
-                margin_b = 75,
+                xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
+                xaxis_tickangle = -22.5,
+                yaxis = attr(title="Value", showgrid=true, zeroline=true),
+                height = 500,
+                width = 1000,                           
+            ) 
+            layout2 = Layout(;title="Community metrics for $(currencies[pair_ID])",
+                xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
+                xaxis_tickangle = -22.5,
                 yaxis = attr(title="Value", showgrid=true, zeroline=true),
                 height = 500,
                 width = 1000,                           
             ) 
 
             P1 = Plot(t1, layout1) # plots developer data 
-            return [P1]
+            P2 = Plot(t2, layout2) # plots community data
+            return [P1 P2]
         
         end
     end

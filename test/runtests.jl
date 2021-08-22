@@ -77,8 +77,10 @@ end
 
     for currency in ["btc", "eth", "ltc"]
 
-        df_dev = CryptoDashApp.get_dev_data(currency)
+        df_dev, df_comm = CryptoDashApp.get_dev_comm_data(currency)
         @test ~isempty(df_dev)
+        @test ~isempty(df_comm)
+
     end
 
 end
