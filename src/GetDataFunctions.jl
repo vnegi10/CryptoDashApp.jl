@@ -266,9 +266,10 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
             coin_vol_tickers_dict = Dict()
 
             try 
-                coin_vol_tickers_dict = get_API_response("exchanges/$(exchange)/tickers?coin_ids=$(coin_id)")
-            catch
+                coin_vol_tickers_dict = get_API_response("/exchanges/$(exchange)/tickers?coin_ids=$(coin_id)")
+            catch err
                 @info "Could not find $(coin_id) volume data on $(exchange)!"
+                @info "$(err)"
             end
             
             if ~isempty(coin_vol_tickers_dict)            

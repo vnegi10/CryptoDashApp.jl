@@ -10,28 +10,12 @@ else
     @info "New data folder has been created"
 end
 
-# Cleanup csv files from previous days
-try
-    main_dir = pwd()
-    cd("data")
-    files = readdir()
-    rx1 = r"data"
-    rx2 = r".csv"
-    for file in files
-        ts = Dates.unix2datetime(stat(file).mtime)
-        file_date = Date(ts)
-        if file_date != Dates.today() && occursin(rx1, file) && occursin(rx2, file)
-            rm(file)
-        end
-    end
-    cd(main_dir)    
-catch
-    println("Unable to perform cleanup action")
-end
+# Perform cleanup 
+CryptoDashApp.remove_old_files()
 
 ################# Test cases for accessing market data #################
 
-@testset "Check if market data is accessible" begin    
+@testset "Check if AV market data are accessible" begin    
 
     for currency in ["ETH", "LTC", "LINK"]
 
@@ -73,13 +57,26 @@ end
 
 ################# Test cases for CoinGecko API  #################
 
-@testset "Check if CoinGecko API is working" begin    
+@testset "Check if CG developer and community data are accessible" begin    
 
     for currency in ["btc", "eth", "ltc"]
 
-        df_dev, df_comm = CryptoDashApp.get_dev_comm_data(currency)
+        df_dev, df_comm = CryptoDashApp.get_dev_comm_data(currency)        
+
         @test ~isempty(df_dev)
-        @test ~isempty(df_comm)
+        @test ~isempty(df_comm)        
+
+    end
+
+end
+
+@testset "Check if CG exchange volume data are accessible" begin    
+
+    for currency in ["btc", "eth", "ltc"]
+
+        df_ex_vol = CryptoDashApp.get_exchange_vol_data(currency, 10)
+
+        @test ~isempty(df_ex_vol)        
 
     end
 

@@ -19,7 +19,33 @@ windows = [1, 5, 10, 30, 50, 75, 100]
 
 ################# CoinGecko URL #################
 
-const URL = "https://api.coingecko.com/api/v3/"
+const URL = "https://api.coingecko.com/api/v3"
+
+
+################# Cleanup function #################
+
+function remove_old_files()
+    # Cleanup data files from previous days
+    try
+        main_dir = pwd()
+        cd("data")
+        files = readdir()
+        rx1 = "data"
+        rx2 = "List"
+        rx3 = ".csv"
+        for file in files
+            ts = Dates.unix2datetime(stat(file).mtime)
+            file_date = Date(ts)
+            if file_date != Dates.today() && occursin(rx3, file) && 
+                     (occursin(rx1, file) || occursin(rx2, file))
+                rm(file)
+            end
+        end
+        cd(main_dir)    
+    catch
+        @info "Unable to perform cleanup action"
+    end
+end
 
 
 ################# Run the app #################
@@ -51,26 +77,8 @@ function run_app(port::Int64, key::String)
         @info "New data folder has been created"
     end
 
-    # Cleanup csv files from previous days
-    try
-        main_dir = pwd()
-        cd("data")
-        files = readdir()
-        rx1 = "data"
-        rx2 = "List"
-        rx3 = ".csv"
-        for file in files
-            ts = Dates.unix2datetime(stat(file).mtime)
-            file_date = Date(ts)
-            if file_date != Dates.today() && occursin(rx3, file) && 
-                     (occursin(rx1, file) || occursin(rx2, file))
-                rm(file)
-            end
-        end
-        cd(main_dir)    
-    catch
-        @info "Unable to perform cleanup action"
-    end
+    # Perform cleanup
+    remove_old_files()
 
     # Set API key
     AlphaVantage.global_key!(key)
