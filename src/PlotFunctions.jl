@@ -252,7 +252,29 @@ function plot_dev_comm_data(index::Int64)
                             name = "Community data")                        
 
     return trace1, trace2
-end                        
+end        
+
+function plot_exchange_vol_data(index::Int64, num_exchanges::Int64 = 10)
+
+    # Convert currency symbol to lowercase and fetch data from CoinGecko
+    df_ex_vol = get_exchange_vol_data(lowercase(currencies[index]), num_exchanges)
+
+    ################# Coin volume data #################
+    trace1 = PlotlyJS.bar(; x = df_ex_vol[!, :Name], y = df_ex_vol[!, :Coin_volume], 
+                            name = "Volume data in coins")
+
+    ################# USD volume data #################   
+    trace2 = PlotlyJS.bar(; x = df_ex_vol[!, :Name], y = df_ex_vol[!, :USD_volume], 
+                            name = "Volume data in USD")  
+    
+    return trace1, trace2
+end
+
+
+
+
+
+
 	
 
 

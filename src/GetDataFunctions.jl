@@ -208,6 +208,100 @@ function get_dev_comm_data(currency::String)
 
     return df_dev, df_comm
 end
+
+function get_list_of_exchanges(num_exchanges::Int64)
+
+    date = Dates.today()
+
+    filename = "List_of_top_$(num_exchanges)_exchanges_$(date).csv"
+    filepath = joinpath("data", filename)
+
+    df_all_ex, df_ex = [DataFrame() for i = 1:2]
+
+    # Look for present day's CSV file, if not found, download and save data to a new file
+    if isfile(filepath)
+        @info "Reading list of exchanges from CSV file on disk"
+        df_ex = CSV.File(filepath) |> DataFrame        
+    else
+        try 
+            @info "Fetching list of exchanges from CoinGecko"  
+            ex_dict = get_API_response("/exchanges")
+            df_all_ex = vcat(DataFrame.(ex_dict)...) 
+
+            # Keep only name and id columns
+            df_ex = DataFrame(name = df_all_ex[!, :name], id = df_all_ex[!, :id])
+            CSV.write(filepath, df_ex)           
+        catch err
+            @info "Could not fetch data, try again later!"
+            @info "$(err)"          
+        end         
+    end 
+
+    # Return filtered list of exchanges only when data is available
+    if ~isempty(df_ex)
+        df_ex_vol = DataFrame(Name = df_ex[!, :name][1:num_exchanges],
+                               ID  = df_ex[!, :id][1:num_exchanges])
+
+        return df_ex_vol    
+    else
+        return DataFrame()
+    end
+end
+
+function get_exchange_vol_data(currency::String, num_exchanges::Int64)
+
+    coin_id = get_coin_id(currency)
+
+    df_ex_vol = get_list_of_exchanges(num_exchanges)
+    allowmissing!(df_ex_vol)    
+
+    exchange_coin_vol, exchange_usd_vol = [Union{Missing, Float64}[] for i = 1:2]
+
+    # Extract volume data only when a list of exchanges is available
+    if ~isempty(df_ex_vol)
+
+        for exchange in df_ex_vol[!, :ID]
+
+            coin_vol, usd_vol = [Float64[] for i = 1:2]
+            coin_vol_tickers_dict = Dict()
+
+            try 
+                coin_vol_tickers_dict = get_API_response("exchanges/$(exchange)/tickers?coin_ids=$(coin_id)")
+            catch
+                @info "Could not find $(coin_id) volume data on $(exchange)!"
+            end
+            
+            if ~isempty(coin_vol_tickers_dict)            
+            
+                for i = 1:length(coin_vol_tickers_dict["tickers"])			
+                    push!(coin_vol, coin_vol_tickers_dict["tickers"][i]["volume"])
+                    push!(usd_vol, coin_vol_tickers_dict["tickers"][i]["converted_volume"]["usd"])                          
+                end
+                
+                push!(exchange_coin_vol, sum(coin_vol))
+                push!(exchange_usd_vol, sum(usd_vol))
+
+            else
+                push!(exchange_coin_vol, missing)
+                push!(exchange_usd_vol, missing)
+            end
+
+        end	
+    end
+
+    insertcols!(df_ex_vol, 3, :Coin_volume => exchange_coin_vol)
+    insertcols!(df_ex_vol, 4, :USD_volume => exchange_usd_vol)
+
+    return df_ex_vol
+end
+
+    
+
+
+
+
+
+
         
         
 

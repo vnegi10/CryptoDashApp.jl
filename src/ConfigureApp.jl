@@ -9,7 +9,8 @@ currencies_index = 1:length(currencies)
 
 modes = ["Average price + Daily trade (AV)", "Candlestick + Volume (AV)", 
          "Cumulative + Daily return (AV)", "Daily volatility (AV)", "MACD + Signal (AV)", 
-         "Linear regression channel (AV)", "FCAS data (AV)", "Developer + Community data (CG)"]
+         "Linear regression channel (AV)", "FCAS data (AV)", "Developer + Community data (CG)",
+          "Exchange volume data (CG)"]
 modes_index = 1:length(modes)
 
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
@@ -55,12 +56,14 @@ function run_app(port::Int64, key::String)
         main_dir = pwd()
         cd("data")
         files = readdir()
-        rx1 = r"data"
-        rx2 = r".csv"
+        rx1 = "data"
+        rx2 = "List"
+        rx3 = ".csv"
         for file in files
             ts = Dates.unix2datetime(stat(file).mtime)
             file_date = Date(ts)
-            if file_date != Dates.today() && occursin(rx1, file) && occursin(rx2, file)
+            if file_date != Dates.today() && occursin(rx3, file) && 
+                     (occursin(rx1, file) || occursin(rx2, file))
                 rm(file)
             end
         end
@@ -304,7 +307,30 @@ function run_app(port::Int64, key::String)
             P1 = Plot(t1, layout1) # plots developer data 
             P2 = Plot(t2, layout2) # plots community data
             return [P1 P2]
-        
+
+        elseif mode_ID == 9
+
+            t1, t2 = plot_exchange_vol_data(pair_ID)
+
+            layout1 = Layout(;title="Exchange volume data for $(currencies[pair_ID])",
+                xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
+                xaxis_tickangle = -22.5,
+                yaxis = attr(title="Number of coins", showgrid=true, zeroline=true),
+                height = 500,
+                width = 1000,                           
+            ) 
+            layout2 = Layout(;title="Exchange volume data for $(currencies[pair_ID])",
+                xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
+                xaxis_tickangle = -22.5,
+                yaxis = attr(title="Volume in USD", showgrid=true, zeroline=true),
+                height = 500,
+                width = 1000,                           
+            ) 
+
+            P1 = Plot(t1, layout1) # plots coin volume data 
+            P2 = Plot(t2, layout2) # plots usd volume data
+            return [P1 P2]
+
         end
     end
 
