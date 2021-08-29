@@ -24,7 +24,7 @@ The plots are interactive, which means you can hover your cursor over the data p
 - Right plot shows the daily volume (number of coins) for the selected timeframe.
 
 ### Cumulative + Daily return
-- Left plot shows the cumulative return that will be obtained from a given starting date
+- Left plot shows the cumulative return that will be obtained from a given starting date.
 
 - Right plot shows the daily return distribution. Green indicates an increase in price, whereas red indicates the opposite. Percentage share of green/red is also indicated in the legend.
 
@@ -45,6 +45,19 @@ The plots are interactive, which means you can hover your cursor over the data p
 
 ### Fundamental Cryptocurrency Asset Score (FCAS) data
 - This metric tells us about the market health of an asset. In the case of cryptocurrencies, they are user activity, developer behavior, and market maturity, which are provided by [Flipside Crypto](https://app.flipsidecrypto.com/tracker/all-coins).
+
+### Following modes make use of the CoinGecko API
+---
+
+### Developer + Community data
+- Left plot shows various developer metrics (number of stars in the repository, commits, closed issues, pull requests etc.) that gives us an idea on how active the software development team is for a given cryptocurrency. In particular, for an actively maintained repository, the delta between the number of "closed issues" and the number of "total issues" should not be too big.
+
+- Right plot shows social media activity (number of followers, accounts etc.) on popular platforms such as reddit, telegram and twitter.
+
+### Exchange volume data
+- Left plot shows the total volume (number of coins) that has been traded over last 24 hours for the selected cryptocurrency on the top ten exchanges.
+
+- Right plot shows the USD equivalent for the same data.
 
 ## Run app
 ```@docs

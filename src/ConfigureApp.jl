@@ -320,14 +320,14 @@ function run_app(port::Int64, key::String)
 
             t1, t2 = plot_exchange_vol_data(pair_ID)
 
-            layout1 = Layout(;title="Exchange volume data for $(currencies[pair_ID])",
+            layout1 = Layout(;title="Exchange volume data (24h) for $(currencies[pair_ID])",
                 xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
                 xaxis_tickangle = -22.5,
                 yaxis = attr(title="Number of coins", showgrid=true, zeroline=true),
                 height = 500,
                 width = 1000,                           
             ) 
-            layout2 = Layout(;title="Exchange volume data for $(currencies[pair_ID])",
+            layout2 = Layout(;title="Exchange volume data (24h) for $(currencies[pair_ID])",
                 xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
                 xaxis_tickangle = -22.5,
                 yaxis = attr(title="Volume in USD", showgrid=true, zeroline=true),

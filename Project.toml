@@ -1,7 +1,7 @@
 name = "CryptoDashApp"
 uuid = "8f55a569-a1ee-45d2-b761-b2b316ddd8e9"
 authors = ["Vikas Negi <vikas.negi10@gmail.com>"]
-version = "0.1.3"
+version = "0.1.4"
 
 [deps]
 AlphaVantage = "6348297c-a006-11e8-3a05-9bbf8830fd7b"
@@ -27,6 +27,9 @@ DashCoreComponents = "1.17"
 DashHtmlComponents = "1.1"
 DataFrames = "1.2"
 GLM = "1.5"
+HTTP = "0.9"
+JSON = "0.21"
 PlotlyJS = "0.15"
+Query = "1.0"
 StatsBase = "0.33"
 julia = "1.6"
