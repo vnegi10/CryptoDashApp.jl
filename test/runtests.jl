@@ -102,11 +102,17 @@ end
 
 @testset "Check if CG overall exchange volume data are accessible" begin 
     
-    days, num_exchanges = 5, 5
+    num_exchanges = 10
 
-    df_ex_vol = CryptoDashApp.get_overall_vol_data(days, num_exchanges)
+    for duration in [5, 10, 50, 75]
+        df_ex_vol = CryptoDashApp.get_overall_vol_data(duration, num_exchanges)
 
-    @test size(df_ex_vol)[1] == num_exchanges   
+        # Check for rows
+        @test size(df_ex_vol)[1] == duration
+
+        # Check for columns, total is num_exchanges + 1 due to "Time" column
+        @test size(df_ex_vol)[2] == num_exchanges + 1
+    end
 
 end
 
