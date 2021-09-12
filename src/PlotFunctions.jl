@@ -270,7 +270,7 @@ function plot_exchange_vol_data(index::Int64, num_exchanges::Int64 = 10)
     return trace1, trace2
 end
 
-function plot_overall_vol_data(duration::Int64 = 15, num_exchanges::Int64 = 10)
+function plot_overall_vol_data(duration::Int64 = 30, num_exchanges::Int64 = 10)
 
     # Collect all traces for all exchanges
     all_traces = GenericTrace{Dict{Symbol, Any}}[]
@@ -280,6 +280,7 @@ function plot_overall_vol_data(duration::Int64 = 15, num_exchanges::Int64 = 10)
 
     if ~isempty(df_ex_vol)
 
+        # First column is for duration
         exchanges = names(df_ex_vol)[2:end]   
 
         for i = 1:length(exchanges)

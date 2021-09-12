@@ -10,7 +10,7 @@ currencies_index = 1:length(currencies)
 modes = ["Average price + Daily trade (AV)", "Candlestick + Volume (AV)", 
          "Cumulative + Daily return (AV)", "Daily volatility (AV)", "MACD + Signal (AV)", 
          "Linear regression channel (AV)", "FCAS data (AV)", "Developer + Community data (CG)",
-          "Exchange volume data (CG)"]
+          "Exchange volume data per currency (CG)", "Overall exchange volume data (CG)"]
 modes_index = 1:length(modes)
 
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
@@ -318,28 +318,42 @@ function run_app(port::Int64, key::String)
 
         elseif mode_ID == 9
 
-            _, t2 = plot_exchange_vol_data(pair_ID)
-            t_all = plot_overall_vol_data()
+            t1, t2 = plot_exchange_vol_data(pair_ID)            
 
             layout1 = Layout(;title="Exchange volume data (24h) for $(currencies[pair_ID])",
                 xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
                 xaxis_tickangle = -22.5,
-                yaxis = attr(title="Volume in USD", showgrid=true, zeroline=true),
+                yaxis = attr(title="Number of coins", showgrid=true, zeroline=true),
                 height = 500,
                 width = 1000,                           
             ) 
-            layout2 = Layout(;title="Overall historical volume data (24h) for top 10 exchanges",
+            layout2 = Layout(;title="Exchange volume data (24h) for $(currencies[pair_ID])",
+                xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
+                xaxis_tickangle = -22.5,
+                yaxis = attr(title="Volume in USD", showgrid=true, zeroline=true),
+                height = 500,
+                width = 1000,                                           
+            ) 
+
+            P1 = Plot(t1, layout1)      # plots coin volume data for a given currency 
+            P2 = Plot(t2, layout2)      # plots USD volume data for a given currency
+            return [P1 P2]
+
+        elseif mode_ID == 10
+
+            t_all = plot_overall_vol_data()
+
+            layout1 = Layout(;title="Overall historical volume data (24h) for top 10 exchanges",
                 xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
                 xaxis_tickangle = 0.0,
                 yaxis = attr(title="Volume in BTC", showgrid=true, zeroline=true),
                 height = 500,
                 width = 1000,
                 barmode = "stack",                           
-            ) 
-
-            P1 = Plot(t2, layout1)         # plots usd volume data for a given currency 
-            P2 = Plot(t_all, layout2)      # plots overall btc volume data for all exchanges
-            return [P1 P2]
+            )
+            
+            P1 = Plot(t_all, layout1)    # plots overall BTC volume data for all exchanges
+            return P1
 
         end
     end

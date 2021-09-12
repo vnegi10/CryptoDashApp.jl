@@ -332,9 +332,13 @@ function get_overall_vol_data(days::Int64, num_exchanges::Int64)
                 catch
                     push!(ex_vol, missing)
                 end                    
-            end            
+            end 
 
-            insertcols!(df_ex_vol, 2, Symbol(exchange) => ex_vol)
+            # Find name of the exchange corresponding to its ID           
+            df_row = df_ex_list |> @filter(_.ID == exchange) |> DataFrame
+            name = df_row[!, :Name][1]
+
+            insertcols!(df_ex_vol, 2, Symbol(name) => ex_vol)
         end
 
         return df_ex_vol
