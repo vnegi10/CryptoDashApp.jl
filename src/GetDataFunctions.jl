@@ -127,22 +127,32 @@ function get_coin_id(currency::String)
         # Filter on matching currency 
         df_filter = df_coins |> @filter(_.symbol == currency) |> DataFrame
 
-        # For multiple matches, first filter on coin ids and then on names,
-        # which do not have "-" in them
-        if size(df_filter)[1] > 1
+        try
+            # For multiple matches, first filter on coin ids and then on names,
+            # which do not have "-" in them
+            if size(df_filter)[1] > 1
 
-            df_filter_1 = df_filter |> 
-                        @filter(~occursin("-", _.id)) |> DataFrame
-
-            if isempty(df_filter_1)
                 df_filter_1 = df_filter |> 
-                        @filter(~occursin("-", _.name)) |> DataFrame
-            end
+                            @filter(~occursin("-", _.id)) |> DataFrame
 
-            return df_filter_1[!, :id][1]
+                if isempty(df_filter_1)
+                    df_filter_1 = df_filter |> 
+                            @filter(~occursin("-", _.name)) |> DataFrame
+                end
+
+                return df_filter_1[!, :id][1]
+            end
+            
+            return df_filter[!, :id][1]
+
+        catch err
+            if isa(err, BoundsError)
+                @info "Could not find an id for the given currency"
+            else
+                @info "Something went wrong, check this error: $(err)"
+            end
         end
-        
-        return df_filter[!, :id][1]
+
     else
         return ""   
     end
@@ -290,9 +300,8 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
         end	
     end
 
-    insertcols!(df_ex_vol, 3, :Coin_volume => exchange_coin_vol)
-    insertcols!(df_ex_vol, 4, :USD_volume => exchange_usd_vol)
-
+    insertcols!(df_ex_vol, 3, :Coin_volume => exchange_coin_vol, :USD_volume => exchange_usd_vol)
+    
     return df_ex_vol
 end
 

@@ -29,6 +29,14 @@ CryptoDashApp.remove_old_files()
 
 end
 
+@testset "Check for exception handling while accessing AV market data" begin 
+
+    currency = "dummy"
+    
+    @test_logs (:info, "Could not fetch data, try again later!") match_mode=:any CryptoDashApp.get_price_data_single(currency)
+       
+end
+
 ################# Test cases for moving averages #################
 
 @testset "Check if MA, MACD and signal are calculated" begin
@@ -70,15 +78,35 @@ end
 
 end
 
-@testset "Check if CG exchange volume data are accessible" begin    
+@testset "Check for exception handling while determining coin id" begin    
+
+    currency = "dummy"
+
+    @test_logs (:info, "Could not find an id for the given currency") match_mode=:any CryptoDashApp.get_coin_id(currency)
+    
+end
+
+@testset "Check if CG exchange volume data per currency are accessible" begin    
 
     for currency in ["btc", "eth", "ltc"]
 
-        df_ex_vol = CryptoDashApp.get_exchange_vol_data(currency, 10)
+        num_exchanges = 10
 
-        @test ~isempty(df_ex_vol)        
+        df_ex_vol = CryptoDashApp.get_exchange_vol_data(currency, num_exchanges)
+
+        @test size(df_ex_vol)[1] == num_exchanges        
 
     end
+
+end
+
+@testset "Check if CG overall exchange volume data are accessible" begin 
+    
+    days, num_exchanges = 5, 5
+
+    df_ex_vol = CryptoDashApp.get_overall_vol_data(days, num_exchanges)
+
+    @test size(df_ex_vol)[1] == num_exchanges   
 
 end
 
