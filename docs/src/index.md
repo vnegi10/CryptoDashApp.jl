@@ -54,10 +54,13 @@ The plots are interactive, which means you can hover your cursor over the data p
 
 - Right plot shows social media activity (number of followers, accounts etc.) on popular platforms such as reddit, telegram and twitter.
 
-### Exchange volume data
+### Exchange volume data per currency
 - Left plot shows the total volume (number of coins) that has been traded over last 24 hours for the selected cryptocurrency on the top ten exchanges.
 
 - Right plot shows the USD equivalent for the same data.
+
+### Overall exchange volume data
+- This stacked bar plot shows the total 24-hr volume (in BTC) of all the cryptocurrencies traded on various exchanges over the course of last 30 days.
 
 ## Run app
 ```@docs
