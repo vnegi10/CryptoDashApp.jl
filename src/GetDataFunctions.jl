@@ -305,13 +305,73 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
     return df_ex_vol
 end
 
-function get_overall_vol_data(days::Int64, num_exchanges::Int64)
+function get_vol_chart(exchange::String)
+
+    date = Dates.today()
+
+    filename = "$(exchange)_vol_data_$(date).txt"
+    filepath = joinpath("data", filename)
+
+    ex_vol_chart = Vector{Any}[]
+
+    # Historical data is fetched and saved for these many days. Takes more time for longer duration, 
+    # and queries for many exchanges don't even return more points.
+    days = 365
+
+    if isfile(filepath)
+        @info "Reading $(exchange) vol data from file on disk"
+        ex_vol_chart = readdlm(filepath, ';')
+
+        # Drop the dimension and convert to Float64
+        ex_vol_chart = Float64.(ex_vol_chart[:])
+    else
+        try
+            # Fetch and save data for 365 days
+            ex_vol_chart = get_API_response("/exchanges/$(exchange)/volume_chart?days=$(days)") 
+
+            open(filepath, "w") do f
+                for i = 1:length(ex_vol_chart)
+                    writedlm(f, [ex_vol_chart[i]], ";")	
+                end
+            end
+
+        catch
+            @info "Could not find volume data for $(exchange)"
+            @info "$(err)"
+        end
+    end
+
+    if length(ex_vol_chart) > days        
+        start_index = Int64(length(ex_vol_chart)/2) + 1        
+        return ex_vol_chart[start_index:end]
+
+    else
+        ex_vol = Union{Missing, Float64}[]
+
+        for i = 1:length(ex_vol_chart)
+            try
+                push!(ex_vol, round(parse(Float64, ex_vol_chart[i][2]); digits = 2))                        
+            catch
+                push!(ex_vol, missing)
+            end                    
+        end 
+
+        return ex_vol
+    end    
+end
+
+function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
 
     df_ex_list = get_list_of_exchanges(num_exchanges)
 
+    # Check on duration, current maximum is set to 365
+    if duration > 365
+        duration = 365
+    end
+
     # Create a column with dates
     f_day = Dates.today()
-    i_day = f_day - Dates.Day(days-1)
+    i_day = f_day - Dates.Day(duration-1)
 
     time = collect(i_day:Dates.Day(1):f_day)
 
@@ -323,31 +383,38 @@ function get_overall_vol_data(days::Int64, num_exchanges::Int64)
 
         for exchange in df_ex_list[!, :ID]
 
-            ex_vol_chart = Vector{Any}[]
-            ex_vol = Union{Missing, Float64}[]
-
+            ex_vol = Vector{Any}[]
+            
             try
-                ex_vol_chart = get_API_response("/exchanges/$(exchange)/volume_chart?days=$(days)")
+                ex_vol = get_vol_chart(exchange)
             catch err
                 @info "Could not find volume data for $(exchange), will continue to next!"
                 @info "$(err)"
-                continue
-            end
 
-            # This will only run when previous try block is okay            
-            for i = 1:length(ex_vol_chart)
-                try
-                    push!(ex_vol, round(parse(Float64, ex_vol_chart[i][2]); digits = 2))                        
-                catch
-                    push!(ex_vol, missing)
-                end                    
-            end 
+                # Skip next part of the code, and continue to next exchange
+                continue
+            end            
+
+            # Check and filter on duration 
+            if duration > length(ex_vol)
+                duration = length(ex_vol)
+            end           
+            ex_vol = ex_vol[end-duration+1:end]       
 
             # Find name of the exchange corresponding to its ID           
             df_row = df_ex_list |> @filter(_.ID == exchange) |> DataFrame
             name = df_row[!, :Name][1]
 
-            insertcols!(df_ex_vol, 2, Symbol(name) => ex_vol)
+            try
+                insertcols!(df_ex_vol, 2, Symbol(name) => ex_vol)                
+            catch err
+                if isa(err, DimensionMismatch)
+                    @info "Data is missing for $(exchange) for the requested duration"
+                else
+                    @info "Something went wrong, check this error: $(err)"
+                end
+            end
+            
         end
 
         return df_ex_vol

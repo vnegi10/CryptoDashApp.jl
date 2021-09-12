@@ -270,7 +270,7 @@ function plot_exchange_vol_data(index::Int64, num_exchanges::Int64 = 10)
     return trace1, trace2
 end
 
-function plot_overall_vol_data(duration::Int64 = 30, num_exchanges::Int64 = 10)
+function plot_overall_vol_data(duration::Int64, num_exchanges::Int64 = 10)
 
     # Collect all traces for all exchanges
     all_traces = GenericTrace{Dict{Symbol, Any}}[]

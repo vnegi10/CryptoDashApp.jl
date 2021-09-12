@@ -341,7 +341,7 @@ function run_app(port::Int64, key::String)
 
         elseif mode_ID == 10
 
-            t_all = plot_overall_vol_data()
+            t_all = plot_overall_vol_data(duration_ID)
 
             layout1 = Layout(;title="Overall historical volume data (24h) for top 10 exchanges",
                 xaxis = attr(title="", showgrid=true, zeroline=true, automargin=true),
