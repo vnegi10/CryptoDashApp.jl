@@ -270,6 +270,29 @@ function plot_exchange_vol_data(index::Int64, num_exchanges::Int64 = 10)
     return trace1, trace2
 end
 
+function plot_overall_vol_data(duration::Int64 = 15, num_exchanges::Int64 = 10)
+
+    # Collect all traces for all exchanges
+    all_traces = GenericTrace{Dict{Symbol, Any}}[]
+
+    # Fetch overall volume data from CoinGecko for given historical duration
+    df_ex_vol = get_overall_vol_data(duration, num_exchanges)
+
+    if ~isempty(df_ex_vol)
+
+        exchanges = names(df_ex_vol)[2:end]   
+
+        for i = 1:length(exchanges)
+
+            trace = PlotlyJS.bar(;x = df_ex_vol[!,:Time], y = df_ex_vol[!,i+1], 
+            mode="markers+lines", name = "$(exchanges[i])")
+
+            push!(all_traces, trace)
+        end
+    end
+
+    return all_traces        
+end
 
 
 

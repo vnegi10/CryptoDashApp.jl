@@ -296,6 +296,53 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
     return df_ex_vol
 end
 
+function get_overall_vol_data(days::Int64, num_exchanges::Int64)
+
+    df_ex_list = get_list_of_exchanges(num_exchanges)
+
+    # Create a column with dates
+    f_day = Dates.today()
+    i_day = f_day - Dates.Day(days-1)
+
+    time = collect(i_day:Dates.Day(1):f_day)
+
+    df_ex_vol = DataFrame(Time = time)
+    allowmissing!(df_ex_vol) 
+
+    # Extract volume data only when a list of exchanges is available
+    if ~isempty(df_ex_list)
+
+        for exchange in df_ex_list[!, :ID]
+
+            ex_vol_chart = Vector{Any}[]
+            ex_vol = Union{Missing, Float64}[]
+
+            try
+                ex_vol_chart = get_API_response("/exchanges/$(exchange)/volume_chart?days=$(days)")
+            catch err
+                @info "Could not find volume data for $(exchange), will continue to next!"
+                @info "$(err)"
+                continue
+            end
+
+            # This will only run when previous try block is okay            
+            for i = 1:length(ex_vol_chart)
+                try
+                    push!(ex_vol, round(parse(Float64, ex_vol_chart[i][2]); digits = 2))                        
+                catch
+                    push!(ex_vol, missing)
+                end                    
+            end            
+
+            insertcols!(df_ex_vol, 2, Symbol(exchange) => ex_vol)
+        end
+
+        return df_ex_vol
+    else
+        return DataFrame()
+    end
+
+end
     
 
 
