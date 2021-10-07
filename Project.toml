@@ -23,7 +23,7 @@ StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
 [compat]
 AlphaVantage = "0.3"
 CSV = "0.8"
-Dash = "0.1"
+Dash = "0.1, 1"
 DashCoreComponents = "1.17"
 DashHtmlComponents = "1.1"
 DataFrames = "1.2"
