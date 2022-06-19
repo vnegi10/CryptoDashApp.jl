@@ -34,4 +34,4 @@ First plot will take a few seconds to appear, wait patiently! If you are running
 
 ## App demo
 
-<iframe src="https://giphy.com/embed/gn6DV7p7Wbh15FdWMX" width="480" height="239" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/blockchain-julia-language-cryptodashapp-gn6DV7p7Wbh15FdWMX">via GIPHY</a></p>
+<div style="width:100%;height:0;padding-bottom:50%;position:relative;"><iframe src="https://giphy.com/embed/gn6DV7p7Wbh15FdWMX" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p><a href="https://giphy.com/gifs/blockchain-julia-language-cryptodashapp-gn6DV7p7Wbh15FdWMX">via GIPHY</a></p>
