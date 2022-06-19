@@ -32,11 +32,6 @@ Now, open a new tab in your browser and check if you can access http://0.0.0.0:8
 
 First plot will take a few seconds to appear, wait patiently! If you are running this app for the first time, or on a different date, new data will be retrieved from Alpha Vantage, and then saved to CSV files on disk. Keep in mind that the free API key imposes a limit of five calls/minute, which means you won't be able to load data for more than five currencies in quick succession. In case you see an error, wait for a while and then try again.
 
+## App demo
 
-    
-
-
-
-    
-
-
+![Storj link](https://link.eu1.storjshare.io/s/juiaacgfta5f4o5p3zy4lxnn4ckq/videos/gifs/CryptoDashApp_demo_2022_06_19.gif)
