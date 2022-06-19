@@ -34,6 +34,4 @@ First plot will take a few seconds to appear, wait patiently! If you are running
 
 ## App demo
 
-<img src="https://link.eu1.storjshare.io/s/juiaacgfta5f4o5p3zy4lxnn4ckq/videos/gifs/CryptoDashApp_demo_2022_06_19.gif"/>
-
-![Storj link](https://link.eu1.storjshare.io/s/juiaacgfta5f4o5p3zy4lxnn4ckq/videos/gifs/CryptoDashApp_demo_2022_06_19.gif)
+<iframe src="https://giphy.com/embed/gn6DV7p7Wbh15FdWMX" width="480" height="239" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/blockchain-julia-language-cryptodashapp-gn6DV7p7Wbh15FdWMX">via GIPHY</a></p>
