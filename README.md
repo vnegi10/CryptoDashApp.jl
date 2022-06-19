@@ -34,4 +34,6 @@ First plot will take a few seconds to appear, wait patiently! If you are running
 
 ## App demo
 
+<img src="https://link.eu1.storjshare.io/s/juiaacgfta5f4o5p3zy4lxnn4ckq/videos/gifs/CryptoDashApp_demo_2022_06_19.gif"/>
+
 ![Storj link](https://link.eu1.storjshare.io/s/juiaacgfta5f4o5p3zy4lxnn4ckq/videos/gifs/CryptoDashApp_demo_2022_06_19.gif)
