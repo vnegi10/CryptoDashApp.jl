@@ -6,9 +6,14 @@ using AlphaVantage, DataFrames, Dates, PlotlyJS, Dash, DashHtmlComponents,
       DashCoreComponents, CSV, Statistics, StatsBase, GLM, HTTP, JSON, Query,
       DelimitedFiles
 
-include("CryptoFunctions.jl")
-include("GetDataFunctions.jl")
-include("PlotFunctions.jl")
-include("ConfigureApp.jl")
+include("app.jl")
+
+include("getdataAV.jl")
+include("getdataCG.jl")
+
+include("plotsAV.jl")
+include("plotsCG.jl")
+
+include("helper.jl")
 
 end # module
