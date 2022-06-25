@@ -13,7 +13,7 @@ modes = ["Average price + Daily trade (AV)",
          "Daily volatility (AV)", 
          "MACD + Signal (AV)", 
          "Linear regression channel (AV)",
-         "Bollinger bands", 
+         "Bollinger bands (AV)", 
          "FCAS data (AV)", 
          "Developer + Community data (CG)",
          "Exchange volume data per currency (CG)", 
@@ -290,6 +290,19 @@ function run_app(port::Int64, key::String)
             return [P1]
 
         elseif mode_ID == 7
+            t1, t2, t3, t4 = plot_price_bollinger_bands(pair_ID, duration_ID, window_ID)
+
+            layout1 = Layout(;title="Bollinger bands for $(currencies[pair_ID])",
+                xaxis = attr(title="Time", showgrid=true, zeroline=true),
+                yaxis = attr(title="Price [euros]", showgrid=true, zeroline=true),
+                height = 500,
+                width = 1000,                           
+            ) 
+
+            P1 = Plot([t1, t2, t3, t4], layout1) # plots Bollinger bands   
+            return [P1]
+
+        elseif mode_ID == 8
             t1, fr = plot_fcas_data(pair_ID)
 
             layout1 = Layout(;title="FCAS metrics data for $(currencies[pair_ID]), overall rating = $(fr)",
@@ -303,7 +316,7 @@ function run_app(port::Int64, key::String)
             return [P1]
         
         # From CoinGecko
-        elseif mode_ID == 8
+        elseif mode_ID == 9
             t1, t2 = plot_dev_comm_data(pair_ID)
 
             layout1 = Layout(;title="Developer metrics for $(currencies[pair_ID])",
@@ -325,7 +338,7 @@ function run_app(port::Int64, key::String)
             P2 = Plot(t2, layout2) # plots community data
             return [P1 P2]
 
-        elseif mode_ID == 9
+        elseif mode_ID == 10
 
             t1, t2 = plot_exchange_vol_data(pair_ID)            
 
@@ -348,7 +361,7 @@ function run_app(port::Int64, key::String)
             P2 = Plot(t2, layout2)      # plots USD volume data for a given currency
             return [P1 P2]
 
-        elseif mode_ID == 10
+        elseif mode_ID == 11
 
             t_all = plot_overall_vol_data(duration_ID)
 

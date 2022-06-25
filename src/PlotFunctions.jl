@@ -26,7 +26,7 @@ function plot_price_ma_trade_data(index::Int64, duration::Int64, window::Int64)
     return trace1, trace2, trace3, trace4, trace5
 end
 
-function plot_price_bollinger_band(index::Int64, duration::Int64, window::Int64)
+function plot_price_bollinger_bands(index::Int64, duration::Int64, window::Int64)
 
     Price_df, _ , _ = get_price_data_single(currencies[index])
 
