@@ -40,8 +40,8 @@ function plot_price_bollinger_bands(index::Int64, duration::Int64, window::Int64
 
     ################# Raw price data #################
     
-    trace1 = PlotlyJS.scatter(;x = Price_df[1:duration,:Date], 
-                               y = Price_df[1:duration,2], 
+    trace1 = PlotlyJS.scatter(;x = Price_df[!,:Date][end-length(Price_SMA)+1:end], 
+                               y = Price_df[!,2][end-length(Price_SMA)+1:end],
                                mode = "markers+lines", 
                                name = "$(currencies[index]) price")
 
@@ -49,17 +49,17 @@ function plot_price_bollinger_bands(index::Int64, duration::Int64, window::Int64
 	
 	trace2 = PlotlyJS.scatter(;x = Price_df[!,:Date][end-length(Price_SMA)+1:end], 
                                y = Price_SMA, 
-                               mode="lines", 
+                               mode = "lines", 
                                name = "$(names(Price_df)[2]) SMA over $(window) days")
 	
 	trace3 = PlotlyJS.scatter(;x = Price_df[!,:Date][end-length(Price_SMA)+1:end], 
                                y = Price_SMA .+ 2*Price_σ, 
-                               mode="markers", 
+                               mode = "markers", 
                                name = "Upper band (+2σ)")
 	
     trace4 = PlotlyJS.scatter(;x = Price_df[!,:Date][end-length(Price_SMA)+1:end], 
                                y = Price_SMA .- 2*Price_σ, 
-                               mode="markers", 
+                               mode = "markers", 
                                name = "Lower band (-2σ)")
 
     return trace1, trace2, trace3, trace4
