@@ -422,25 +422,4 @@ function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
         return DataFrame()
     end
 
-end
-    
-
-
-
-
-
-
-        
-        
-
-    
-
-
-
-
-
-    
-
-
-
-    
+end    

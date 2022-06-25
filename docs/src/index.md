@@ -43,6 +43,20 @@ The plots are interactive, which means you can hover your cursor over the data p
 
 - Plot title also contains $R^2$, which is a statistical measure representing the proportion of variation in the dependent variable that is explained by different features (independent variables) in this model. A value closer to 1 (maximum) indicates a good fit. The linear regression channel metric will therefore not be very useful when $R^2 < 0.50$.
 
+### Bollinger bands
+- These are price envelopes plotted at two standard deviations (std) above (upper band) and below
+(lower band) a simple moving average of the daily price. Since the distance towards the bands is
+based on std, it adjusts in response to the price volatility.
+
+- When the bands move closer (tighten during low volatility), it raises the chances of a sharp
+price movement in either direction. On the contrary, diverging bands indicate high volatility, 
+which might also indicate the end for any existing trend.
+
+- Prices often bounce between the two bands, which could be used to identify potential price 
+targets. For example, when a price bounces off of the lower band, and crosses the moving average,
+the upper band might be considered as the next profit target. Prices can also cross the bands 
+during strong ternds.
+
 ### Fundamental Cryptocurrency Asset Score (FCAS) data
 - This metric tells us about the market health of an asset. In the case of cryptocurrencies, they are user activity, developer behavior, and market maturity, which are provided by [Flipside Crypto](https://app.flipsidecrypto.com/tracker/all-coins).
 

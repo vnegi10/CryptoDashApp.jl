@@ -134,4 +134,3 @@ function calculate_macd(Price_df::DataFrame, window_long::Int64 = 26,
 	
 	return df_ema
 end	
-
