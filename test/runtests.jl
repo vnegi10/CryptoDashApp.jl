@@ -51,12 +51,12 @@ end
         duration = 90
         window = 30
 
-        Price_SMA, Price_WMA, Price_EMA =
+        price_SMA, price_WMA, price_EMA =
             CryptoDashApp.moving_averages(df_out_price, duration, window)
 
-        @test ~isempty(Price_SMA)
-        @test ~isempty(Price_WMA)
-        @test ~isempty(Price_WMA)
+        @test ~isempty(price_SMA)
+        @test ~isempty(price_WMA)
+        @test ~isempty(price_WMA)
 
         df_out_price = df_out_price[end-duration+1-26-9+1:end, :]
         df_ema_all = CryptoDashApp.calculate_macd(df_out_price)

@@ -2,50 +2,50 @@
 
 function plot_price_ma_trade_data(index::Int64, duration::Int64, window::Int64)
     # Retrieve data from various helper functions    
-    Price_df, _, Vol_df = get_price_data_single(currencies[index])
+    df_price, _, df_vol = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows - max(windows) in the DataFrame
     # This allows calculation of MA for the longest duration
-    if duration > size(Price_df)[1] - maximum(windows)
-        duration = size(Price_df)[1] - maximum(windows)
+    if duration > size(df_price)[1] - maximum(windows)
+        duration = size(df_price)[1] - maximum(windows)
     end
 
     ################# Daily average data #################
     trace1 = PlotlyJS.scatter(;
-        x = Price_df[1:duration, :Date],
-        y = Price_df[1:duration, 2],
+        x = df_price[1:duration, :Date],
+        y = df_price[1:duration, 2],
         mode = "markers+lines",
         name = "$(currencies[index]) price",
     )
 
     ################# Moving averages data #################
-    sort!(Price_df, :Date) # oldest date first, newest at the bottom
-    Price_SMA, Price_WMA, Price_EMA = moving_averages(Price_df, duration, window)
+    sort!(df_price, :Date) # oldest date first, newest at the bottom
+    price_SMA, price_WMA, price_EMA = moving_averages(df_price, duration, window)
 
     trace2 = PlotlyJS.scatter(;
-        x = Price_df[!, :Date][end-length(Price_SMA)+1:end],
-        y = Price_SMA,
+        x = df_price[!, :Date][end-length(price_SMA)+1:end],
+        y = price_SMA,
         mode = "lines",
-        name = "$(names(Price_df)[2]) SMA over $(window) days",
+        name = "$(names(df_price)[2]) SMA over $(window) days",
     )
     trace3 = PlotlyJS.scatter(;
-        x = Price_df[!, :Date][end-length(Price_WMA)+1:end],
-        y = Price_WMA,
+        x = df_price[!, :Date][end-length(price_WMA)+1:end],
+        y = price_WMA,
         mode = "lines",
-        name = "$(names(Price_df)[2]) WMA over $(window) days",
+        name = "$(names(df_price)[2]) WMA over $(window) days",
     )
     trace4 = PlotlyJS.scatter(;
-        x = Price_df[!, :Date][end-length(Price_EMA)+1:end],
-        y = Price_EMA,
+        x = df_price[!, :Date][end-length(price_EMA)+1:end],
+        y = price_EMA,
         mode = "lines",
-        name = "$(names(Price_df)[2]) EMA over $(window) days",
+        name = "$(names(df_price)[2]) EMA over $(window) days",
     )
 
     ################# Daily trade data #################
-    sort!(Price_df, :Date, rev = true) # newest date first, oldest at the bottom
+    sort!(df_price, :Date, rev = true) # newest date first, oldest at the bottom
     trace5 = PlotlyJS.bar(;
-        x = Price_df[1:duration, :Date],
-        y = Price_df[1:duration, 2] .* Vol_df[1:duration, 2],
+        x = df_price[1:duration, :Date],
+        y = df_price[1:duration, 2] .* df_vol[1:duration, 2],
         mode = "markers+lines",
         name = "$(currencies[index]) daily trade",
     )
@@ -55,21 +55,21 @@ end
 
 function plot_price_bollinger_bands(index::Int64, duration::Int64, window::Int64)
 
-    Price_df, _, _ = get_price_data_single(currencies[index])
+    df_price, _, _ = get_price_data_single(currencies[index])
 
-    if duration > size(Price_df)[1] - maximum(windows)
-        duration = size(Price_df)[1] - maximum(windows)
+    if duration > size(df_price)[1] - maximum(windows)
+        duration = size(df_price)[1] - maximum(windows)
     end
 
-    sort!(Price_df, :Date) # oldest date first, newest at the bottom
-    Price_SMA, _, _ = moving_averages(Price_df, duration, window)
-    Price_σ = moving_std(Price_df, duration, window)
+    sort!(df_price, :Date) # oldest date first, newest at the bottom
+    price_SMA, _, _ = moving_averages(df_price, duration, window)
+    Price_σ = moving_std(df_price, duration, window)
 
     ################# Raw price data #################
 
     trace1 = PlotlyJS.scatter(;
-        x = Price_df[!, :Date][end-length(Price_SMA)+1:end],
-        y = Price_df[!, 2][end-length(Price_SMA)+1:end],
+        x = df_price[!, :Date][end-length(price_SMA)+1:end],
+        y = df_price[!, 2][end-length(price_SMA)+1:end],
         mode = "markers+lines",
         name = "$(currencies[index]) price",
     )
@@ -77,22 +77,22 @@ function plot_price_bollinger_bands(index::Int64, duration::Int64, window::Int64
     ################# SMA and Bollinger bands #################
 
     trace2 = PlotlyJS.scatter(;
-        x = Price_df[!, :Date][end-length(Price_SMA)+1:end],
-        y = Price_SMA,
+        x = df_price[!, :Date][end-length(price_SMA)+1:end],
+        y = price_SMA,
         mode = "lines",
-        name = "$(names(Price_df)[2]) SMA over $(window) days",
+        name = "$(names(df_price)[2]) SMA over $(window) days",
     )
 
     trace3 = PlotlyJS.scatter(;
-        x = Price_df[!, :Date][end-length(Price_SMA)+1:end],
-        y = Price_SMA .+ 2 * Price_σ,
+        x = df_price[!, :Date][end-length(price_SMA)+1:end],
+        y = price_SMA .+ 2 * Price_σ,
         mode = "markers",
         name = "Upper band (+2σ)",
     )
 
     trace4 = PlotlyJS.scatter(;
-        x = Price_df[!, :Date][end-length(Price_SMA)+1:end],
-        y = Price_SMA .- 2 * Price_σ,
+        x = df_price[!, :Date][end-length(price_SMA)+1:end],
+        y = price_SMA .- 2 * Price_σ,
         mode = "markers",
         name = "Lower band (-2σ)",
     )
@@ -103,7 +103,7 @@ end
 function plot_candle_vol_data(index::Int64, duration::Int64)
 
     # Retrieve data from various helper functions    
-    _, Candle_df, Vol_df = get_price_data_single(currencies[index])
+    _, Candle_df, df_vol = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
     if duration > size(Candle_df)[1]
@@ -132,8 +132,8 @@ function plot_candle_vol_data(index::Int64, duration::Int64)
 
     ################# Daily volume data #################
     trace2 = PlotlyJS.bar(;
-        x = Vol_df[1:duration, :Date],
-        y = Vol_df[1:duration, 2],
+        x = df_vol[1:duration, :Date],
+        y = df_vol[1:duration, 2],
         name = "$(currencies[index]) volume",
     )
 
@@ -143,22 +143,22 @@ end
 function plot_cumul_daily_return_hist(index::Int64, duration::Int64)
 
     # Retrieve data from various helper functions    
-    Price_df, _, _ = get_price_data_single(currencies[index])
+    df_price, _, _ = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
-    if duration > size(Price_df)[1]
-        duration = size(Price_df)[1]
+    if duration > size(df_price)[1]
+        duration = size(df_price)[1]
     end
 
     # Reverse the order (oldest date first, newest at the bottom)
-    sort!(Price_df, :Date)
+    sort!(df_price, :Date)
 
     ################# Cumulative return #################
 
     trace1 = PlotlyJS.scatter(;
-        x = Price_df[end-duration+2:end, :Date],
+        x = df_price[end-duration+2:end, :Date],
         y = (
-            cumsum(diff(Price_df[end-duration+1:end, 2])) ./ Price_df[end-duration+1, 2]
+            cumsum(diff(df_price[end-duration+1:end, 2])) ./ df_price[end-duration+1, 2]
         ) .* 100,
         mode = "markers+lines",
         name = "$(currencies[index]) cumulative return",
@@ -166,8 +166,8 @@ function plot_cumul_daily_return_hist(index::Int64, duration::Int64)
 
     ################# Daily return #################
 
-    X = Price_df[end-duration+2:end, :Date]
-    Y = (diff(Price_df[end-duration+1:end, 2]) ./ Price_df[end-duration+1:end-1, 2]) .* 100
+    X = df_price[end-duration+2:end, :Date]
+    Y = (diff(df_price[end-duration+1:end, 2]) ./ df_price[end-duration+1:end-1, 2]) .* 100
 
     # Split into two datasets (green: positive change, red: negative change)
     green_Y = Y[Y.≥0.0]
@@ -244,19 +244,19 @@ end
 function plot_macd_signal(index::Int64, duration::Int64)
 
     # Retrieve data from various helper functions    
-    Price_df, _, _ = get_price_data_single(currencies[index])
+    df_price, _, _ = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
-    if duration > size(Price_df)[1]
-        duration = size(Price_df)[1]
+    if duration > size(df_price)[1]
+        duration = size(df_price)[1]
     end
 
-    sort!(Price_df, :Date)                            # oldest date first, newest at the bottom
+    sort!(df_price, :Date)                            # oldest date first, newest at the bottom
 
-    Price_df = Price_df[end-duration+1-26-9+1:end, :] # filter based on selected duration and effective 
+    df_price = df_price[end-duration+1-26-9+1:end, :] # filter based on selected duration and effective 
     # window size of 26+9
 
-    df_ema_all = calculate_macd(Price_df)             # get EMA and MACD data into a DataFrame
+    df_ema_all = calculate_macd(df_price)             # get EMA and MACD data into a DataFrame
 
 
     ################# Daily average, EMA-12 and EMA-26 data #################
@@ -331,15 +331,15 @@ end
 function plot_linear_regression(index::Int64, duration::Int64)
 
     # Retrieve data from various helper functions    
-    Price_df, _, _ = get_price_data_single(currencies[index])
+    df_price, _, _ = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
-    if duration > size(Price_df)[1]
-        duration = size(Price_df)[1]
+    if duration > size(df_price)[1]
+        duration = size(df_price)[1]
     end
 
     # Filter on duration and create index column (model fit does not work with dates)	
-    df_fit = sort!(Price_df[1:duration, :])
+    df_fit = sort!(df_price[1:duration, :])
     df_fit.Index = 1:size(df_fit)[1]
 
     # Rename column to price to make df_fit generic

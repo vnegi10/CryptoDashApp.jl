@@ -17,7 +17,7 @@ function raw_to_df(raw_data)
     return df
 end
 
-function average_price_df(currency::String, df_in::DataFrame)
+function average_df_price(currency::String, df_in::DataFrame)
 
     df_out_price, df_out_candle = [DataFrame() for i = 1:2]
 
@@ -51,7 +51,7 @@ function average_price_df(currency::String, df_in::DataFrame)
     return df_out_price, df_out_candle
 end
 
-function vol_df(currency::String, df_in::DataFrame)
+function df_vol(currency::String, df_in::DataFrame)
 
     df_out_vol = DataFrame()
 
@@ -61,12 +61,12 @@ function vol_df(currency::String, df_in::DataFrame)
     return df_out_vol
 end
 
-function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64)
+function moving_averages(df_price::DataFrame, duration::Int64, window::Int64)
 
-    # Price_df should have date order - oldest to latest
-    Price_col = Price_df[end-duration+1-window+1:end, 2]
+    # df_price should have date order - oldest to latest
+    Price_col = df_price[end-duration+1-window+1:end, 2]
     rows1 = length(Price_col)
-    Price_SMA, Price_WMA, Price_EMA = [Float64[] for i = 1:3]
+    price_SMA, price_WMA, price_EMA = [Float64[] for i = 1:3]
 
     weights = collect(1:window) / (window * (window + 1) / 2)
     k = 2 / (window + 1)
@@ -74,24 +74,24 @@ function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64)
     # Calculate different Moving Averages
     for i = 1:rows1-(window-1)
         # Simple Moving Average (SMA)
-        push!(Price_SMA, mean(Price_col[i:i+(window-1)]))
+        push!(price_SMA, mean(Price_col[i:i+(window-1)]))
 
         # Weighted Moving Average
-        push!(Price_WMA, sum(Price_col[i:i+(window-1)] .* weights))
+        push!(price_WMA, sum(Price_col[i:i+(window-1)] .* weights))
 
         # Exponential Moving Average
         SMA = mean(Price_col[i:i+(window-1)])
         EMA = (Price_col[i+(window-1)] * k) + (SMA * (1 - k))
-        push!(Price_EMA, EMA)
+        push!(price_EMA, EMA)
     end
 
-    return Price_SMA, Price_WMA, Price_EMA
+    return price_SMA, price_WMA, price_EMA
 end
 
-function moving_std(Price_df::DataFrame, duration::Int64, window::Int64)
+function moving_std(df_price::DataFrame, duration::Int64, window::Int64)
 
-    # Price_df should have date order - oldest to latest
-    Price_col = Price_df[end-duration+1-window+1:end, 2]
+    # df_price should have date order - oldest to latest
+    Price_col = df_price[end-duration+1-window+1:end, 2]
     rows1 = length(Price_col)
 
     Price_std = Float64[]
@@ -107,46 +107,46 @@ end
 function calculate_ema(Price_col::Vector{Float64}, window::Int64)
 
     k(window) = 2 / (window + 1)
-    Price_EMA = Float64[]
+    price_EMA = Float64[]
     rows = length(Price_col)
 
     for i = 1:rows-(window-1)
 
         SMA = mean(Price_col[i:i+(window-1)])
         EMA = (Price_col[i+(window-1)] * k(window)) + (SMA * (1 - k(window)))
-        push!(Price_EMA, EMA)
+        push!(price_EMA, EMA)
     end
 
-    return Price_EMA
+    return price_EMA
 end
 
 function calculate_macd(
-    Price_df::DataFrame,
+    df_price::DataFrame,
     window_long::Int64 = 26,
     window_short::Int64 = 12,
     window_signal::Int64 = 9,
 )
 
-    # Price_df should have date order - oldest to latest    
-    Price_col = Price_df[!, 2]
+    # df_price should have date order - oldest to latest    
+    Price_col = df_price[!, 2]
 
     # Calculate 26 (long) and 12 (short) period EMA
-    Price_EMA_short = calculate_ema(Price_col, window_short)
-    Price_EMA_long = calculate_ema(Price_col, window_long)
+    price_EMA_short = calculate_ema(Price_col, window_short)
+    price_EMA_long = calculate_ema(Price_col, window_long)
 
     # Make EMA_long and EMA_short equal	
-    EMA_short_col = Price_EMA_short[window_long-window_short+1:end]
+    EMA_short_col = price_EMA_short[window_long-window_short+1:end]
 
     # Calculate MACD = EMA_short - EMA_long
-    MACD_col = EMA_short_col - Price_EMA_long
+    MACD_col = EMA_short_col - price_EMA_long
 
     # Calculate signal line (9 period EMA of MACD)	
     Signal_col = calculate_ema(MACD_col, window_signal)
 
     df_ema = DataFrame(
-        date = Price_df[window_long+window_signal-1:end, :Date],
-        Raw = Price_df[window_long+window_signal-1:end, 2],
-        EMA_long = Price_EMA_long[window_signal:end],
+        date = df_price[window_long+window_signal-1:end, :Date],
+        Raw = df_price[window_long+window_signal-1:end, 2],
+        EMA_long = price_EMA_long[window_signal:end],
         EMA_short = EMA_short_col[window_signal:end],
         MACD = MACD_col[window_signal:end],
         Signal = Signal_col,

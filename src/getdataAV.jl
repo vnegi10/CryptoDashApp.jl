@@ -7,27 +7,27 @@ function get_price_data_single(currency::String)
     filename = "$(currency)_EUR_data_$(date).csv"
     filepath = joinpath("data", filename)
 
-    raw_df = DataFrame()
+    df_raw = DataFrame()
 
     # Look for present day's CSV file, if not found, download and save data to a new file
     if isfile(filepath)
         @info "Reading $(currency) price/vol data from CSV file on disk"
-        raw_df = CSV.File(filepath) |> DataFrame
+        df_raw = CSV.File(filepath) |> DataFrame
     else
         try
             @info "Fetching $(currency) price/vol data from Alpha Vantage"
             raw = AlphaVantage.digital_currency_daily(currency, "EUR", datatype = "csv")
-            raw_df = raw_to_df(raw)
-            CSV.write(filepath, raw_df)
+            df_raw = raw_to_df(raw)
+            CSV.write(filepath, df_raw)
         catch
             @info "Could not fetch data, try again later!"
         end
     end
 
     # Return processed DataFrame only when raw data has been fetched successfully
-    if ~isempty(raw_df)
-        df_out_price, df_out_candle = average_price_df(currency, raw_df)
-        df_out_vol = vol_df(currency, raw_df)
+    if ~isempty(df_raw)
+        df_out_price, df_out_candle = average_df_price(currency, df_raw)
+        df_out_vol = df_vol(currency, df_raw)
 
         return df_out_price, df_out_candle, df_out_vol
     else
