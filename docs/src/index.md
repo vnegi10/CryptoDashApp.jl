@@ -55,7 +55,7 @@ which might also indicate the end for any existing trend.
 - Prices often bounce between the two bands, which could be used to identify potential price 
 targets. For example, when a price bounces off of the lower band, and crosses the moving average,
 the upper band might be considered as the next profit target. Prices can also cross the bands 
-during strong ternds.
+during strong trends.
 
 ### Fundamental Cryptocurrency Asset Score (FCAS) data
 - This metric tells us about the market health of an asset. In the case of cryptocurrencies, they are user activity, developer behavior, and market maturity, which are provided by [Flipside Crypto](https://app.flipsidecrypto.com/tracker/all-coins).
@@ -80,9 +80,3 @@ during strong ternds.
 ```@docs
 run_app(port::Int64, key::String)
 ```
-
-
-
-
-
-
