@@ -74,6 +74,22 @@ function moving_averages(Price_df::DataFrame, duration::Int64, window::Int64)
     return Price_SMA, Price_WMA, Price_EMA
 end
 
+function moving_std(Price_df::DataFrame, duration::Int64, window::Int64)
+
+    # Price_df should have date order - oldest to latest
+    Price_col = Price_df[end-duration+1-window+1:end,2]
+    rows1 = length(Price_col)
+
+    Price_std = Float64[]
+
+    for i = 1:rows1-(window-1)
+        # Standard deviation over the period SMA is also being calculated
+        push!(Price_std, std(Price_col[i:i+(window-1)]))
+    end
+
+    return Price_std
+end
+
 function calculate_ema(Price_col::Vector{Float64}, window::Int64)
 
     k(window) = 2/(window+1)
@@ -118,4 +134,3 @@ function calculate_macd(Price_df::DataFrame, window_long::Int64 = 26,
 	
 	return df_ema
 end	
-
