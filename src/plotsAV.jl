@@ -1,4 +1,4 @@
-# Generate plots for AlphaVantage data
+################# Plots for AlphaVantage data #################
 
 function plot_price_ma_trade_data(index::Int64, duration::Int64, window::Int64)
     # Retrieve data from various helper functions    

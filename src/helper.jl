@@ -1,3 +1,5 @@
+################# Helper functions #################
+
 function raw_to_df(raw_data)
 
     # Argument ":auto" is required to generate column names in latest version of DataFrames.jl (v1.2.1)    

@@ -1,4 +1,4 @@
-# Generate plots for CoinGecko data
+################# Plots for CoinGecko data #################
 
 function plot_dev_comm_data(index::Int64)
 
