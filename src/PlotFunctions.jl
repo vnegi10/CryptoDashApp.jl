@@ -26,6 +26,45 @@ function plot_price_ma_trade_data(index::Int64, duration::Int64, window::Int64)
     return trace1, trace2, trace3, trace4, trace5
 end
 
+function plot_price_bollinger_band(index::Int64, duration::Int64, window::Int64)
+
+    Price_df, _ , _ = get_price_data_single(currencies[index])
+
+    if duration > size(Price_df)[1]-maximum(windows)
+        duration = size(Price_df)[1]-maximum(windows)
+    end
+
+    sort!(Price_df, :Date) # oldest date first, newest at the bottom
+    Price_SMA, _ , _ = moving_averages(Price_df, duration, window)
+    Price_σ          = moving_std(Price_df, duration, window)
+
+    ################# Raw price data #################
+    
+    trace1 = PlotlyJS.scatter(;x = Price_df[1:duration,:Date], 
+                               y = Price_df[1:duration,2], 
+                               mode = "markers+lines", 
+                               name = "$(currencies[index]) price")
+
+    ################# SMA and Bollinger bands #################
+	
+	trace2 = PlotlyJS.scatter(;x = Price_df[!,:Date][end-length(Price_SMA)+1:end], 
+                               y = Price_SMA, 
+                               mode="lines", 
+                               name = "$(names(Price_df)[2]) SMA over $(window) days")
+	
+	trace3 = PlotlyJS.scatter(;x = Price_df[!,:Date][end-length(Price_SMA)+1:end], 
+                               y = Price_SMA .+ 2*Price_σ, 
+                               mode="markers", 
+                               name = "Upper band (+2σ)")
+	
+    trace4 = PlotlyJS.scatter(;x = Price_df[!,:Date][end-length(Price_SMA)+1:end], 
+                               y = Price_SMA .- 2*Price_σ, 
+                               mode="markers", 
+                               name = "Lower band (-2σ)")
+
+    return trace1, trace2, trace3, trace4
+end
+
 function plot_candle_vol_data(index::Int64, duration::Int64)
 
     # Retrieve data from various helper functions    
@@ -294,33 +333,3 @@ function plot_overall_vol_data(duration::Int64, num_exchanges::Int64 = 10)
 
     return all_traces        
 end
-
-
-
-
-
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
