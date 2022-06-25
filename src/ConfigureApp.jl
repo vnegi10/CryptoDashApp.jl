@@ -7,10 +7,18 @@ currencies_list = ["BTC", "LTC", "BCH", "ETH", "KNC", "LINK", "ETC", "BNB", "ADA
 currencies = sort(currencies_list)
 currencies_index = 1:length(currencies)
 
-modes = ["Average price + Daily trade (AV)", "Candlestick + Volume (AV)", 
-         "Cumulative + Daily return (AV)", "Daily volatility (AV)", "MACD + Signal (AV)", 
-         "Linear regression channel (AV)", "FCAS data (AV)", "Developer + Community data (CG)",
-          "Exchange volume data per currency (CG)", "Overall exchange volume data (CG)"]
+modes = ["Average price + Daily trade (AV)", 
+         "Candlestick + Volume (AV)", 
+         "Cumulative + Daily return (AV)", 
+         "Daily volatility (AV)", 
+         "MACD + Signal (AV)", 
+         "Linear regression channel (AV)",
+         "Bollinger bands", 
+         "FCAS data (AV)", 
+         "Developer + Community data (CG)",
+         "Exchange volume data per currency (CG)", 
+         "Overall exchange volume data (CG)"]
+
 modes_index = 1:length(modes)
 
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
