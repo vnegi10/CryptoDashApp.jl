@@ -103,25 +103,25 @@ end
 function plot_candle_vol_data(index::Int64, duration::Int64)
 
     # Retrieve data from various helper functions    
-    _, Candle_df, df_vol = get_price_data_single(currencies[index])
+    _, df_candle, df_vol = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
-    if duration > size(Candle_df)[1]
-        duration = size(Candle_df)[1]
+    if duration > size(df_candle)[1]
+        duration = size(df_candle)[1]
     end
 
     ################# Daily candlestick data #################
     open_col, high_col, low_col, close_col = [Float64[] for i = 1:4]
 
     for i = 1:duration
-        push!(open_col, Candle_df[!, 2][i][1])
-        push!(high_col, Candle_df[!, 2][i][2])
-        push!(low_col, Candle_df[!, 2][i][3])
-        push!(close_col, Candle_df[!, 2][i][4])
+        push!(open_col, df_candle[!, 2][i][1])
+        push!(high_col, df_candle[!, 2][i][2])
+        push!(low_col, df_candle[!, 2][i][3])
+        push!(close_col, df_candle[!, 2][i][4])
     end
 
     trace1 = PlotlyJS.candlestick(;
-        x = Candle_df[1:duration, :Date],
+        x = df_candle[1:duration, :Date],
         open = open_col,
         high = high_col,
         low = low_col,
