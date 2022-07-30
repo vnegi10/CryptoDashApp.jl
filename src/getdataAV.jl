@@ -42,19 +42,19 @@ function get_ratings_data(currency::String)
     filename = "$(currency)_metrics_data_$(date).csv"
     filepath = joinpath("data", filename)
 
-    metrics_df = DataFrame()
+    df_metrics = DataFrame()
 
     # Look for present day's CSV file, if not found, download and save data to a new file
     if isfile(filepath)
         @info "Reading $(currency) FCAS data from CSV file on disk"
-        metrics_df = CSV.File(filepath) |> DataFrame
+        df_metrics = CSV.File(filepath) |> DataFrame
     else
         try
             @info "Fetching $(currency) FCAS data from Alpha Vantage"
             rating = AlphaVantage.crypto_rating(currency)
             scores = rating["Crypto Rating (FCAS)"]
             CSV.write(filepath, scores)
-            metrics_df = CSV.File(filepath) |> DataFrame
+            df_metrics = CSV.File(filepath) |> DataFrame
         catch err
             if isa(err, KeyError)
                 @info "Could not retrieve data. Something wrong with the API, try again later!"
@@ -65,22 +65,24 @@ function get_ratings_data(currency::String)
     end
 
     ratings = ["utility", "fcas score", "developer", "market", "fcas rating"]
-    index = Array{Int64}(undef, 0)
+    index = Int64[]
 
     # Return scores only when metrics data has been fetched successfully
-    if ~isempty(metrics_df)
+    if ~isempty(df_metrics)
 
         # Find the row(index) of a string match
         for rating in ratings
-            i = findall(occursin.(rating, metrics_df[!, 1]))
+            i = findall(occursin.(rating, df_metrics[!, 1]))
             push!(index, i[1])
         end
 
         # Variables should be assigned in the same order as the list of ratings above
-        utility_score, fcas_score, dev_score = metrics_df[!, 2][index[1]],
-        metrics_df[!, 2][index[2]],
-        metrics_df[!, 2][index[3]]
-        mark_score, fcas_rating = metrics_df[!, 2][index[4]], metrics_df[!, 2][index[5]]
+        utility_score, fcas_score, dev_score = df_metrics[!, 2][index[1]],
+                                               df_metrics[!, 2][index[2]],
+                                               df_metrics[!, 2][index[3]]
+
+        mark_score, fcas_rating = df_metrics[!, 2][index[4]], 
+                                  df_metrics[!, 2][index[5]]
 
         return utility_score, fcas_score, dev_score, mark_score, fcas_rating
     else

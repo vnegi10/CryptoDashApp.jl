@@ -197,11 +197,11 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
 
             if ~isempty(coin_vol_tickers_dict)
 
-                for i = 1:length(coin_vol_tickers_dict["tickers"])
-                    push!(coin_vol, coin_vol_tickers_dict["tickers"][i]["volume"])
+                for ticker in coin_vol_tickers_dict["tickers"]
+                    push!(coin_vol, ticker["volume"])
                     push!(
                         usd_vol,
-                        coin_vol_tickers_dict["tickers"][i]["converted_volume"]["usd"],
+                        ticker["converted_volume"]["usd"],
                     )
                 end
 
@@ -252,8 +252,8 @@ function get_vol_chart(exchange::String)
                 get_API_response("/exchanges/$(exchange)/volume_chart?days=$(days)")
 
             open(filepath, "w") do f
-                for i = 1:length(ex_vol_chart)
-                    writedlm(f, [ex_vol_chart[i]], ";")
+                for chart in ex_vol_chart
+                    writedlm(f, [chart], ";")
                 end
             end
 
@@ -270,9 +270,9 @@ function get_vol_chart(exchange::String)
     else
         ex_vol = Union{Missing,Float64}[]
 
-        for i = 1:length(ex_vol_chart)
+        for chart in ex_vol_chart
             try
-                push!(ex_vol, round(parse(Float64, ex_vol_chart[i][2]); digits = 2))
+                push!(ex_vol, round(parse(Float64, chart[2]); digits = 2))
             catch
                 push!(ex_vol, missing)
             end
