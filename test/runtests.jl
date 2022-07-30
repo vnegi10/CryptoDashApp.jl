@@ -1,4 +1,5 @@
-using Test, AlphaVantage, Dates, DataFrames, CryptoDashApp, HTTP, JSON, Query
+using Test, AlphaVantage, Dates, DataFrames, CryptoDashApp, 
+      HTTP, JSON, Query, PlotlyJS
 
 AlphaVantage.global_key!("AKTJ25ALEBBLH1QJ")
 
@@ -46,7 +47,8 @@ end
 
 test_files = ["test_API_CG.jl",
               "test_marketdata_AV.jl",
-              "test_movingaverages.jl"]
+              "test_movingaverages.jl",
+              "test_plots_AV.jl"]
 
 ###################################################
 
