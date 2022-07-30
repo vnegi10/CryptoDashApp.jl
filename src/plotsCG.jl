@@ -57,7 +57,7 @@ function plot_overall_vol_data(duration::Int64, num_exchanges::Int64 = 10)
         # First column is for duration
         exchanges = names(df_ex_vol)[2:end]
 
-        for i = 1:length(exchanges)
+        for i in eachindex(exchanges)
 
             trace = PlotlyJS.bar(;
                 x = df_ex_vol[!, :Time],
