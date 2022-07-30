@@ -10,127 +10,50 @@ else
     @info "New data folder has been created"
 end
 
-# Perform cleanup 
+# Perform cleanup of old data
 CryptoDashApp.remove_old_files()
 
-################# Test cases for accessing market data #################
+errors = false
+all_tests = false
 
-@testset "Check if AV market data are accessible" begin
+# Run all tests when no arguments or "all" is specified
+if isempty(ARGS) || "all" in ARGS
+    all_tests = true
+end
 
-    for currency in ["ETH", "LTC", "LINK"]
+# Execute test in a try-catch block for each file
+function execute_test(file::String, ARGS; all_tests::Bool, errors::Bool)
 
-        df_out_price, df_out_candle, df_out_vol =
-            CryptoDashApp.get_price_data_single(currency)
-
-        @test ~isempty(df_out_price)
-        @test ~isempty(df_out_candle)
-        @test ~isempty(df_out_vol)
-
+    if all_tests || file in ARGS
+        try
+            include(file)
+            println("\t\033[1m\033[32mPASSED\033[0m: $(file)")
+        catch e
+            println("\t\033[1m\033[31mFAILED\033[0m: $(file)")
+            errors = true
+            showerror(stdout, e, backtrace())
+            println()
+        end
     end
 
-end
-
-@testset "Check for exception handling while accessing AV market data" begin
-
-    currency = "dummy"
-
-    @test_logs (:info, "Could not fetch data, try again later!") match_mode = :any CryptoDashApp.get_price_data_single(
-        currency,
-    )
-
-end
-
-################# Test cases for moving averages #################
-
-@testset "Check if MA, MACD + signal, σ (for Bollinger bands) are calculated" begin
-
-    for currency in ["BTC", "DOT"]
-
-        df_out_price, _, _ = CryptoDashApp.get_price_data_single(currency)
-
-        duration = 90
-        window = 30
-
-        price_SMA, price_WMA, price_EMA =
-            CryptoDashApp.moving_averages(df_out_price, duration, window)
-
-        @test ~isempty(price_SMA)
-        @test ~isempty(price_WMA)
-        @test ~isempty(price_WMA)
-
-        df_out_price = df_out_price[end-duration+1-26-9+1:end, :]
-        df_ema_all = CryptoDashApp.calculate_macd(df_out_price)
-        @test ~isempty(df_ema_all)
-
-        Price_σ = CryptoDashApp.moving_std(df_out_price, duration, window)
-        @test ~isempty(Price_σ)
-
+    if errors
+        @warn "Some tests have failed! Check the results summary above."
     end
-
 end
 
-################# Test cases for CoinGecko API  #################
 
-@testset "Check if CG developer and community data are accessible" begin
+################# All test groups #################
 
-    for currency in ["btc", "eth", "ltc"]
+test_files = ["test_API_CG.jl",
+              "test_marketdata_AV.jl",
+              "test_movingaverages.jl"]
 
-        df_dev, df_comm = CryptoDashApp.get_dev_comm_data(currency)
+###################################################
 
-        @test ~isempty(df_dev)
-        @test ~isempty(df_comm)
+################# Execute tests ###################
 
-    end
-
+@time for file in test_files
+    execute_test(file, ARGS, all_tests = all_tests, errors = errors)
 end
 
-@testset "Check for exception handling while determining coin id" begin
-
-    currency = "dummy"
-
-    @test_logs (:info, "Could not find an id for the given currency") match_mode = :any CryptoDashApp.get_coin_id(
-        currency,
-    )
-
-end
-
-@testset "Check if CG exchange volume data per currency are accessible" begin
-
-    for currency in ["btc", "eth", "ltc"]
-
-        num_exchanges = 10
-
-        df_ex_vol = CryptoDashApp.get_exchange_vol_data(currency, num_exchanges)
-
-        @test size(df_ex_vol)[1] == num_exchanges
-
-    end
-
-end
-
-@testset "Check if CG overall exchange volume data are accessible" begin
-
-    num_exchanges = 10
-
-    for duration in [5, 10, 50, 75]
-        df_ex_vol = CryptoDashApp.get_overall_vol_data(duration, num_exchanges)
-
-        # Check for rows
-        @test size(df_ex_vol)[1] == duration
-
-        # Check for columns, total is num_exchanges + 1 due to "Time" column
-        @test size(df_ex_vol)[2] == num_exchanges + 1
-    end
-
-end
-
-#=@testset "Check if ratings data is accessible" begin
-
-    utility_score, fcas_score, dev_score, mark_score, fcas_rating = CryptoDashApp.get_ratings_data("ETH")
-
-    @test ~isempty(utility_score)
-    @test ~isempty(fcas_score)
-    @test ~isempty(dev_score)
-    @test ~isempty(mark_score)
-    @test ~isempty(fcas_rating)
-end=#
+###################################################
