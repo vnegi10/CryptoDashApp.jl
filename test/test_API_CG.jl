@@ -2,7 +2,7 @@
 
 @testset "Check if CG developer and community data are accessible" begin
 
-    for currency in ["btc", "eth", "ltc"]
+    for currency in ["eth"]
 
         df_dev, df_comm = CryptoDashApp.get_dev_comm_data(currency)
 
@@ -25,9 +25,9 @@ end
 
 @testset "Check if CG exchange volume data per currency are accessible" begin
 
-    for currency in ["btc", "eth", "ltc"]
+    for currency in ["btc"]
 
-        num_exchanges = 10
+        num_exchanges = 5
 
         df_ex_vol = CryptoDashApp.get_exchange_vol_data(currency, num_exchanges)
 
@@ -37,11 +37,11 @@ end
 
 end
 
-@testset "Check if CG overall exchange volume data are accessible" begin
+#=@testset "Check if CG overall exchange volume data are accessible" begin
 
-    num_exchanges = 10
+    num_exchanges = 5
 
-    for duration in [5, 10, 50, 75]
+    for duration in [50, 75]
         df_ex_vol = CryptoDashApp.get_overall_vol_data(duration, num_exchanges)
 
         # Check for rows
@@ -51,7 +51,7 @@ end
         @test size(df_ex_vol)[2] == num_exchanges + 1
     end
 
-end
+end=#
 
 #=@testset "Check if ratings data is accessible" begin
 

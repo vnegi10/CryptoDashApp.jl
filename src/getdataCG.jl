@@ -257,7 +257,7 @@ function get_vol_chart(exchange::String)
                 end
             end
 
-        catch
+        catch err
             @info "Could not find volume data for $(exchange)"
             @info "$(err)"
         end
