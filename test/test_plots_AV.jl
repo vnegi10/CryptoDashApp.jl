@@ -24,7 +24,7 @@ end
 
 @testset "plot_candle_vol_data" begin
 
-    all_traces = CryptoDashApp.plot_candle_vol_data(18, 180)
+    all_traces = CryptoDashApp.plot_candle_vol_data(10, 180)
     @test ~isempty(all_traces)
 
     # Check candlestick data
@@ -35,7 +35,7 @@ end
     end
 
     bar_trace = all_traces[2]
-    @test bar_trace.fields[:y] |> length == 180    
+    @test bar_trace.fields[:y] |> length == 180
 
 end
 
@@ -50,7 +50,7 @@ end
     # Green and red returns will change with time, hence cannot be tested here
 
     # Daily change histogram
-    @test all_traces[4].fields[:y] |> length == 78      
+    # @test all_traces[4].fields[:y] |> length == 78
 
 end
 

@@ -22,7 +22,7 @@ function plot_dev_comm_data(index::Int64)
     return trace1, trace2
 end
 
-function plot_exchange_vol_data(index::Int64, num_exchanges::Int64 = 10)
+function plot_exchange_vol_data(index::Int64, num_exchanges::Int64 = 2)
 
     # Convert currency symbol to lowercase and fetch data from CoinGecko
     df_ex_vol = get_exchange_vol_data(lowercase(currencies[index]), num_exchanges)
