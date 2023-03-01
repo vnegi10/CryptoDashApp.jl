@@ -1,7 +1,7 @@
 ################# Plots for AlphaVantage data #################
 
 function plot_price_ma_trade_data(index::Int64, duration::Int64, window::Int64)
-    # Retrieve data from various helper functions    
+    # Retrieve data from various helper functions
     df_price, _, df_vol = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows - max(windows) in the DataFrame
@@ -102,7 +102,7 @@ end
 
 function plot_candle_vol_data(index::Int64, duration::Int64)
 
-    # Retrieve data from various helper functions    
+    # Retrieve data from various helper functions
     _, df_candle, df_vol = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
@@ -142,7 +142,7 @@ end
 
 function plot_cumul_daily_return_hist(index::Int64, duration::Int64)
 
-    # Retrieve data from various helper functions    
+    # Retrieve data from various helper functions
     df_price, _, _ = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
@@ -243,7 +243,7 @@ end
 
 function plot_macd_signal(index::Int64, duration::Int64)
 
-    # Retrieve data from various helper functions    
+    # Retrieve data from various helper functions
     df_price, _, _ = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
@@ -330,7 +330,7 @@ end
 
 function plot_linear_regression(index::Int64, duration::Int64)
 
-    # Retrieve data from various helper functions    
+    # Retrieve data from various helper functions
     df_price, _, _ = get_price_data_single(currencies[index])
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
