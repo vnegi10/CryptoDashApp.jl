@@ -36,10 +36,7 @@ function execute_test(file::String, ARGS; all_tests::Bool, errors::Bool)
             println()
         end
     end
-
-    if errors
-        @warn "Some tests have failed! Check the results summary above."
-    end
+    
 end
 
 
@@ -57,6 +54,10 @@ test_files = ["test_API_CG.jl",
 
 @time for file in test_files
     execute_test(file, ARGS, all_tests = all_tests, errors = errors)
+end
+
+if errors
+    throw("Some tests have failed! Check the results summary above.")
 end
 
 ###################################################
