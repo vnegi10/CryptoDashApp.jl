@@ -121,7 +121,8 @@ function run_app(port::Int64, key::String)
     remove_old_files()
 
     # Set API key
-    AlphaVantage.global_key!(key)
+    client = AlphaVantage.GLOBAL[]
+    client.key = key
 
     # UI part of the tool
     app = dash()
