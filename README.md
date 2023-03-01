@@ -15,7 +15,7 @@ Functionality of the app will be extended in the future by adding more technical
 
 ## How to use?
 
-** This package is currently not compatible with Julia 1.8 due to issues with its dependencies.**
+**Currently not compatible with Julia 1.8 due to issues with its dependencies.**
 
 This package is available via the General registry. Add it to your working Julia environment by
 doing the following in the REPL:
