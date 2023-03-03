@@ -54,16 +54,6 @@ end
 
 end
 
-@testset "plot_fcas_data" begin
-
-    trace1 = CryptoDashApp.plot_fcas_data(13)[1]
-
-    # Unable to get FCAS metrics from AV, so skipping tests for now [30-07-2022]
-    @test_skip ~isempty(trace1)
-    @test_skip typeof(trace1) == PlotlyBase.GenericTrace{Dict{Symbol, Any}}       
-
-end
-
 @testset "plot_macd_signal" begin
 
     all_traces = CryptoDashApp.plot_macd_signal(2, 42)
