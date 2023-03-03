@@ -43,7 +43,6 @@ modes = [
     "MACD + Signal (AV)",
     "Linear regression channel (AV)",
     "Bollinger bands (AV)",
-    "FCAS data (AV)",
     "Developer + Community data (CG)",
     "Exchange volume data per currency (CG)",
     "Overall exchange volume data (CG)",
@@ -443,22 +442,8 @@ function run_app(port::Int64, key::String)
             P1 = Plot([t1, t2, t3, t4], layout1) # plots Bollinger bands   
             return [P1]
 
+        # From CoinGecko
         elseif mode_ID == 8
-            t1, fr = plot_fcas_data(pair_ID)
-
-            layout1 = Layout(;
-                title = "FCAS metrics data for $(currencies[pair_ID]), overall rating = $(fr)",
-                xaxis = attr(title = "Type of metric", showgrid = true, zeroline = true),
-                yaxis = attr(title = "Score", showgrid = true, zeroline = true),
-                height = 500,
-                width = 1000,
-            )
-
-            P1 = Plot(t1, layout1) # plots FCAS metrics
-            return [P1]
-
-            # From CoinGecko
-        elseif mode_ID == 9
             t1, t2 = plot_dev_comm_data(pair_ID)
 
             layout1 = Layout(;
@@ -492,7 +477,7 @@ function run_app(port::Int64, key::String)
             P2 = Plot(t2, layout2) # plots community data
             return [P1 P2]
 
-        elseif mode_ID == 10
+        elseif mode_ID == 9
 
             t1, t2 = plot_exchange_vol_data(pair_ID)
 
@@ -527,7 +512,7 @@ function run_app(port::Int64, key::String)
             P2 = Plot(t2, layout2)      # plots USD volume data for a given currency
             return [P1 P2]
 
-        elseif mode_ID == 11
+        elseif mode_ID == 10
 
             t_all = plot_overall_vol_data(duration_ID)
 
