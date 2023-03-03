@@ -90,10 +90,8 @@ of data.
 
 - For more description, see [link.](https://www.fidelity.com/learning-center/trading-investing/technical-analysis/technical-indicator-guide/bollinger-bands)
 
-### Fundamental Cryptocurrency Asset Score (FCAS) data
-- This metric tells us about the market health of an asset. In the case of cryptocurrencies, they 
-  are user activity, developer behavior, and market maturity, which are provided by [Flipside 
-  Crypto](https://app.flipsidecrypto.com/tracker/all-coins).
+### Fundamental Cryptocurrency Asset Score (FCAS) data 
+- **Removed from the app since this is no longer provided by AlphaVantage.**
 
 ### Following modes make use of the CoinGecko API
 ---
