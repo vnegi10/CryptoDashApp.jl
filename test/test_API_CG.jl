@@ -13,12 +13,6 @@
 
 end
 
-@testset "Check for exception handling while determining coin id" begin
-
-    @test_throws ErrorException("Could not find an id for the given currency") CryptoDashApp.get_coin_id("dummy")
-
-end
-
 @testset "Check if CG exchange volume data per currency are accessible" begin
 
     for currency in ["btc"]

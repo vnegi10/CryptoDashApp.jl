@@ -46,7 +46,8 @@ test_files = ["test_API_CG.jl",
               "test_marketdata_AV.jl",
               "test_movingaverages.jl",
               "test_plots_AV.jl",
-              "test_plots_CG.jl"]
+              "test_plots_CG.jl",
+              "test_exceptions.jl"]
 
 ###################################################
 

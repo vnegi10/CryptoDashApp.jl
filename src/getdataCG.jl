@@ -93,7 +93,7 @@ function get_dev_comm_data(currency::String)
         @info "Fetching coin data from CoinGecko"
         coin_dict = get_API_response("/coins/$(coin_id)")
     catch
-        @info "Could not fetch data, try again later!"
+        error("Could not fetch data, try again later!")
     end
 
     # Get developer data
@@ -101,9 +101,9 @@ function get_dev_comm_data(currency::String)
         dev_dict = coin_dict["developer_data"]
     catch err
         if isa(err, KeyError)
-            @info "Could not find developer data!"
+            @error "Could not find developer data!"
         else
-            @info "This is a new error: $(err)"
+            @error "This is a new error: $(err)"
         end
     end
 
@@ -112,9 +112,9 @@ function get_dev_comm_data(currency::String)
         comm_dict = coin_dict["community_data"]
     catch err
         if isa(err, KeyError)
-            @info "Could not find community data!"
+            @error "Could not find community data!"
         else
-            @info "This is a new error: $(err)"
+            @error "This is a new error: $(err)"
         end
     end
 
