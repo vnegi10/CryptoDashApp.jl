@@ -37,17 +37,20 @@ function get_coin_id(currency::String)
     if ~isempty(df_coins)
 
         # Filter on matching currency 
-        df_filter = df_coins |> @filter(_.symbol == currency) |> DataFrame
+        df_filter = filter(row -> ~ismissing(row.symbol) &&
+                                   row.symbol == currency, df_coins)
 
         try
             # For multiple matches, first filter on coin ids and then on names,
             # which do not have "-" in them
             if size(df_filter)[1] > 1
 
-                df_filter_1 = df_filter |> @filter(~occursin("-", _.id)) |> DataFrame
+                df_filter_1 = filter(row -> ~ismissing(row.id) &&
+                                            ~occursin("-", row.id), df_filter)
 
                 if isempty(df_filter_1)
-                    df_filter_1 = df_filter |> @filter(~occursin("-", _.name)) |> DataFrame
+                    df_filter_1 = filter(row -> ~ismissing(row.name) &&
+                                                ~occursin("-", row.name), df_filter)
                 end
 
                 return df_filter_1[!, :id][1]
@@ -57,9 +60,9 @@ function get_coin_id(currency::String)
 
         catch err
             if isa(err, BoundsError)
-                @info "Could not find an id for the given currency"
+                error("Could not find an id for the given currency")
             else
-                @info "Something went wrong, check this error: $(err)"
+                error("Something went wrong, check this error: $(err)")
             end
         end
 

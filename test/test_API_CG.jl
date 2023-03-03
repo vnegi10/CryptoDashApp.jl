@@ -15,11 +15,7 @@ end
 
 @testset "Check for exception handling while determining coin id" begin
 
-    currency = "dummy"
-
-    @test_logs (:info, "Could not find an id for the given currency") match_mode = :any CryptoDashApp.get_coin_id(
-        currency,
-    )
+    @test_throws ErrorException("Could not find an id for the given currency") CryptoDashApp.get_coin_id("dummy")
 
 end
 
