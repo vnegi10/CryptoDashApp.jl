@@ -156,3 +156,29 @@ function calculate_macd(
 
     return df_ema
 end
+
+################# Cleanup function #################
+
+function remove_old_files()
+    # Cleanup data files from previous days
+    try
+        data_dir = joinpath(@__DIR__, "..", "data")
+        files    = readdir(data_dir)
+        rx1 = "data"
+        rx2 = "List"
+        rx3 = ".csv"
+        rx4 = ".txt"
+        for file in files
+            ts = Dates.unix2datetime(stat(file).mtime)
+            file_date = Date(ts)
+            if file_date != Dates.today() &&
+               (occursin(rx3, file) || occursin(rx4, file)) &&
+               (occursin(rx1, file) || occursin(rx2, file))
+               rm(file)
+            end
+        end
+
+    catch
+        @info "Unable to perform cleanup action"
+    end
+end

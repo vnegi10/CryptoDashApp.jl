@@ -59,34 +59,6 @@ windows = [1, 5, 10, 30, 50, 75, 100]
 const URL = "https://api.coingecko.com/api/v3"
 
 
-################# Cleanup function #################
-
-function remove_old_files()
-    # Cleanup data files from previous days
-    try
-        main_dir = pwd()
-        cd("data")
-        files = readdir()
-        rx1 = "data"
-        rx2 = "List"
-        rx3 = ".csv"
-        rx4 = ".txt"
-        for file in files
-            ts = Dates.unix2datetime(stat(file).mtime)
-            file_date = Date(ts)
-            if file_date != Dates.today() &&
-               (occursin(rx3, file) || occursin(rx4, file)) &&
-               (occursin(rx1, file) || occursin(rx2, file))
-                rm(file)
-            end
-        end
-        cd(main_dir)
-    catch
-        @info "Unable to perform cleanup action"
-    end
-end
-
-
 ################# Run the app #################
 
 """
@@ -309,7 +281,7 @@ function run_app(port::Int64, key::String)
                 width = 1000,
                 paper_bgcolor = "white",
             )
-            P1 = Plot([t1, t2, t3, t4], layout1) # plots daily average price and three diferent moving averages               
+            P1 = Plot([t1, t2, t3, t4], layout1) # plots daily average price and three diferent moving averages
             P2 = Plot(t5, layout2)               # plots daily market cap
             return [P1 P2]
 
