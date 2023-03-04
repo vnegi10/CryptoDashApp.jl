@@ -14,7 +14,7 @@ function get_coin_id(currency::String)
     date = Dates.today()
 
     filename = "List_of_all_coins_$(date).csv"
-    filepath = joinpath("data", filename)
+    filepath = joinpath(@__DIR__, "..", "data", filename)
 
     df_coins, df_filter, df_filter_1 = [DataFrame() for i = 1:3]
 
@@ -137,7 +137,7 @@ function get_list_of_exchanges(num_exchanges::Int64)
     date = Dates.today()
 
     filename = "List_of_top_$(num_exchanges)_exchanges_$(date).csv"
-    filepath = joinpath("data", filename)
+    filepath = joinpath(@__DIR__, "..", "data", filename)
 
     df_all_ex, df_ex = [DataFrame() for i = 1:2]
 
@@ -231,7 +231,7 @@ function get_vol_chart(exchange::String)
     date = Dates.today()
 
     filename = "$(exchange)_vol_data_$(date).txt"
-    filepath = joinpath("data", filename)
+    filepath = joinpath(@__DIR__, "..", "data", filename)
 
     ex_vol_chart = Vector{Any}[]
 
