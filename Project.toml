@@ -1,7 +1,7 @@
 name = "CryptoDashApp"
 uuid = "8f55a569-a1ee-45d2-b761-b2b316ddd8e9"
 authors = ["Vikas Negi <vikas.negi10@gmail.com>"]
-version = "0.4.1"
+version = "0.4.2"
 
 [deps]
 AlphaVantage = "6348297c-a006-11e8-3a05-9bbf8830fd7b"
