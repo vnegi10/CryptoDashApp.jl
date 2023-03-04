@@ -190,8 +190,8 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
                 coin_vol_tickers_dict =
                     get_API_response("/exchanges/$(exchange)/tickers?coin_ids=$(coin_id)")
             catch err
-                @info "Could not find $(coin_id) volume data on $(exchange)!"
-                @info "$(err)"
+                @error "Could not find $(coin_id) volume data on $(exchange)!"
+                @error "$(err)"
             end
 
             if ~isempty(coin_vol_tickers_dict)
@@ -213,14 +213,15 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
             end
 
         end
-    end
 
-    insertcols!(
+        insertcols!(
         df_ex_vol,
         3,
         :Coin_volume => exchange_coin_vol,
         :USD_volume => exchange_usd_vol,
-    )
+        )
+    
+    end
 
     return df_ex_vol
 end
