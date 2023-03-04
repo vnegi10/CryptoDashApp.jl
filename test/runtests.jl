@@ -3,11 +3,13 @@ using Test, AlphaVantage, CryptoDashApp
 # Free API key
 AlphaVantage.global_key!("AKTJ25ALEBBLH1QJ")
 
+location = joinpath(@__DIR__, "data")
+
 # Check if "data" folder exists, if not, create a new one
-if isdir("data")
+if isdir(location)
     @info "data folder exists, cleanup action will be performed!"
 else
-    mkdir("data")
+    mkpath(location)
     @info "New data folder has been created"
 end
 

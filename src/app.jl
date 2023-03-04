@@ -80,11 +80,13 @@ julia> run_app(8056, "Your API key")
 """
 function run_app(port::Int64, key::String)
 
+    location = joinpath(@__DIR__, "..", "data")
+
     # Check if "data" folder exists, if not, create a new one
-    if isdir("data")
+    if isdir(location)
         @info "data folder exists, cleanup action will be performed!"
     else
-        mkdir("data")
+        mkpath(location)
         @info "New data folder has been created"
     end
 
