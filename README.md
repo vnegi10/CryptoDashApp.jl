@@ -1,6 +1,8 @@
 # CryptoDashApp.jl
 
+[![License](http://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat)](LICENSE.md)
 [![Build status (Github Actions)](https://github.com/vnegi10/CryptoDashApp.jl/workflows/CI/badge.svg)](https://github.com/vnegi10/CryptoDashApp.jl/actions)
+[![Coverage Status](https://codecov.io/gh/vnegi10/CryptoDashApp.jl/branch/master/graphs/badge.svg?branch=master)](https://app.codecov.io/gh/vnegi10/CryptoDashApp.jl)
 
 [![](https://img.shields.io/badge/docs-stable-blue.svg)](https://vnegi10.github.io/CryptoDashApp.jl/stable)
 

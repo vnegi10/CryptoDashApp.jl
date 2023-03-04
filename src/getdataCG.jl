@@ -14,7 +14,7 @@ function get_coin_id(currency::String)
     date = Dates.today()
 
     filename = "List_of_all_coins_$(date).csv"
-    filepath = joinpath("data", filename)
+    filepath = joinpath(@__DIR__, "..", "data", filename)
 
     df_coins, df_filter, df_filter_1 = [DataFrame() for i = 1:3]
 
@@ -29,7 +29,7 @@ function get_coin_id(currency::String)
             df_coins = vcat(DataFrame.(coins_dict)...)
             CSV.write(filepath, df_coins)
         catch
-            @info "Could not fetch data, try again later!"
+            @error "Could not fetch data, try again later!"
         end
     end
 
@@ -37,17 +37,20 @@ function get_coin_id(currency::String)
     if ~isempty(df_coins)
 
         # Filter on matching currency 
-        df_filter = df_coins |> @filter(_.symbol == currency) |> DataFrame
+        df_filter = filter(row -> ~ismissing(row.symbol) &&
+                                   row.symbol == currency, df_coins)
 
         try
             # For multiple matches, first filter on coin ids and then on names,
             # which do not have "-" in them
             if size(df_filter)[1] > 1
 
-                df_filter_1 = df_filter |> @filter(~occursin("-", _.id)) |> DataFrame
+                df_filter_1 = filter(row -> ~ismissing(row.id) &&
+                                            ~occursin("-", row.id), df_filter)
 
                 if isempty(df_filter_1)
-                    df_filter_1 = df_filter |> @filter(~occursin("-", _.name)) |> DataFrame
+                    df_filter_1 = filter(row -> ~ismissing(row.name) &&
+                                                ~occursin("-", row.name), df_filter)
                 end
 
                 return df_filter_1[!, :id][1]
@@ -57,9 +60,9 @@ function get_coin_id(currency::String)
 
         catch err
             if isa(err, BoundsError)
-                @info "Could not find an id for the given currency"
+                error("Could not find an id for the given currency")
             else
-                @info "Something went wrong, check this error: $(err)"
+                error("Something went wrong, check this error: $(err)")
             end
         end
 
@@ -90,7 +93,7 @@ function get_dev_comm_data(currency::String)
         @info "Fetching coin data from CoinGecko"
         coin_dict = get_API_response("/coins/$(coin_id)")
     catch
-        @info "Could not fetch data, try again later!"
+        error("Could not fetch data, try again later!")
     end
 
     # Get developer data
@@ -98,9 +101,9 @@ function get_dev_comm_data(currency::String)
         dev_dict = coin_dict["developer_data"]
     catch err
         if isa(err, KeyError)
-            @info "Could not find developer data!"
+            @error "Could not find developer data!"
         else
-            @info "This is a new error: $(err)"
+            @error "This is a new error: $(err)"
         end
     end
 
@@ -109,9 +112,9 @@ function get_dev_comm_data(currency::String)
         comm_dict = coin_dict["community_data"]
     catch err
         if isa(err, KeyError)
-            @info "Could not find community data!"
+            @error "Could not find community data!"
         else
-            @info "This is a new error: $(err)"
+            @error "This is a new error: $(err)"
         end
     end
 
@@ -134,7 +137,7 @@ function get_list_of_exchanges(num_exchanges::Int64)
     date = Dates.today()
 
     filename = "List_of_top_$(num_exchanges)_exchanges_$(date).csv"
-    filepath = joinpath("data", filename)
+    filepath = joinpath(@__DIR__, "..", "data", filename)
 
     df_all_ex, df_ex = [DataFrame() for i = 1:2]
 
@@ -145,26 +148,22 @@ function get_list_of_exchanges(num_exchanges::Int64)
     else
         try
             @info "Fetching list of exchanges from CoinGecko"
-            ex_dict = get_API_response("/exchanges")
+            ex_dict   = get_API_response("/exchanges")
             df_all_ex = vcat(DataFrame.(ex_dict)...)
 
             # Keep only name and id columns
-            df_ex = DataFrame(name = df_all_ex[!, :name], id = df_all_ex[!, :id])
+            df_ex = DataFrame(Name = df_all_ex[!, :name],
+                              ID   = df_all_ex[!, :id])
             CSV.write(filepath, df_ex)
         catch err
-            @info "Could not fetch data, try again later!"
-            @info "$(err)"
+            @error "Could not fetch data, try again later!"
+            @error "$(err)"
         end
     end
 
     # Return filtered list of exchanges only when data is available
     if ~isempty(df_ex)
-        df_ex_vol = DataFrame(
-            Name = df_ex[!, :name][1:num_exchanges],
-            ID = df_ex[!, :id][1:num_exchanges],
-        )
-
-        return df_ex_vol
+        return df_ex[1:num_exchanges, :]
     else
         return DataFrame()
     end
@@ -191,8 +190,8 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
                 coin_vol_tickers_dict =
                     get_API_response("/exchanges/$(exchange)/tickers?coin_ids=$(coin_id)")
             catch err
-                @info "Could not find $(coin_id) volume data on $(exchange)!"
-                @info "$(err)"
+                @error "Could not find $(coin_id) volume data on $(exchange)!"
+                @error "$(err)"
             end
 
             if ~isempty(coin_vol_tickers_dict)
@@ -214,14 +213,15 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
             end
 
         end
-    end
 
-    insertcols!(
+        insertcols!(
         df_ex_vol,
         3,
         :Coin_volume => exchange_coin_vol,
         :USD_volume => exchange_usd_vol,
-    )
+        )
+    
+    end
 
     return df_ex_vol
 end
@@ -231,13 +231,13 @@ function get_vol_chart(exchange::String)
     date = Dates.today()
 
     filename = "$(exchange)_vol_data_$(date).txt"
-    filepath = joinpath("data", filename)
+    filepath = joinpath(@__DIR__, "..", "data", filename)
 
     ex_vol_chart = Vector{Any}[]
 
-    # Historical data is fetched and saved for these many days. Takes more time for longer duration, 
-    # and queries for many exchanges don't even return more points.
-    days = 365
+    # Historical data is fetched and saved for these many days. Takes more time
+    # for longer duration, and queries for many exchanges don't even return more points.
+    days = 30
 
     if isfile(filepath)
         @info "Reading $(exchange) vol data from file on disk"
@@ -247,7 +247,7 @@ function get_vol_chart(exchange::String)
         ex_vol_chart = Float64.(ex_vol_chart[:])
     else
         try
-            # Fetch and save data for 365 days
+            # Fetch and save data for a given number of days
             ex_vol_chart =
                 get_API_response("/exchanges/$(exchange)/volume_chart?days=$(days)")
 
@@ -257,9 +257,8 @@ function get_vol_chart(exchange::String)
                 end
             end
 
-        catch err
-            @info "Could not find volume data for $(exchange)"
-            @info "$(err)"
+        catch
+            error("Could not find volume data for $(exchange)")
         end
     end
 
@@ -286,9 +285,12 @@ function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
 
     df_ex_list = get_list_of_exchanges(num_exchanges)
 
-    # Check on duration, current maximum is set to 365
-    if duration > 365
-        duration = 365
+    # Check on duration, current maximum is set to 30. Using > 30 
+    # gives a bad request error. [04-03-2022]
+
+    if duration > 30
+        @info "Showing results only for 30 days!"
+        duration = 30
     end
 
     # Create a column with dates
@@ -310,8 +312,8 @@ function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
             try
                 ex_vol = get_vol_chart(exchange)
             catch err
-                @info "Could not find volume data for $(exchange), will continue to next!"
-                @info "$(err)"
+                @error "Could not find volume data for $(exchange), will continue to next!"
+                @error "$(err)"
 
                 # Skip next part of the code, and continue to next exchange
                 continue
@@ -324,16 +326,16 @@ function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
             ex_vol = ex_vol[end-duration+1:end]
 
             # Find name of the exchange corresponding to its ID
-            df_row = df_ex_list |> @filter(_.ID == exchange) |> DataFrame
+            df_row = filter(row -> row.ID == exchange, df_ex_list)
             name = df_row[!, :Name][1]
 
             try
                 insertcols!(df_ex_vol, 2, Symbol(name) => ex_vol)
             catch err
                 if isa(err, DimensionMismatch)
-                    @info "Data is missing for $(exchange) for the requested duration"
+                    @error "Data is missing for $(exchange) for the requested duration"
                 else
-                    @info "Something went wrong, check this error: $(err)"
+                    @error "Something went wrong, check this error: $(err)"
                 end
             end
 

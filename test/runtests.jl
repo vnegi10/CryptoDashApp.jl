@@ -1,13 +1,15 @@
-using Test, AlphaVantage, Dates, DataFrames, CryptoDashApp, 
-      HTTP, JSON, Query, PlotlyJS
+using Test, AlphaVantage, CryptoDashApp
 
+# Free API key
 AlphaVantage.global_key!("AKTJ25ALEBBLH1QJ")
 
+location = joinpath(@__DIR__, "data")
+
 # Check if "data" folder exists, if not, create a new one
-if isdir("data")
+if isdir(location)
     @info "data folder exists, cleanup action will be performed!"
 else
-    mkdir("data")
+    mkpath(location)
     @info "New data folder has been created"
 end
 
@@ -46,7 +48,8 @@ test_files = ["test_API_CG.jl",
               "test_marketdata_AV.jl",
               "test_movingaverages.jl",
               "test_plots_AV.jl",
-              "test_plots_CG.jl"]
+              "test_plots_CG.jl",
+              "test_exceptions.jl"]
 
 ###################################################
 

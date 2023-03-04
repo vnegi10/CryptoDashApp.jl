@@ -5,7 +5,7 @@ function get_price_data_single(currency::String)
     date = Dates.today()
 
     filename = "$(currency)_EUR_data_$(date).csv"
-    filepath = joinpath("data", filename)
+    filepath = joinpath(@__DIR__, "..", "data", filename)
 
     df_raw = DataFrame()
 
