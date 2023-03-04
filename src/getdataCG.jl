@@ -148,26 +148,22 @@ function get_list_of_exchanges(num_exchanges::Int64)
     else
         try
             @info "Fetching list of exchanges from CoinGecko"
-            ex_dict = get_API_response("/exchanges")
+            ex_dict   = get_API_response("/exchanges")
             df_all_ex = vcat(DataFrame.(ex_dict)...)
 
             # Keep only name and id columns
-            df_ex = DataFrame(name = df_all_ex[!, :name], id = df_all_ex[!, :id])
+            df_ex = DataFrame(Name = df_all_ex[!, :name],
+                              ID   = df_all_ex[!, :id])
             CSV.write(filepath, df_ex)
         catch err
-            @info "Could not fetch data, try again later!"
-            @info "$(err)"
+            @error "Could not fetch data, try again later!"
+            @error "$(err)"
         end
     end
 
     # Return filtered list of exchanges only when data is available
     if ~isempty(df_ex)
-        df_ex_vol = DataFrame(
-            Name = df_ex[!, :name][1:num_exchanges],
-            ID = df_ex[!, :id][1:num_exchanges],
-        )
-
-        return df_ex_vol
+        return df_ex[1:num_exchanges, :]
     else
         return DataFrame()
     end
