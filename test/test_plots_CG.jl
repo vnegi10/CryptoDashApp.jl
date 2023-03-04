@@ -21,13 +21,13 @@ end
 
 end
 
-#=@testset "plot_overall_vol_data" begin
+@testset "plot_overall_vol_data" begin
 
-    all_traces = CryptoDashApp.plot_overall_vol_data(30)
+    all_traces = CryptoDashApp.plot_overall_vol_data(15, 5)
     @test ~isempty(all_traces)
 
     for trace in all_traces
-        @test trace.fields[:y] |> length == 30
+        @test trace.fields[:y] |> length == 15
     end   
 
-end=#
+end

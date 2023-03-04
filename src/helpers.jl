@@ -129,29 +129,29 @@ function calculate_macd(
     window_signal::Int64 = 9,
 )
 
-    # df_price should have date order - oldest to latest    
+    # df_price should have date order - oldest to latest
     Price_col = df_price[!, 2]
 
     # Calculate 26 (long) and 12 (short) period EMA
     price_EMA_short = calculate_ema(Price_col, window_short)
-    price_EMA_long = calculate_ema(Price_col, window_long)
+    price_EMA_long  = calculate_ema(Price_col, window_long)
 
-    # Make EMA_long and EMA_short equal	
+    # Make EMA_long and EMA_short equal
     EMA_short_col = price_EMA_short[window_long-window_short+1:end]
 
     # Calculate MACD = EMA_short - EMA_long
     MACD_col = EMA_short_col - price_EMA_long
 
-    # Calculate signal line (9 period EMA of MACD)	
+    # Calculate signal line (9 period EMA of MACD)
     Signal_col = calculate_ema(MACD_col, window_signal)
 
     df_ema = DataFrame(
-        date = df_price[window_long+window_signal-1:end, :Date],
-        Raw = df_price[window_long+window_signal-1:end, 2],
-        EMA_long = price_EMA_long[window_signal:end],
+        date      = df_price[window_long+window_signal-1:end, :Date],
+        Raw       = df_price[window_long+window_signal-1:end, 2],
+        EMA_long  = price_EMA_long[window_signal:end],
         EMA_short = EMA_short_col[window_signal:end],
-        MACD = MACD_col[window_signal:end],
-        Signal = Signal_col,
+        MACD      = MACD_col[window_signal:end],
+        Signal    = Signal_col,
     )
 
     return df_ema

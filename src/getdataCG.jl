@@ -29,7 +29,7 @@ function get_coin_id(currency::String)
             df_coins = vcat(DataFrame.(coins_dict)...)
             CSV.write(filepath, df_coins)
         catch
-            @info "Could not fetch data, try again later!"
+            @error "Could not fetch data, try again later!"
         end
     end
 
@@ -235,9 +235,9 @@ function get_vol_chart(exchange::String)
 
     ex_vol_chart = Vector{Any}[]
 
-    # Historical data is fetched and saved for these many days. Takes more time for longer duration, 
-    # and queries for many exchanges don't even return more points.
-    days = 365
+    # Historical data is fetched and saved for these many days. Takes more time
+    # for longer duration, and queries for many exchanges don't even return more points.
+    days = 30
 
     if isfile(filepath)
         @info "Reading $(exchange) vol data from file on disk"
@@ -247,7 +247,7 @@ function get_vol_chart(exchange::String)
         ex_vol_chart = Float64.(ex_vol_chart[:])
     else
         try
-            # Fetch and save data for 365 days
+            # Fetch and save data for a given number of days
             ex_vol_chart =
                 get_API_response("/exchanges/$(exchange)/volume_chart?days=$(days)")
 
@@ -257,9 +257,8 @@ function get_vol_chart(exchange::String)
                 end
             end
 
-        catch err
-            @info "Could not find volume data for $(exchange)"
-            @info "$(err)"
+        catch
+            error("Could not find volume data for $(exchange)")
         end
     end
 
@@ -286,9 +285,12 @@ function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
 
     df_ex_list = get_list_of_exchanges(num_exchanges)
 
-    # Check on duration, current maximum is set to 365
-    if duration > 365
-        duration = 365
+    # Check on duration, current maximum is set to 30. Using > 30 
+    # gives a bad request error. [04-03-2022]
+
+    if duration > 30
+        @info "Showing results only for 30 days!"
+        duration = 30
     end
 
     # Create a column with dates
@@ -310,8 +312,8 @@ function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
             try
                 ex_vol = get_vol_chart(exchange)
             catch err
-                @info "Could not find volume data for $(exchange), will continue to next!"
-                @info "$(err)"
+                @error "Could not find volume data for $(exchange), will continue to next!"
+                @error "$(err)"
 
                 # Skip next part of the code, and continue to next exchange
                 continue
@@ -331,9 +333,9 @@ function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
                 insertcols!(df_ex_vol, 2, Symbol(name) => ex_vol)
             catch err
                 if isa(err, DimensionMismatch)
-                    @info "Data is missing for $(exchange) for the requested duration"
+                    @error "Data is missing for $(exchange) for the requested duration"
                 else
-                    @info "Something went wrong, check this error: $(err)"
+                    @error "Something went wrong, check this error: $(err)"
                 end
             end
 
