@@ -1,6 +1,6 @@
-using Test, AlphaVantage, Dates, DataFrames, CryptoDashApp, 
-      HTTP, JSON, Query, PlotlyJS
+using Test, AlphaVantage, CryptoDashApp
 
+# Free API key
 AlphaVantage.global_key!("AKTJ25ALEBBLH1QJ")
 
 # Check if "data" folder exists, if not, create a new one

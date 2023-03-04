@@ -15,7 +15,6 @@ using AlphaVantage,
       GLM,
       HTTP,
       JSON,
-      Query,
       DelimitedFiles
 
 include("app.jl")

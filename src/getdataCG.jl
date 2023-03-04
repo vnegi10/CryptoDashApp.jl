@@ -326,7 +326,7 @@ function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
             ex_vol = ex_vol[end-duration+1:end]
 
             # Find name of the exchange corresponding to its ID
-            df_row = df_ex_list |> @filter(_.ID == exchange) |> DataFrame
+            df_row = filter(row -> row.ID == exchange, df_ex_list)
             name = df_row[!, :Name][1]
 
             try
