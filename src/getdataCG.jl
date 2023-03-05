@@ -1,14 +1,5 @@
 ################# Functions for CoinGecko API #################
 
-function get_API_response(params::String, url::String = CG_URL)
-
-    CG_request = HTTP.request("GET", url * params; verbose = 0, retries = 2)
-    response_text = String(CG_request.body)
-    response_dict = JSON.parse(response_text)
-
-    return response_dict
-end
-
 function get_coin_id(currency::String)
 
     date = Dates.today()
@@ -25,8 +16,8 @@ function get_coin_id(currency::String)
     else
         try
             @info "Fetching list of coins from CoinGecko"
-            coins_dict = get_API_response("/coins/list")
-            df_coins = vcat(DataFrame.(coins_dict)...)
+            coins_dict = get_API_response("/coins/list", CG_URL)
+            df_coins   = vcat(DataFrame.(coins_dict)...)
             CSV.write(filepath, df_coins)
         catch
             @error "Could not fetch data, try again later!"
@@ -91,7 +82,7 @@ function get_dev_comm_data(currency::String)
 
     try
         @info "Fetching coin data from CoinGecko"
-        coin_dict = get_API_response("/coins/$(coin_id)")
+        coin_dict = get_API_response("/coins/$(coin_id)", CG_URL)
     catch
         error("Could not fetch data, try again later!")
     end
@@ -148,7 +139,7 @@ function get_list_of_exchanges(num_exchanges::Int64)
     else
         try
             @info "Fetching list of exchanges from CoinGecko"
-            ex_dict   = get_API_response("/exchanges")
+            ex_dict   = get_API_response("/exchanges", CG_URL)
             df_all_ex = vcat(DataFrame.(ex_dict)...)
 
             # Keep only name and id columns
@@ -187,8 +178,9 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
             coin_vol_tickers_dict = Dict()
 
             try
-                coin_vol_tickers_dict =
-                    get_API_response("/exchanges/$(exchange)/tickers?coin_ids=$(coin_id)")
+                url_parts = ["/exchanges/$(exchange)",
+                             "/tickers?coin_ids=$(coin_id)"]
+                coin_vol_tickers_dict = get_API_response(join(url_parts), CG_URL)
             catch err
                 @error "Could not find $(coin_id) volume data on $(exchange)!"
                 @error "$(err)"
@@ -248,8 +240,9 @@ function get_vol_chart(exchange::String)
     else
         try
             # Fetch and save data for a given number of days
-            ex_vol_chart =
-                get_API_response("/exchanges/$(exchange)/volume_chart?days=$(days)")
+            url_parts    = ["/exchanges/$(exchange)",
+                            "/volume_chart?days=$(days)"]
+            ex_vol_chart = get_API_response(join(url_parts), CG_URL)
 
             open(filepath, "w") do f
                 for chart in ex_vol_chart

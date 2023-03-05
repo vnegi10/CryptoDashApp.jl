@@ -16,7 +16,10 @@ function get_price_data_single(currency::String, key::String = KEY)
     else
         try
             @info "Fetching $(currency) price/vol data from Alpha Vantage"
-            raw    = get_AV_response("&symbol=$(currency)&market=EUR&apikey=$(key)")
+            url_parts = ["&symbol=$(currency)",
+                         "&market=EUR",
+                         "&apikey=$(key)"]
+            raw    = get_API_response(join(url_parts), AV_URL)
             df_raw = raw_to_df(raw)
             CSV.write(filepath, df_raw)
         catch
@@ -33,13 +36,4 @@ function get_price_data_single(currency::String, key::String = KEY)
     else
         return DataFrame[], DataFrame[], DataFrame[]
     end
-end
-
-function get_AV_response(params::String, url::String = AV_URL)
-
-    AV_request = HTTP.request("GET", url * params; verbose = 0, retries = 2)
-    response_text = String(AV_request.body)
-    response_dict = JSON.parse(response_text)
-
-    return response_dict
 end

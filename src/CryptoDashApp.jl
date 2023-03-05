@@ -25,6 +25,7 @@ include("getdataCG.jl")
 include("plotsAV.jl")
 include("plotsCG.jl")
 
+include("request.jl")
 include("helpers.jl")
 
 end # module
