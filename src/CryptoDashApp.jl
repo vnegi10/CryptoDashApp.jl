@@ -2,8 +2,7 @@ module CryptoDashApp
 
 export run_app
 
-using AlphaVantage,
-      DataFrames,
+using DataFrames,
       Dates,
       PlotlyJS,
       Dash,
@@ -25,6 +24,7 @@ include("getdataCG.jl")
 include("plotsAV.jl")
 include("plotsCG.jl")
 
+include("request.jl")
 include("helpers.jl")
 
 end # module

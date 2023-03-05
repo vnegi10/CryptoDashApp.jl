@@ -54,10 +54,10 @@ durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
 windows = [1, 5, 10, 30, 50, 75, 100]
 
 
-################# CoinGecko URL #################
+################# URLs for API requests #################
 
-const URL = "https://api.coingecko.com/api/v3"
-
+const CG_URL = "https://api.coingecko.com/api/v3"
+const AV_URL = "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY"
 
 ################# Run the app #################
 
@@ -94,7 +94,7 @@ function run_app(port::Int64, key::String)
     remove_old_files()
 
     # Set API key
-    AlphaVantage.global_key!(key)
+    global KEY = key
 
     # UI part of the tool
     app = dash()

@@ -1,7 +1,7 @@
-using Test, AlphaVantage, CryptoDashApp
+using Test, CryptoDashApp
 
 # Free API key
-AlphaVantage.global_key!("AKTJ25ALEBBLH1QJ")
+global KEY = "AKTJ25ALEBBLH1QJ"
 
 location = joinpath(@__DIR__, "data")
 

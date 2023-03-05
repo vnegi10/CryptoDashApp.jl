@@ -5,7 +5,7 @@
     for currency in ["ETH", "BTC"]
 
         df_out_price, df_out_candle, df_out_vol =
-            CryptoDashApp.get_price_data_single(currency)
+            CryptoDashApp.get_price_data_single(currency, KEY)
 
         @test ~isempty(df_out_price)
         @test ~isempty(df_out_candle)
@@ -21,6 +21,7 @@ end
 
     @test_logs (:info, "Could not fetch data, try again later!") match_mode = :any CryptoDashApp.get_price_data_single(
         currency,
+        KEY
     )
 
 end
