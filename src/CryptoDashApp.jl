@@ -2,8 +2,7 @@ module CryptoDashApp
 
 export run_app
 
-using AlphaVantage,
-      DataFrames,
+using DataFrames,
       Dates,
       PlotlyJS,
       Dash,

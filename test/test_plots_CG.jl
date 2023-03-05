@@ -12,11 +12,11 @@ end
 
 @testset "plot_exchange_vol_data" begin
 
-    all_traces = CryptoDashApp.plot_exchange_vol_data(7)
+    all_traces = CryptoDashApp.plot_exchange_vol_data(7, 5)
     @test ~isempty(all_traces)
 
     for trace in all_traces
-        @test trace.fields[:y] |> length == 2
+        @test trace.fields[:y] |> length == 5
     end
 
 end

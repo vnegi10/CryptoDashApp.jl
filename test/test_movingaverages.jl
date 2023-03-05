@@ -4,7 +4,7 @@
 
     for currency in ["BTC", "DOT"]
 
-        df_out_price, _, _ = CryptoDashApp.get_price_data_single(currency)
+        df_out_price, _, _ = CryptoDashApp.get_price_data_single(currency, KEY)
 
         duration = 90
         window = 30
