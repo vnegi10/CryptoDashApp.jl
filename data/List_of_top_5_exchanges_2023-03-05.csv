@@ -1,0 +1,101 @@
+Name,ID
+Coinbase Exchange,gdax
+KuCoin,kucoin
+Huobi,huobi
+Bybit,bybit_spot
+Kraken,kraken
+Bitfinex,bitfinex
+Binance,binance
+Bitget,bitget
+OKX,okex
+Crypto.com Exchange,crypto_com
+Binance US,binance_us
+Phemex,phemex
+Gemini,gemini
+XT.COM,xt
+BitMart,bitmart
+Upbit,upbit
+BKEX,bkex
+BingX,bingx
+Gate.io,gate
+BTCEX,btcex
+MEXC Global,mxc
+WhiteBIT,whitebit
+Hotbit,hotbit
+EXMO,exmo
+BtcTurk PRO,btcturk
+Bitstamp,bitstamp
+LATOKEN,latoken
+Bitkub,bitkub
+CoinEx,coinex
+Bitbank,bitbank
+Max Maicoin,max_maicoin
+WOO X,wootrade
+Bitso,bitso
+Bittrex,bittrex
+Okcoin,okcoin
+Kuna Exchange,kuna
+BitMEX,bitmex_spot
+Coinsbit,coinsbit
+DigiFinex,digifinex
+Bitrue,bitrue
+Bithumb,bithumb
+Tidex,tidex
+Poloniex,poloniex
+BigONE,bigone
+Dex-Trade,dextrade
+Paribu,paribu
+bitFlyer,bitflyer
+FinexBox,finexbox
+Kanga,kanga
+Indodax,indodax
+Independent Reserve,independent_reserve
+Luno,luno
+BTCMarkets,btcmarkets
+Korbit,korbit
+Blockchain.com,blockchain_com
+Coinmetro,coin_metro
+Coins.ph,coinspro
+NiceHash,nice_hash
+LBank,lbank
+P2B,p2pb2b
+Uniswap (Arbitrum One),uniswap_v3_arbitrum
+Deepcoin,deepcoin
+PancakeSwap (v2),pancakeswap_new
+Coinstore,coinstore
+Uniswap (v2),uniswap_v2
+Uniswap (Polygon),uniswap_v3_polygon_pos
+BIT,bit_com
+Bitvavo,bitvavo
+Cryptology,cryptology
+Uniswap (Optimism),uniswap_v3_optimism
+FMFW.io,bitcoin_com
+Trader Joe v2,traderjoe-v2-avalanche
+AscendEX (BitMax),bitmax
+BitBNS,bitbns
+Orca,orca
+BTSE,btse
+Kyberswap Elastic (Optimism),kyberswap_elastic_optimism
+Osmosis,osmosis
+Dodo (BSC),dodo_bsc
+KyberSwap Elastic (Ethereum),kyberswap_elastic
+Kyberswap Elastic (Arbitrum),kyberswap_elastic_arbitrum
+Sushiswap (Arbitrum One),sushiswap_arbitrum
+Bitazza,bitazza
+Pancakeswap (Stableswap),pancakeswap_stableswap
+Thena,thena
+GMO Japan,gmo_japan
+Camelot,camelot
+Kyberswap Elastic (Polygon),kyberswap_elastic_polygon
+Quickswap,quickswap
+Nominex,nominex
+Bitci,bitci
+BitoPro,bitopro
+Kyberswap Elastic (Avalanche),kyberswap_elastic_avalanche
+Trader Joe v2 (Arbitrum),traderjoe-v2-arbitrum
+Dodo (Polygon),dodo_polygon
+VALR,valr
+Katana,katana
+CEX.IO,cex
+WazirX,wazirx
+Coinlist,coinlist
