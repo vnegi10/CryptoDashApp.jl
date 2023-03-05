@@ -1,21 +1,58 @@
 ################# Helper functions #################
 
-function raw_to_df(raw_data)
+function raw_to_df(raw)
 
-    # Argument ":auto" is required to generate column names in latest version of DataFrames.jl (v1.2.1)
-    df = DataFrame(raw_data[1], :auto)
-    df_names = Symbol.(vcat(raw_data[2]...))
-    df = DataFrames.rename(df, df_names)
+    all_dates = raw["Time Series (Digital Currency Daily)"]
 
-    timestamps = df[!, :timestamp]
+    Date = Dates.Date[]
+    Rows = DataFrame[]
 
-    select!(df, Not([:timestamp]))
+    for (k, v) in all_dates
 
-    for col in eachcol(df)
-        col = Float64.(col)
+        day = parse(Dates.Date, k)
+        push!(Date, day)
+
+        df_row = DataFrame.(v...)
+        push!(Rows, df_row)
+
     end
 
-    df[!, :Date] = Date.(timestamps)
+    df = vcat(Rows...)
+
+    for i = 1:ncol(df)
+        df[!, i] = parse.(Float64, df[!, i])
+    end
+
+    # Rename columns
+    col_names = String[]
+
+    for name in names(df)
+        new_name = split(name, ".")[2] |> strip
+        push!(col_names, new_name)
+    end
+
+    df = DataFrames.rename(df, Symbol.(col_names))
+    
+    # Dates are inserted as the last column
+    insertcols!(df, ncol(df)+1, :Date => Date)
+
+    # Latest date first
+    df = sort(df, :Date, rev = true)
+
+    # Rearrange columns to same order as before
+    df = df[!, ["open (EUR)",
+                "high (EUR)",
+                "low (EUR)",
+                "close (EUR)",
+                "open (USD)",
+                "high (USD)",
+                "low (USD)",
+                "close (USD)",
+                "volume",
+                "market cap (USD)",
+                "Date"]
+           ]
+
     return df
 end
 

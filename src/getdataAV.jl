@@ -1,6 +1,6 @@
 ################# Functions for AlphaVantage API #################
 
-function get_price_data_single(currency::String)
+function get_price_data_single(currency::String, key::String = KEY)
 
     date = Dates.today()
 
@@ -16,7 +16,7 @@ function get_price_data_single(currency::String)
     else
         try
             @info "Fetching $(currency) price/vol data from Alpha Vantage"
-            raw = AlphaVantage.digital_currency_daily(currency, "EUR", datatype = "csv")
+            raw    = get_AV_response("&symbol=$(currency)&market=EUR&apikey=$(key)")
             df_raw = raw_to_df(raw)
             CSV.write(filepath, df_raw)
         catch
@@ -33,4 +33,13 @@ function get_price_data_single(currency::String)
     else
         return DataFrame[], DataFrame[], DataFrame[]
     end
+end
+
+function get_AV_response(params::String, url::String = AV_URL)
+
+    AV_request = HTTP.request("GET", url * params; verbose = 0, retries = 2)
+    response_text = String(AV_request.body)
+    response_dict = JSON.parse(response_text)
+
+    return response_dict
 end

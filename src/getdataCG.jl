@@ -1,6 +1,6 @@
 ################# Functions for CoinGecko API #################
 
-function get_API_response(params::String, url::String = URL)
+function get_API_response(params::String, url::String = CG_URL)
 
     CG_request = HTTP.request("GET", url * params; verbose = 0, retries = 2)
     response_text = String(CG_request.body)
