@@ -33,7 +33,7 @@ function execute_test(file::String, ARGS; all_tests::Bool, errors::Bool)
             println("\t\033[1m\033[32mPASSED\033[0m: $(file)")
         catch e
             println("\t\033[1m\033[31mFAILED\033[0m: $(file)")
-            errors = true
+            global errors = true
             showerror(stdout, e, backtrace())
             println()
         end
