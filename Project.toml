@@ -1,7 +1,7 @@
 name = "CryptoDashApp"
 uuid = "8f55a569-a1ee-45d2-b761-b2b316ddd8e9"
 authors = ["Vikas Negi <vikas.negi10@gmail.com>"]
-version = "0.4.0"
+version = "0.4.1"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
