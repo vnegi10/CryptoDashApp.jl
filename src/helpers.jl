@@ -196,11 +196,24 @@ end
 
 ################# Cleanup function #################
 
+function read_filepaths(folder::String)
+
+    filepaths = String[]
+
+    for (root, dirs, files) in walkdir(folder)
+        for file in files
+            push!(filepaths, joinpath(root, file))
+        end
+    end
+
+    return filepaths
+end
+
 function remove_old_files()
     # Cleanup data files from previous days
     try
         data_dir = joinpath(@__DIR__, "..", "data")
-        files    = readdir(data_dir)
+        files    = read_filepaths(data_dir)
         rx1 = "data"
         rx2 = "List"
         rx3 = ".csv"
@@ -215,7 +228,8 @@ function remove_old_files()
             end
         end
 
-    catch
+    catch err
+        @info "$(err)"
         @info "Unable to perform cleanup action"
     end
 end
