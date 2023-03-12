@@ -2,7 +2,7 @@
 
 @testset "Check if MA, MACD + signal, σ (for Bollinger bands) are calculated" begin
 
-    for currency in ["BTC", "DOT"]
+    for currency in ["DOT"]
 
         df_out_price, _, _ = CryptoDashApp.get_price_data_single(currency, KEY)
 

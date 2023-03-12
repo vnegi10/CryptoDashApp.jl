@@ -2,12 +2,12 @@
 
 @testset "plot_price_ma_trade_data" begin
 
-    all_traces = CryptoDashApp.plot_price_ma_trade_data(7, 90, 30, KEY)
+    all_traces = CryptoDashApp.plot_price_ma_trade_data(10, 90, 30, KEY)
     @test ~isempty(all_traces)
 
     for trace in all_traces
         @test trace.fields[:y] |> length == 90
-    end   
+    end
 
 end
 
@@ -18,7 +18,7 @@ end
 
     for trace in all_traces
         @test trace.fields[:y] |> length == 180
-    end   
+    end
 
 end
 
