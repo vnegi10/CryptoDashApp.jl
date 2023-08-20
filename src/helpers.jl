@@ -214,13 +214,23 @@ function remove_old_files()
     try
         data_dir = joinpath(@__DIR__, "..", "data")
         files    = read_filepaths(data_dir)
+
+        # Matching strings for regex
         rx1 = "data"
         rx2 = "List"
         rx3 = ".csv"
         rx4 = ".txt"
+
         for file in files
-            ts = Dates.unix2datetime(stat(file).mtime)
-            file_date = Date(ts)
+            # Extract date from file name
+            parts = splitext(file)[1] |> splitpath
+            file_name = parts[end]
+            date_str = split(file_name, "_")[end]
+
+            # Convert String to Date object
+            df = DateFormat("y-m-d")
+            file_date = Date(date_str, df)
+
             if file_date != Dates.today() &&
                (occursin(rx3, file) || occursin(rx4, file)) &&
                (occursin(rx1, file) || occursin(rx2, file))
