@@ -17,6 +17,7 @@ Functionality of the app will be extended in the future by adding more technical
 
 ## How to use?
 
+### Running in Julia locally
 This package is available via the General registry. Add it to your working Julia environment by
 doing the following in the REPL:
 * Press ']' to enter Pkg prompt
@@ -36,6 +37,27 @@ julia> run_app(8056, "your key") # where 8056 is the port
 Free API key can be obtained from [here.](https://www.alphavantage.co/support/#api-key)
 
 Now, open a new tab in your browser and check if you can access http://0.0.0.0:8056/ or http://127.0.0.1:8056/
+
+### Running as a Docker container
+Assuming that you have Docker installed, and a valid API key, a Docker image
+can be created using the follwing steps:
+* Clone this repository and cd to the directory
+
+* Build the Docker image (Here `crypto_app` is the name of the generated image)
+```bash
+docker build --build-arg api_key=<YOUR_API_KEY> -t crypto_app .
+```
+
+* Once the image is successfully generated, start a container (port 8010 is hard-coded
+in the Dockerfile, can also be changed if needed):
+```bash
+docker run -dp 127.0.0.1:8010:8010 crypto_app
+```
+
+* Check log output:
+```bash
+docker logs --follow <container id>
+```
 
 First plot will take a few seconds to appear, wait patiently! If you are running this app for the
 first time, or on a different date, new data will be retrieved from Alpha Vantage, and then saved
