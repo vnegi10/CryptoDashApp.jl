@@ -67,7 +67,7 @@ end
 
 @testset "plot_linear_regression" begin
 
-    all_traces = CryptoDashApp.plot_linear_regression(17, 200, KEY)
+    all_traces = CryptoDashApp.plot_linear_regression(16, 200, KEY)
     @test ~isempty(all_traces)
 
     for trace in all_traces[1:4]
