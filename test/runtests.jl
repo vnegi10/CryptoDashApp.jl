@@ -16,6 +16,23 @@ end
 # Perform cleanup of old data
 CryptoDashApp.remove_old_files()
 
+# Activate mocking for relevant test cases
+Mocking.activate()
+
+# Load mocking data
+data_dir = joinpath(@__DIR__, "mocking_data")
+csv_to_df(data_dir, fname) = joinpath(data_dir, fname) |> CSV.File |> DataFrame
+
+df_price = csv_to_df(data_dir, "single_price.csv")
+df_candle = csv_to_df(data_dir, "single_candle.csv")
+df_vol = csv_to_df(data_dir, "single_vol.csv")
+
+# Generate an alternative method of the target function
+patch = @patch CryptoDashApp.get_price_data_single(currency::String,
+                                                   key::String = KEY) = return df_price,
+                                                                               df_candle,
+                                                                               df_vol
+
 errors = false
 all_tests = false
 
