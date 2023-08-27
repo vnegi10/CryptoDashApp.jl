@@ -1,7 +1,7 @@
 name = "CryptoDashApp"
 uuid = "8f55a569-a1ee-45d2-b761-b2b316ddd8e9"
 authors = ["Vikas Negi <vikas.negi10@gmail.com>"]
-version = "0.4.2"
+version = "0.4.3"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
@@ -14,6 +14,7 @@ DelimitedFiles = "8bb1440f-4735-579b-a4ab-409b98df4dab"
 GLM = "38e38edf-8417-5370-95a0-9cbb8c7f171a"
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
+Mocking = "78c3b35d-d492-501b-9361-3d52fe80e533"
 PlotlyJS = "f0f68f2c-4968-5e81-91da-67840de0976a"
 Statistics = "10745b16-79ce-11e8-11f9-7d13ad32a3b2"
 StatsBase = "2913bbd2-ae8a-5f71-8c99-4fb6c76f3a91"
@@ -29,4 +30,5 @@ HTTP = "0.9"
 JSON = "0.21"
 PlotlyJS = "0.15"
 StatsBase = "0.33"
+Mocking = "0.7"
 julia = "1.6"

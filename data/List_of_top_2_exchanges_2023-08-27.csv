@@ -1,0 +1,101 @@
+Name,ID
+Coinbase Exchange,gdax
+Bybit,bybit_spot
+KuCoin,kucoin
+Kraken,kraken
+Bitstamp,bitstamp
+Bitfinex,bitfinex
+Binance US,binance_us
+Binance,binance
+OKX,okex
+Gate.io,gate
+Bitget,bitget
+Huobi,huobi
+Crypto.com Exchange,crypto_com
+Gemini,gemini
+Coins.ph,coinspro
+DigiFinex,digifinex
+WhiteBIT,whitebit
+Deepcoin,deepcoin
+BingX,bingx
+Dex-Trade,dextrade
+Phemex,phemex
+QMall,qmall
+PointPay,pointpay
+CoinEx,coinex
+Bitkub,bitkub
+WOO X,wootrade
+Bitbank,bitbank
+Bitso,bitso
+Max Maicoin,max_maicoin
+Indodax,indodax
+C-Patex,c_patex
+Bullish,bullish_com
+Luno,luno
+VALR,valr
+Bittrex Global,bittrex
+Coinmetro,coin_metro
+Blockchain.com,blockchain_com
+Kuna Exchange,kuna
+NiceHash,nice_hash
+BitMEX,bitmex_spot
+LBank,lbank
+BitMart,bitmart
+CoinW,coinw
+MEXC,mxc
+XT.COM,xt
+Coinsbit,coinsbit
+Upbit,upbit
+Bitrue,bitrue
+Tidex,tidex
+BTSE,btse
+Toobit,toobit
+BigONE,bigone
+EXMO,exmo
+Coinstore,coinstore
+bitFlyer,bitflyer
+Kanga,kanga
+Independent Reserve,independent_reserve
+BitoPro,bitopro
+itBit,itbit
+BTCMarkets,btcmarkets
+CEX.IO,cex
+Delta Exchange,delta_spot
+LATOKEN,latoken
+P2B,p2pb2b
+Bitci TR,bitci
+Uniswap V2 (Ethereum),uniswap_v2
+Biconomy,biconomy
+Bithumb,bithumb
+Uniswap V3 (Arbitrum One),uniswap_v3_arbitrum
+Azbit,azbit
+DIFX,difx
+Bitvavo,bitvavo
+BtcTurk | Kripto,btcturk
+Pancakeswap V3 (BSC),pancakeswap-v3-bsc
+SyncSwap,syncswap
+Cryptology,cryptology
+PancakeSwap (v2),pancakeswap_new
+PulseX,pulsex
+Uniswap V3 (Polygon),uniswap_v3_polygon_pos
+Uniswap V3 (Optimism),uniswap_v3_optimism
+Pancakeswap V3 (zkSync),pancakeswap-v3-zksync
+Coinone,coinone
+Osmosis,osmosis
+Mute,mute
+GMO Japan,gmo_japan
+Sushiswap,sushiswap
+DODO (BSC),dodo_bsc
+SyncSwap (Linea),syncswap-linea
+SpaceFi (ZkSync),spacefi_zksync
+Velodrome Finance v2,velodrome-finance-v2
+SushiSwap V3 (Base),sushiswap-v3-base
+Katana,katana
+Korbit,korbit
+Stormgain,stormgain
+BIT,bit_com
+Nominex,nominex
+PulseX V2,pulsex-v2
+Stellaswap (V3),stellaswap-v3
+WazirX,wazirx
+Bitlo,bitlo

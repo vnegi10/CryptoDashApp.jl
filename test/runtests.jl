@@ -3,19 +3,6 @@ using Test, CryptoDashApp
 # Free API key
 global KEY = "AKTJ25ALEBBLH1QJ"
 
-location = joinpath(@__DIR__, "data")
-
-# Check if "data" folder exists, if not, create a new one
-if isdir(location)
-    @info "data folder exists, cleanup action will be performed!"
-else
-    mkpath(location)
-    @info "New data folder has been created"
-end
-
-# Perform cleanup of old data
-CryptoDashApp.remove_old_files()
-
 errors = false
 all_tests = false
 
@@ -23,6 +10,9 @@ all_tests = false
 if isempty(ARGS) || "all" in ARGS
     all_tests = true
 end
+
+# Enable mocking
+include("mocking_setup.jl")
 
 # Execute test in a try-catch block for each file
 function execute_test(file::String, ARGS; all_tests::Bool, errors::Bool)

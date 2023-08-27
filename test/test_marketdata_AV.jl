@@ -2,7 +2,7 @@
 
 @testset "Check if AV market data are accessible" begin
 
-    for currency in ["ETH"]
+    for currency in ["BTC"]
 
         df_out_price, df_out_candle, df_out_vol =
             CryptoDashApp.get_price_data_single(currency, KEY)

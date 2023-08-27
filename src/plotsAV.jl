@@ -6,7 +6,7 @@ function plot_price_ma_trade_data(index::Int64,
                                   key::String = KEY)
 
     # Retrieve data from various helper functions
-    df_price, _, df_vol = get_price_data_single(currencies[index], key)
+    df_price, _, df_vol = @mock get_price_data_single(currencies[index], key)
 
     # Make sure that duration does not exceed the number of rows - max(windows) in the DataFrame
     # This allows calculation of MA for the longest duration
@@ -62,7 +62,7 @@ function plot_price_bollinger_bands(index::Int64,
                                     window::Int64,
                                     key::String = KEY)
 
-    df_price, _, _ = get_price_data_single(currencies[index], key)
+    df_price, _, _ = @mock get_price_data_single(currencies[index], key)
 
     if duration > size(df_price)[1] - maximum(windows)
         duration = size(df_price)[1] - maximum(windows)
@@ -112,7 +112,7 @@ function plot_candle_vol_data(index::Int64,
                               key::String = KEY)
 
     # Retrieve data from various helper functions
-    _, df_candle, df_vol = get_price_data_single(currencies[index], key)
+    _, df_candle, df_vol = @mock get_price_data_single(currencies[index], key)
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
     if duration > size(df_candle)[1]
@@ -154,7 +154,7 @@ function plot_cumul_daily_return_hist(index::Int64,
                                       key::String = KEY)
 
     # Retrieve data from various helper functions
-    df_price, _, _ = get_price_data_single(currencies[index], key)
+    df_price, _, _ = @mock get_price_data_single(currencies[index], key)
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
     if duration > size(df_price)[1]
@@ -244,7 +244,7 @@ function plot_macd_signal(index::Int64,
                           key::String = KEY)
 
     # Retrieve data from various helper functions
-    df_price, _, _ = get_price_data_single(currencies[index], key)
+    df_price, _, _ = @mock get_price_data_single(currencies[index], key)
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
     if duration > size(df_price)[1]
@@ -333,7 +333,7 @@ function plot_linear_regression(index::Int64,
                                 key::String = KEY)
 
     # Retrieve data from various helper functions
-    df_price, _, _ = get_price_data_single(currencies[index], key)
+    df_price, _, _ = @mock get_price_data_single(currencies[index], key)
 
     # Make sure that duration does not exceed the number of rows in the DataFrame
     if duration > size(df_price)[1]

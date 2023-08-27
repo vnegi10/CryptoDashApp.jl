@@ -2,10 +2,7 @@
 
 @testset "Check if MA, MACD + signal, σ (for Bollinger bands) are calculated" begin
 
-    for currency in ["DOT"]
-
-        df_out_price, _, _ = CryptoDashApp.get_price_data_single(currency, KEY)
-
+        df_out_price, _, _ = df_price, df_candle, df_vol
         duration = 90
         window = 30
 
@@ -22,7 +19,5 @@
 
         Price_σ = CryptoDashApp.moving_std(df_out_price, duration, window)
         @test ~isempty(Price_σ)
-
-    end
 
 end
