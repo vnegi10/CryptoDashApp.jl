@@ -1,4 +1,4 @@
-using Test, CryptoDashApp
+using Test, CryptoDashApp, Mocking, CSV, DataFrames
 
 # Free API key
 global KEY = "AKTJ25ALEBBLH1QJ"
