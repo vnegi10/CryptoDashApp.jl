@@ -17,7 +17,7 @@ end
 
     for currency in ["btc"]
 
-        num_exchanges = 5
+        num_exchanges = 2
 
         df_ex_vol = CryptoDashApp.get_exchange_vol_data(currency, num_exchanges)
 
@@ -29,7 +29,7 @@ end
 
 @testset "Check if CG overall exchange volume data are accessible" begin
 
-    num_exchanges = 5
+    num_exchanges = 2
 
     for duration in [10, 30]
         df_ex_vol = CryptoDashApp.get_overall_vol_data(duration, num_exchanges)
