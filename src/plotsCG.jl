@@ -3,7 +3,7 @@
 function plot_dev_comm_data(index::Int64)
 
     # Convert currency symbol to lowercase and fetch data from CoinGecko
-    df_dev, df_comm = get_dev_comm_data(lowercase(currencies[index]))
+    df_dev, df_comm = @mock get_dev_comm_data(lowercase(currencies[index]))
 
     ################# Developer data #################
     trace1 = PlotlyJS.bar(;
@@ -25,7 +25,7 @@ end
 function plot_exchange_vol_data(index::Int64, num_exchanges::Int64 = 10)
 
     # Convert currency symbol to lowercase and fetch data from CoinGecko
-    df_ex_vol = get_exchange_vol_data(lowercase(currencies[index]), num_exchanges)
+    df_ex_vol = @mock get_exchange_vol_data(lowercase(currencies[index]), num_exchanges)
 
     ################# Coin volume data #################
     trace1 = PlotlyJS.bar(;
@@ -50,7 +50,7 @@ function plot_overall_vol_data(duration::Int64, num_exchanges::Int64 = 10)
     all_traces = GenericTrace{Dict{Symbol,Any}}[]
 
     # Fetch overall volume data from CoinGecko for given historical duration
-    df_ex_vol = get_overall_vol_data(duration, num_exchanges)
+    df_ex_vol = @mock get_overall_vol_data(duration, num_exchanges)
 
     if ~isempty(df_ex_vol)
 

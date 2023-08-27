@@ -2,7 +2,7 @@
 
 @testset "plot_price_ma_trade_data" begin
 
-    apply(patch) do
+    apply(patch_1) do
 
         all_traces = CryptoDashApp.plot_price_ma_trade_data(10, 90, 30, KEY)
         @test ~isempty(all_traces)
@@ -17,7 +17,7 @@ end
 
 @testset "plot_price_bollinger_bands" begin
 
-    apply(patch) do
+    apply(patch_1) do
 
         all_traces = CryptoDashApp.plot_price_bollinger_bands(15, 180, 30, KEY)
         @test ~isempty(all_traces)
@@ -32,7 +32,7 @@ end
 
 @testset "plot_candle_vol_data" begin
 
-    apply(patch) do
+    apply(patch_1) do
         
         all_traces = CryptoDashApp.plot_candle_vol_data(7, 180, KEY)
         @test ~isempty(all_traces)
@@ -53,7 +53,7 @@ end
 
 @testset "plot_cumul_daily_return_hist" begin
 
-    apply(patch) do
+    apply(patch_1) do
 
         all_traces = CryptoDashApp.plot_cumul_daily_return_hist(11, 60, KEY)
         @test ~isempty(all_traces)
@@ -72,7 +72,7 @@ end
 
 @testset "plot_macd_signal" begin
 
-    apply(patch) do
+    apply(patch_1) do
 
         all_traces = CryptoDashApp.plot_macd_signal(20, 42, KEY)
         @test ~isempty(all_traces)
@@ -87,7 +87,7 @@ end
 
 @testset "plot_linear_regression" begin
 
-    apply(patch) do
+    apply(patch_1) do
 
         all_traces = CryptoDashApp.plot_linear_regression(15, 200, KEY)
         @test ~isempty(all_traces)
