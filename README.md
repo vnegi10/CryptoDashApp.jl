@@ -69,4 +69,4 @@ case you see an error, wait for a while and then try again.
 
 <img src="https://media.giphy.com/media/gn6DV7p7Wbh15FdWMX/giphy.gif"/>
 
-For better visual quality, visit this [link.](https://link.eu1.storjshare.io/s/juiaacgfta5f4o5p3zy4lxnn4ckq/videos/gifs/CryptoDashApp_demo_2022_06_19.gif)
+For better visual quality, visit this [link.](https://link.storjshare.io/jvsmvfth6rqbxiwixxcnb6iortba/gifs%2FCryptoDashApp_demo_2023_10_10.gif)
