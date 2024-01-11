@@ -19,7 +19,7 @@ end
 
     currency = "dummy"
 
-    @test_logs (:info, "Could not fetch data, try again later!") match_mode = :any CryptoDashApp.get_price_data_single(
+    @test_throws ErrorException("Could not fetch data, try again later!") CryptoDashApp.get_price_data_single(
         currency,
         KEY
     )
