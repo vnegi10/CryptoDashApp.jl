@@ -23,17 +23,16 @@ function get_price_data_single(currency::String, key::String = KEY)
             df_raw = raw_to_df(raw)
             CSV.write(filepath, df_raw)
         catch
-            @info "Could not fetch data, try again later!"
+            error("Could not fetch data, try again later!")
         end
     end
 
-    # Return processed DataFrame only when raw data has been fetched successfully
-    if ~isempty(df_raw)
-        df_out_price, df_out_candle = average_df_price(currency, df_raw)
-        df_out_vol = df_vol(currency, df_raw)
+    # Return processed DataFrame only when raw data is available
+    @assert ~isempty(df_raw) "Raw DataFrame is empty!"
+    
+    df_out_price, df_out_candle = average_df_price(currency, df_raw)
+    df_out_vol = df_vol(currency, df_raw)
 
-        return df_out_price, df_out_candle, df_out_vol
-    else
-        return DataFrame[], DataFrame[], DataFrame[]
-    end
+    return df_out_price, df_out_candle, df_out_vol
+
 end
