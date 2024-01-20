@@ -1,12 +1,13 @@
 Name,ID
 Binance,binance
-Bybit,bybit_spot
+Bitfinex,bitfinex
 Coinbase Exchange,gdax
+Crypto.com Exchange,crypto_com
+Kraken,kraken
+Bybit,bybit_spot
 OKX,okex
 Gate.io,gate
 KuCoin,kucoin
-Kraken,kraken
-Bitfinex,bitfinex
 Binance US,binance_us
 MEXC,mxc
 Bitget,bitget

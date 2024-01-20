@@ -207,6 +207,7 @@ function run_app(port::Int64, key::String)
                                                 i in windows
                                             ],
                                             value = 1,
+                                            labelStyle = Dict("display" => "inline-block"),
                                         ),
                                     ),
                                     html_td(
@@ -217,6 +218,7 @@ function run_app(port::Int64, key::String)
                                                 i in durations
                                             ],
                                             value = 7,
+                                            labelStyle = Dict("display" => "inline-block"),
                                         ),
                                     ),
                                 ]),
@@ -344,7 +346,7 @@ function run_app(port::Int64, key::String)
             )
 
             P1 = Plot(t1, layout1) # plots histogram of daily price change
-            return [P1]
+            return P1
 
         elseif mode_ID == 5
             t1, t2, t3, t4, t5, t6_green, t6_red = plot_macd_signal(pair_ID, duration_ID)
@@ -400,7 +402,7 @@ function run_app(port::Int64, key::String)
             )
 
             P1 = Plot([t1, t2, t3, t4], layout1) # plots linear regression channel   
-            return [P1]
+            return P1
 
         elseif mode_ID == 7
             t1, t2, t3, t4 = plot_price_bollinger_bands(pair_ID, duration_ID, window_ID)
@@ -414,7 +416,7 @@ function run_app(port::Int64, key::String)
             )
 
             P1 = Plot([t1, t2, t3, t4], layout1) # plots Bollinger bands   
-            return [P1]
+            return P1
 
         # From CoinGecko
         elseif mode_ID == 8
