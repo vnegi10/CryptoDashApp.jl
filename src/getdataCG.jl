@@ -218,7 +218,7 @@ function get_exchange_vol_data(currency::String, num_exchanges::Int64)
     return df_ex_vol
 end
 
-function get_vol_chart(exchange::String)
+function get_vol_chart(exchange)
 
     date = Dates.today()
 
