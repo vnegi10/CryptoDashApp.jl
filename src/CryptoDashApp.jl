@@ -12,7 +12,6 @@ using DataFrames,
       GLM,
       HTTP,
       JSON,
-      DelimitedFiles,
       Mocking
 
 include("app.jl")
