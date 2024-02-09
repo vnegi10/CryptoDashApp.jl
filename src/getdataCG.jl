@@ -225,7 +225,7 @@ function get_vol_chart(exchange)
     filename = "$(exchange)_vol_data_$(date).csv"
     filepath = joinpath(@__DIR__, "..", "data", filename)
 
-    ex_vol_chart = Vector{Any}[]
+    df_vol = DataFrame()
 
     # Historical data is fetched and saved for these many days. Takes more time
     # for longer duration, and queries for many exchanges don't even return more points.
@@ -233,10 +233,7 @@ function get_vol_chart(exchange)
 
     if isfile(filepath)
         @info "Reading $(exchange) vol data from file on disk"
-        ex_vol_chart = readdlm(filepath, ';')
-
-        # Drop the dimension and convert to Float64
-        ex_vol_chart = Float64.(ex_vol_chart[:])
+        df_vol = CSV.read(filepath, DataFrame)
     else
         try
             # Fetch and save data for a given number of days
@@ -244,35 +241,26 @@ function get_vol_chart(exchange)
                             "/volume_chart?days=$(days)"]
             ex_vol_chart = get_API_response(join(url_parts), CG_URL)
 
-            time, volume = Float64[], String[]
+            time, volume = [Float64[] for i = 1:2]
             for vol in ex_vol_chart
                 push!(time, vol[1])
-                push!(volume, vol[2])
+                push!(volume, round(parse(Float64, vol[2]), digits = 2))
             end
             df_vol = DataFrame(time = time, volume = volume)
+
+            # Write to CSV file on disk
             CSV.write(filepath, df_vol)
         catch
             error("Could not find volume data for $(exchange)")
         end
     end
 
-    if length(ex_vol_chart) > days
-        start_index = Int64(length(ex_vol_chart) / 2) + 1
-        return ex_vol_chart[start_index:end]
-
-    else
-        ex_vol = Union{Missing,Float64}[]
-
-        for chart in ex_vol_chart
-            try
-                push!(ex_vol, round(parse(Float64, chart[2]); digits = 2))
-            catch
-                push!(ex_vol, missing)
-            end
-        end
-
-        return ex_vol
+    if nrow(df_vol) > days
+        df_vol = df_vol[end-days+1:end, :]
     end
+
+    return df_vol.volume
+
 end
 
 function get_overall_vol_data(duration::Int64, num_exchanges::Int64)
