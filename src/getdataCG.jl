@@ -222,7 +222,7 @@ function get_vol_chart(exchange)
 
     date = Dates.today()
 
-    filename = "$(exchange)_vol_data_$(date).txt"
+    filename = "$(exchange)_vol_data_$(date).csv"
     filepath = joinpath(@__DIR__, "..", "data", filename)
 
     ex_vol_chart = Vector{Any}[]
@@ -244,12 +244,13 @@ function get_vol_chart(exchange)
                             "/volume_chart?days=$(days)"]
             ex_vol_chart = get_API_response(join(url_parts), CG_URL)
 
-            open(filepath, "w") do f
-                for chart in ex_vol_chart
-                    writedlm(f, [chart], ";")
-                end
+            time, volume = Float64[], String[]
+            for vol in ex_vol_chart
+                push!(time, vol[1])
+                push!(volume, vol[2])
             end
-
+            df_vol = DataFrame(time = time, volume = volume)
+            CSV.write(filepath, df_vol)
         catch
             error("Could not find volume data for $(exchange)")
         end
