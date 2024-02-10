@@ -17,7 +17,7 @@ df_overall_vol = csv_to_df(data_dir, "overall_vol_ex.csv")
 
 # Generate an alternative method of the target function
 patch_1 = @patch CryptoDashApp.get_price_data_single(currency::String,
-                                                     key::String = KEY) = return df_price,
+                                                     key::String = AV_KEY) = return df_price,
                                                                                  df_candle,
                                                                                  df_vol
 

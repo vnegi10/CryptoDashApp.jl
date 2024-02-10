@@ -4,7 +4,7 @@
 
     apply(patch_1) do
 
-        all_traces = CryptoDashApp.plot_price_ma_trade_data(10, 90, 30, KEY)
+        all_traces = CryptoDashApp.plot_price_ma_trade_data(10, 90, 30, AV_KEY)
         @test ~isempty(all_traces)
 
         for trace in all_traces
@@ -19,7 +19,7 @@ end
 
     apply(patch_1) do
 
-        all_traces = CryptoDashApp.plot_price_bollinger_bands(15, 180, 30, KEY)
+        all_traces = CryptoDashApp.plot_price_bollinger_bands(15, 180, 30, AV_KEY)
         @test ~isempty(all_traces)
 
         for trace in all_traces
@@ -34,7 +34,7 @@ end
 
     apply(patch_1) do
         
-        all_traces = CryptoDashApp.plot_candle_vol_data(7, 180, KEY)
+        all_traces = CryptoDashApp.plot_candle_vol_data(7, 180, AV_KEY)
         @test ~isempty(all_traces)
 
         # Check candlestick data
@@ -55,7 +55,7 @@ end
 
     apply(patch_1) do
 
-        all_traces = CryptoDashApp.plot_cumul_daily_return_hist(11, 60, KEY)
+        all_traces = CryptoDashApp.plot_cumul_daily_return_hist(11, 60, AV_KEY)
         @test ~isempty(all_traces)
 
         # Cumulative return
@@ -74,7 +74,7 @@ end
 
     apply(patch_1) do
 
-        all_traces = CryptoDashApp.plot_macd_signal(20, 42, KEY)
+        all_traces = CryptoDashApp.plot_macd_signal(20, 42, AV_KEY)
         @test ~isempty(all_traces)
 
         for trace in all_traces
@@ -89,7 +89,7 @@ end
 
     apply(patch_1) do
 
-        all_traces = CryptoDashApp.plot_linear_regression(15, 200, KEY)
+        all_traces = CryptoDashApp.plot_linear_regression(15, 200, AV_KEY)
         @test ~isempty(all_traces)
 
         for trace in all_traces[1:4]

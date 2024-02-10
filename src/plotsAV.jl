@@ -3,7 +3,7 @@
 function plot_price_ma_trade_data(index::Int64,
                                   duration::Int64,
                                   window::Int64,
-                                  key::String = KEY)
+                                  key::String = AV_KEY)
 
     # Retrieve data from various helper functions
     df_price, _, df_vol = @mock get_price_data_single(currencies[index], key)
@@ -60,7 +60,7 @@ end
 function plot_price_bollinger_bands(index::Int64,
                                     duration::Int64,
                                     window::Int64,
-                                    key::String = KEY)
+                                    key::String = AV_KEY)
 
     df_price, _, _ = @mock get_price_data_single(currencies[index], key)
 
@@ -109,7 +109,7 @@ end
 
 function plot_candle_vol_data(index::Int64,
                               duration::Int64,
-                              key::String = KEY)
+                              key::String = AV_KEY)
 
     # Retrieve data from various helper functions
     _, df_candle, df_vol = @mock get_price_data_single(currencies[index], key)
@@ -151,7 +151,7 @@ end
 
 function plot_cumul_daily_return_hist(index::Int64,
                                       duration::Int64,
-                                      key::String = KEY)
+                                      key::String = AV_KEY)
 
     # Retrieve data from various helper functions
     df_price, _, _ = @mock get_price_data_single(currencies[index], key)
@@ -241,7 +241,7 @@ end
 
 function plot_macd_signal(index::Int64,
                           duration::Int64,
-                          key::String = KEY)
+                          key::String = AV_KEY)
 
     # Retrieve data from various helper functions
     df_price, _, _ = @mock get_price_data_single(currencies[index], key)
@@ -330,7 +330,7 @@ end
 
 function plot_linear_regression(index::Int64,
                                 duration::Int64,
-                                key::String = KEY)
+                                key::String = AV_KEY)
 
     # Retrieve data from various helper functions
     df_price, _, _ = @mock get_price_data_single(currencies[index], key)

@@ -1,7 +1,7 @@
 using Test, CryptoDashApp
 
 # Free API key
-const KEY = "AKTJ25ALEBBLH1QJ"
+const AV_KEY = "AKTJ25ALEBBLH1QJ"
 const CG_KEY = "CG-x2BULjmy7mJmvZ9aM6S13Gof"
 
 errors = false

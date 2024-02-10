@@ -6,7 +6,7 @@ const AV_URL = "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAIL
 ################# API keys #################
 
 if haskey(ENV, "KEY_AV")
-    const KEY = ENV["KEY_AV"]
+    const AV_KEY = ENV["KEY_AV"]
 else
     error("API key for AlphaVantage has not been provided!")
 end

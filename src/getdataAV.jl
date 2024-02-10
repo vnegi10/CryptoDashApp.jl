@@ -1,6 +1,6 @@
 ################# Functions for AlphaVantage API #################
 
-function get_price_data_single(currency::String, key::String = KEY)
+function get_price_data_single(currency::String, key::String = AV_KEY)
 
     date = Dates.today()
 
