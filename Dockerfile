@@ -1,5 +1,5 @@
 # Debian 12 image
-FROM amd64/julia:1.9.2-bookworm
+FROM amd64/julia:1.10.0-bookworm
 
 WORKDIR /app
 COPY . .
@@ -11,9 +11,11 @@ USER root
 RUN apt-get update
 RUN apt-get install --no-install-recommends unzip
 
-# Set API environment variable
-ARG api_key
-ENV env_key $api_key
+# Set API environment variables
+ARG key_av
+ARG key_cg
+ENV KEY_AV $key_av
+ENV KEY_CG $key_cg
 
 # Install dependencies
 RUN julia -e 'using Pkg; Pkg.activate(pwd()); Pkg.instantiate()'
