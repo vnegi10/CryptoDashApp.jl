@@ -29,6 +29,11 @@ jobs:
         arch:
           - x64
     steps:
+      - name: Set env. variables in Windows
+        if: runner.os == 'Windows'
+        run: |
+          $env:KEY_AV = KEY_AV
+          $env:KEY_CG = KEY_CG
       - uses: actions/checkout@v3
       - uses: julia-actions/setup-julia@latest
         with:
