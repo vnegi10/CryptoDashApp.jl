@@ -5,7 +5,7 @@
     for currency in ["BTC"]
 
         df_out_price, df_out_candle, df_out_vol =
-            CryptoDashApp.get_price_data_single(currency, KEY)
+            CryptoDashApp.get_price_data_single(currency, AV_KEY)
 
         @test ~isempty(df_out_price)
         @test ~isempty(df_out_candle)
@@ -21,7 +21,7 @@ end
 
     @test_throws ErrorException("Could not fetch data, try again later!") CryptoDashApp.get_price_data_single(
         currency,
-        KEY
+        AV_KEY
     )
 
 end

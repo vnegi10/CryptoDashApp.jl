@@ -117,5 +117,5 @@ of data.
 
 ## Run app
 ```@docs
-run_app(port::Int64, key::String)
+run_app(port::Int64)
 ```
