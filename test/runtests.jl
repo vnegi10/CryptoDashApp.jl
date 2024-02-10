@@ -1,8 +1,27 @@
-using Test, CryptoDashApp
+using Test, JSON, CryptoDashApp
 
-# Free API key
-const AV_KEY = "AKTJ25ALEBBLH1QJ"
-const CG_KEY = "CG-x2BULjmy7mJmvZ9aM6S13Gof"
+# Get both API keys locally and during CI
+local_dir = "/home/vikas/Documents"
+AV_file = joinpath(local_dir, "AV_demo_key.json")
+CG_file = joinpath(local_dir, "CG_demo_key.json")
+
+if isfile(AV_file)
+    key_dict = JSON.parsefile(AV_file)
+    const AV_KEY = key_dict["key"]
+elseif haskey(ENV, "KEY_AV")
+    const AV_KEY = ENV["KEY_AV"]
+else
+    error("API key for AlphaVantage has not been provided!")
+end
+
+if isfile(CG_file)
+    key_dict = JSON.parsefile(CG_file)
+    const CG_KEY = key_dict["key"]
+elseif haskey(ENV, "KEY_CG")
+    const CG_KEY = ENV["KEY_CG"]
+else
+    error("API key for CoinGecko has not been provided!")
+end
 
 errors = false
 all_tests = false
