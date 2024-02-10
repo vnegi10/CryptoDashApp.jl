@@ -29,16 +29,15 @@ jobs:
         arch:
           - x64
     steps:
-      - name: Set env. variables in Windows
-        if: runner.os == 'Windows'
-        run: |
-          $env:KEY_AV = ${{ secrets.KEY_AV }}
-          $env:KEY_CG = ${{ secrets.KEY_CG }}
       - uses: actions/checkout@v3
       - uses: julia-actions/setup-julia@latest
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
+      - name: Set env. variables in Windows
+        if: runner.os == 'Windows'
+        run: |
+           julia -e 'println("$ENV")'
       - uses: actions/cache@v3
         env:
           cache-name: cache-artifacts
