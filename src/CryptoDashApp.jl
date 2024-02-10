@@ -14,6 +14,7 @@ using DataFrames,
       JSON,
       Mocking
 
+include("constants.jl")
 include("app.jl")
 
 include("getdataAV.jl")

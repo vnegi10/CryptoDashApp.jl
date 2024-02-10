@@ -53,12 +53,6 @@ modes_index = 1:length(modes)
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
 windows = [1, 5, 10, 30, 50, 75, 100]
 
-
-################# URLs for API requests #################
-
-const CG_URL = "https://api.coingecko.com/api/v3"
-const AV_URL = "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAILY"
-
 ################# Run the app #################
 
 """
@@ -78,7 +72,7 @@ julia> run_app(8056, "Your API key")
 [ Info: Fetching BTC price/vol data from Alpha Vantage
 ```
 """
-function run_app(port::Int64, key_AV::String, key_CG::String)
+function run_app(port::Int64)
 
     location = joinpath(@__DIR__, "..", "data")
 
@@ -92,10 +86,6 @@ function run_app(port::Int64, key_AV::String, key_CG::String)
 
     # Perform cleanup
     remove_old_files()
-
-    # Set API keys
-    global KEY = key_AV
-    global CG_KEY = key_CG
 
     # UI part of the tool
     app = dash()

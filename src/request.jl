@@ -1,7 +1,9 @@
-function get_API_response(params::String, url::String)
+function get_API_response(params::String,
+                          url::String,
+                          cg_key::String = CG_KEY)
 
     cg_headers = Dict("accept" => "application/json",
-                      "x-cg-demo-api-key" => CG_KEY)
+                      "x-cg-demo-api-key" => cg_key)
 
     if occursin("coingecko", url)
         request = HTTP.request("GET",

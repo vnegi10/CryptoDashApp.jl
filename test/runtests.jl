@@ -1,7 +1,8 @@
 using Test, CryptoDashApp
 
 # Free API key
-global KEY = "AKTJ25ALEBBLH1QJ"
+const KEY = "AKTJ25ALEBBLH1QJ"
+const CG_KEY = "CG-x2BULjmy7mJmvZ9aM6S13Gof"
 
 errors = false
 all_tests = false
