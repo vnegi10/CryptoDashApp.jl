@@ -78,7 +78,7 @@ julia> run_app(8056, "Your API key")
 [ Info: Fetching BTC price/vol data from Alpha Vantage
 ```
 """
-function run_app(port::Int64, key::String)
+function run_app(port::Int64, key_AV::String, key_CG::String)
 
     location = joinpath(@__DIR__, "..", "data")
 
@@ -93,8 +93,9 @@ function run_app(port::Int64, key::String)
     # Perform cleanup
     remove_old_files()
 
-    # Set API key
-    global KEY = key
+    # Set API keys
+    global KEY = key_AV
+    global CG_KEY = key_CG
 
     # UI part of the tool
     app = dash()
