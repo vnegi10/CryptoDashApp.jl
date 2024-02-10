@@ -34,10 +34,6 @@ jobs:
         with:
           version: ${{ matrix.version }}
           arch: ${{ matrix.arch }}
-      - name: Set env. variables in Windows
-        if: runner.os == 'Windows'
-        run: |
-           julia -e 'println("$ENV")'
       - uses: actions/cache@v3
         env:
           cache-name: cache-artifacts
