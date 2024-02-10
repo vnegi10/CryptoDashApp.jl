@@ -53,20 +53,23 @@ modes_index = 1:length(modes)
 durations = [7, 14, 30, 90, 180, 270, 365, 500, 750, 1000]
 windows = [1, 5, 10, 30, 50, 75, 100]
 
+################# Pass API keys as env. variables #################
+# ENV["KEY_AV"] = "your_key"
+# ENV["KEY_CG"] = "your_key"
+
 ################# Run the app #################
 
 """
-    run_app(port::Int64, key::String)
+    run_app(port::Int64)
 
-Start the app on the given port using the provided API key.
+Start the app on the given port.
 
 # Arguments
 - `port::Int64` : Port number, for example 8056
-- `key::String` : API key from Alpha Vantage
 
 # Example
 ```julia-repl
-julia> run_app(8056, "Your API key")
+julia> run_app(8056)
 [ Info: data folder exists, cleanup action will be performed!
 [ Info: Listening on: 0.0.0.0:8056
 [ Info: Fetching BTC price/vol data from Alpha Vantage
