@@ -42,20 +42,20 @@ julia> run_app(8056) # where 8056 is the port
 
 Now, open a new tab in your browser and check if you can access http://0.0.0.0:8056/ or http://127.0.0.1:8056/
 
-### Running as a Docker container (for versions < 0.6.0)
-Assuming that you have Docker installed, and a valid API key, a Docker image
+### Running as a Docker container (for versions > 0.6.0)
+Assuming that you have Docker installed, and have generated both API keys, a Docker image
 can be created using the following steps:
 * Clone this repository and cd to the directory
 
-* Build the Docker image (Here `crypto_app` is the name of the generated image)
+* Build the Docker image (Here `my_app` is the name of the generated image)
 ```bash
-docker build --build-arg api_key=<YOUR_API_KEY> -t crypto_app .
+docker build --build-arg key_av="YOUR_KEY" --build-arg key_cg="YOUR_KEY" -t my_app .
 ```
 
 * Once the image is successfully generated, start a container (port 8010 is hard-coded
 in the Dockerfile, can also be changed if needed):
 ```bash
-docker run -dp 127.0.0.1:8010:8010 crypto_app
+docker run -dp 127.0.0.1:8010:8010 my_app
 ```
 
 * Check log output:
