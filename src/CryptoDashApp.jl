@@ -1,6 +1,7 @@
 module CryptoDashApp
 
-export run_app
+export run_app,
+       load_keys
 
 using DataFrames,
       Dates,
