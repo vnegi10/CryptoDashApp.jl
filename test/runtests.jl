@@ -1,7 +1,7 @@
 using Test, JSON, CryptoDashApp
 
 # Get both API keys locally and during CI
-local_dir = joinpath("home", "vikas", "Documents")
+local_dir = joinpath("/home", "vikas", "Documents")
 AV_file = joinpath(local_dir, "AV_demo_key.json")
 CG_file = joinpath(local_dir, "CG_demo_key.json")
 
