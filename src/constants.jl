@@ -5,14 +5,23 @@ const AV_URL = "https://www.alphavantage.co/query?function=DIGITAL_CURRENCY_DAIL
 
 ################# API keys #################
 
-if haskey(ENV, "KEY_AV")
-    const AV_KEY = ENV["KEY_AV"]
-else
-    error("API key for AlphaVantage has not been provided!")
-end
+AV_KEY = "dummy"
+CG_KEY = "dummy"
 
-if haskey(ENV, "KEY_CG")
-    const CG_KEY = ENV["KEY_CG"]
-else
-    error("API key for CoinGecko has not been provided!")
+function load_keys()
+
+    if haskey(ENV, "KEY_AV")
+        global AV_KEY = ENV["KEY_AV"]
+    else
+        @warn("API key for AlphaVantage has not been provided!")
+    end
+
+    if haskey(ENV, "KEY_CG")
+        global CG_KEY = ENV["KEY_CG"]
+    else
+        @warn("API key for CoinGecko has not been provided!")
+    end
+
+    return nothing
+
 end
