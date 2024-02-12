@@ -34,9 +34,10 @@ Once all the packages are downloaded, you can make use of the **CryptoDashApp**
 module from the REPL itself or within a script by executing:
 
 ```julia
+julia> using CryptoDashApp
 julia> ENV["KEY_AV"] = "your_AlphaVantage_key"
 julia> ENV["KEY_CG"] = "your_CoinGecko_key"
-julia> using CryptoDashApp
+julia> load_keys()
 julia> run_app(8056) # where 8056 is the port
 ```
 
